@@ -1,2 +1,3 @@
-# galaxy-tools
-Galaxy Tools maintained by NordicESMHub
+# Galaxy Tools maintained by NordicESMHub
+
+![](nordicESMHub_logo.png)
