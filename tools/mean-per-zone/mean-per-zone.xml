@@ -8,8 +8,11 @@
         <requirement type="package" version="1.4.3.2">netcdf4</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
+       mkdir -p shp_tmp &&
+       cp '$shapefile' 'shp_tmp/${name}.shp' &&
+       cp '$shapefilex' 'shp_tmp/${name}.shx' &&
        python3 $__tool_directory__/zonal_statistics.py
-               '$ifilename' '$shapefile' '$variable' '$ofilename'
+               '$ifilename' 'shp_tmp' '$variable' '$ofilename'
              #if $stat_type != ''
                --stat '$stat_type'
              #end if
@@ -19,7 +22,9 @@
     ]]></command>
     <inputs>
        <param name="ifilename" type="data" format="netcdf, h5" label="input with geographical coordinates (netCDF format)"></param>
-       <param name="shapefile" type="data" format="binary" label="shapefile with polygons for which statistics will be computed"></param>
+       <param name="shapefile" type="data" format="binary" label="shapefile (shp) with polygons for which statistics will be computed"></param>
+       <param name="shapefilex" type="data" format="binary" label="shapefile (shx) with polygons for which statistics will be computed"></param>
+       <param name="name" type="text" value="" label="Shapefile name" />
        <param name="variable" type="text" value="TS" label="variable name as given in the netCDF file" />
        <param name="title" type="text" value="" label="Title of the generated plot" />
        <param name="stat_type" type="select">
@@ -38,6 +43,8 @@
            <param name="variable" value="TS" />
            <param name="title" value="Mean Surface Temperature per country" />
            <param name="shapefile" value="TM_WORLD_BORDERS_SIMPL-0.3/TM_WORLD_BORDERS_SIMPL-0.3.shp" />
+           <param name="shapefilex" value="TM_WORLD_BORDERS_SIMPL-0.3/TM_WORLD_BORDERS_SIMPL-0.3.shx" />
+           <param name="name" value="TM_WORLD_BORDERS_SIMPL-0.3" />
            <output name="ofilename" ftype="png" file="TS.f2000.T31T31.control.cam.h0.0014-12.180.png" compare="sim_size" delta="500"/>
         </test>
     </tests>
