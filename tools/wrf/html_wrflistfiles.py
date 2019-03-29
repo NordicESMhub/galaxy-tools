@@ -2,9 +2,6 @@
 #
 # (C) Copyright 2015 UIO.
 #
-# This software is licensed under the terms of the Apache Licence Version 2.0
-# which can be obtained at http://www.apache.org/licenses/LICENSE-2.0. 
-# 
 # Creation: June 2015 - Anne Fouilloux - University of Oslo
 #
 
