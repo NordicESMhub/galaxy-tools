@@ -60,7 +60,7 @@ if __name__ == '__main__':
   ddf=df.dropna()
   f, ax = plt.subplots(1, figsize=(20, 10))
 
-  visu = ddf.plot(column='mean', scheme='Quantiles',  k=15, cmap='jet', 
+  visu = ddf.plot(column=stat_type, scheme='Quantiles',  k=15, cmap='jet', 
                   legend=True, ax=ax, legend_kwds={'loc': 'lower left',
                                                    'frameon': True, 
                                                    'title': args.variable,
