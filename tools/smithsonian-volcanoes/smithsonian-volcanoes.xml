@@ -10,9 +10,14 @@
                '2.0.0'
                $typename
                --verbose 
-               --format '$format'
+               --format "$format_type.format"
+              #if str($format_type.format) == 'csv'
+                #if str($format_type.max_features) != ''
+                 --max "$format_type.max_features"
+                #end if
+              #end if
                --output downloaded && 
-        mv downloaded.'$format' '$ofilename'
+        mv "downloaded.$format_type.format" '$ofilename'
     ]]></command>
     <inputs>
        <param name="typename" type="select" label="Select feature type">
@@ -24,10 +29,16 @@
            <option value="GVP-VOTW:Smithsonian_VOTW_Holocene_Volcanoes">Smithsonian VOTW Holocene Volcanoes</option>
            <option value="GVP-VOTW:Smithsonian_VOTW_Pleistocene_Volcanoes">Smithsonian VOTW Pleistocene Volcanoes</option>
        </param>
-       <param name="format" type="select" label="Select output file format">
+       <conditional name="format_type">
+
+         <param name="format" type="select" label="Select output file format">
            <option value="csv" selected="true">csv</option>
            <option value="json">geojson</option>
-       </param>
+         </param>
+         <when value="csv">
+             <param name="max_features" type="text" value="" label="Maximum number of features (do not fill if you wish to retrieve the entire dataset" />
+         </when>
+       </conditional>
     </inputs>
     <outputs>
         #if $format == 'json'
@@ -45,6 +56,7 @@
         <test>
            <param name="typename" value="GVP-VOTW:E3WebApp_Eruptions1960" />
            <param name="format" value="csv" />
+           <param name="csv.max_features" value="50" />
            <output name="ofilename" ftype="csv" file="E3WebApp_Eruptions1960.csv" compare="sim_size" delta="500" />
         </test>
     </tests>
@@ -74,7 +86,7 @@ By default, the output format is ``csv`` (Comma-Separated Values). This setting 
 ::
 
 
-  usage: wfs_download.py [-h] [--format FORMAT] [--output OUTPUT] [-v]
+  usage: wfs_download.py [-h] [--format FORMAT] [--output OUTPUT] [--max MAXLINES] [-v]
                          url version typename
 
 Positional arguments:
@@ -91,6 +103,7 @@ Optional arguments:
   -h, --help       show this help message and exit
   --format FORMAT  Specify the output format (csv, json, gml, etc.)
   --output OUTPUT  output filename to store retrieved data
+  --max MAXLINES   Maximum number of features to retrieve (default: all)
   -v, --verbose    switch on verbose mode
 
 

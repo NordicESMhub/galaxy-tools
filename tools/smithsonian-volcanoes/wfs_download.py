@@ -14,6 +14,7 @@
 #  -h, --help       show this help message and exit
 #  --format FORMAT  Specify the output format (csv, json, gml, etc.)
 #  --output OUTPUT  output filename to store retrieved data
+#  --max MAXLINES   Maximum number of features to retrieve
 #  -v, --verbose    switch on verbose mode
 #
 
@@ -24,7 +25,7 @@ from owslib.wfs import WebFeatureService
 from pathlib import Path
 
 class WFSservices ():
-  def __init__(self, url, version, typename, format, output,
+  def __init__(self, url, version, typename, format, output, maxlines, 
                  verbose=False
                  ):
     self.url = url
@@ -38,6 +39,11 @@ class WFSservices ():
       self.output = Path(input).stem + '.' + self.format
     else:
       self.output = output + '.' + self.format
+    if maxlines is None:
+      self.maxlines = ''
+    else:
+      self.maxlines = maxlines
+
     self.verbose = verbose
     if verbose:
       print("url: ", self.url)
@@ -45,6 +51,8 @@ class WFSservices ():
       print("typename: ", self.typename)
       print("format: ", self.format)
       print("output: ", self.output)
+      print("maxlines: ", self.maxlines)
+      print("verbose: ", self.verbose)
  
   def save(self):
     wfs = WebFeatureService(url=self.url, version=self.version) 
@@ -57,16 +65,21 @@ class WFSservices ():
 
     if idx >= 0:
       response = wfs.getfeature(typename=self.typename, outputFormat=self.format)
-      ans = response.read()
+      if self.maxlines != '' and self.format == 'csv':
+        ans=""
+        for i in range(int(self.maxlines)):
+          ans+=response.readline()
+      else:
+        ans = ''.join(response.readlines())
 
       out = open(self.output, 'wb')
       out.write(bytes(ans.encode('latin-1')))
       out.close()
 
-def retrieve_wfs(url, version, typename, format, output, verbose):
+def retrieve_wfs(url, version, typename, format, output, maxlines, verbose):
     """Retrieve all data from WFS service"""
 
-    p = WFSservices(url, version, typename, format, output, verbose)
+    p = WFSservices(url, version, typename, format, output, maxlines, verbose)
     p.save()
 
 if __name__ == '__main__':
@@ -93,8 +106,12 @@ if __name__ == '__main__':
         '--output',
         help='output filename to store retrieved data'
   )
+  parser.add_argument(
+        '--max',
+        help='Maximum number of features to retrieve'
+  )
   parser.add_argument("-v", "--verbose", help="switch on verbose mode",
                     action="store_true")
   args = parser.parse_args()
   
-  retrieve_wfs(args.url, args.version, args.typename, args.format, args.output, args.verbose)
+  retrieve_wfs(args.url, args.version, args.typename, args.format, args.output, args.max, args.verbose)
