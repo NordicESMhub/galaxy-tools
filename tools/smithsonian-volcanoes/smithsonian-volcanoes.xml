@@ -1,0 +1,101 @@
+<tool id="smithsonian-volcanoes" name="smithsonian volcanoes" version="0.1.0">
+    <description>Retrieve Volcanoes of the World (VOTW)</description>
+    <requirements>
+        <requirement type="package" version="3.6.7">python</requirement>
+        <requirement type="package" version="0.17.1">owslib</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+       python3 $__tool_directory__/wfs_download.py
+               'https://webservices.volcano.si.edu/geoserver/GVP-VOTW/wfs' 
+               '2.0.0'
+               $typename
+               --verbose 
+               --format '$format'
+               --output downloaded && 
+        mv downloaded.'$format' '$ofilename'
+    ]]></command>
+    <inputs>
+       <param name="typename" type="select" label="Select feature type">
+           <option value="GVP-VOTW:E3WebApp_EmissionPixels" selected="true">SO2 Emission Pixels</option>
+           <option value="GVP-VOTW:E3WebApp_Emissions">SO2 Emissions</option>
+           <option value="GVP-VOTW:E3WebApp_Eruptions1960">Volcanic Eruptions</option>
+           <option value="GVP-VOTW:E3WebApp_HoloceneVolcanoes">Holocene Volcanoes</option>
+           <option value="GVP-VOTW:Smithsonian_VOTW_Holocene_Eruptions">Smithsonian VOTW Holocene Eruptions</option>
+           <option value="GVP-VOTW:Smithsonian_VOTW_Holocene_Volcanoes">Smithsonian VOTW Holocene Volcanoes</option>
+           <option value="GVP-VOTW:Smithsonian_VOTW_Pleistocene_Volcanoes">Smithsonian VOTW Pleistocene Volcanoes</option>
+       </param>
+       <param name="format" type="select" label="Select output file format">
+           <option value="csv" selected="true">csv</option>
+           <option value="json">geojson</option>
+       </param>
+    </inputs>
+    <outputs>
+        #if $format == 'json'
+           <data name="ofilename" format="json"></data>
+        #else
+           <data name="ofilename" format="csv"></data>
+        #endif
+    </outputs>
+    <tests>
+        <test>
+           <param name="typename" value="GVP-VOTW:E3WebApp_Eruptions1960" />
+           <param name="format" value="json" />
+           <output name="ofilename" ftype="json" file="E3WebApp_Eruptions1960.json" compare="sim_size" delta="500" />
+        </test>
+        <test>
+           <param name="typename" value="GVP-VOTW:E3WebApp_Eruptions1960" />
+           <param name="format" value="csv" />
+           <output name="ofilename" ftype="csv" file="E3WebApp_Eruptions1960.csv" compare="sim_size" delta="500" />
+        </test>
+    </tests>
+    <help><![CDATA[
+
+**Retrieve data from the Smithsonian Institution's Global Volcanism Program**
+==============================================================================
+
+This tool allows to retrieve data from Volcanoes of the World (VOTW) Database, hosted by the Smithsonian Institution's Global Volcanism Program (GVP) in USA.
+
+
+.. class:: infomark
+
+        The wrappers aims at accessing and retrieving VOTW data using WFS services.
+        The output file is either in csv, json or gml format.
+
+**What it does**
+----------------
+
+This tools creates an output file (csv,json or gml format) with data
+retrieved from VOTW database using the selected ``typename``.
+By default, the output format is ``csv`` (Comma-Separated Values). This setting can be changed by selecting another output format. 
+
+
+**Usage**
+
+::
+
+
+  usage: wfs_download.py [-h] [--format FORMAT] [--output OUTPUT] [-v]
+                         url version typename
+
+Positional arguments:
+~~~~~~~~~~~~~~~~~~~~~
+
+-  **url**              Specify url for WFS service
+-  **version**          Specify which version to use for WFS services (1.0.0,
+                   1.1.0, 2.0.0)
+-  **typename**         Feature Type name to retrieve
+
+Optional arguments:
+~~~~~~~~~~~~~~~~~~~~~
+
+  -h, --help       show this help message and exit
+  --format FORMAT  Specify the output format (csv, json, gml, etc.)
+  --output OUTPUT  output filename to store retrieved data
+  -v, --verbose    switch on verbose mode
+
+
+It uses owslib, a Python package for client programming with Open Geospatial Consortium (OGC) web service (hence OWS) interface standards, and their related content models. More information about
+owslib can be found at https://geopython.github.io/OWSLib/
+
+    ]]></help>
+</tool>
