@@ -9,13 +9,11 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
        python3 '$__tool_directory__/psymap_simple.py'
-          '$ifilename' '$variable'
-          #if $adv.projection != ''
+            '$ifilename' '$variable'
             --proj '$adv.projection'
-          #end if
-          --cmap '$adv.colormap'
-          --output image.png
-    ]]>    </command>
+            --cmap '$adv.colormap'
+            --output image.png
+    ]]></command>
     <inputs>
         <param name="ifilename" type="data" format="netcdf" label="input with geographical coordinates (netCDF format)"></param>
         <param name="variable" type="text" value="TS" label="variable name as given in the netCDF file" />
@@ -176,5 +174,7 @@ Optional arguments:
 It uses psy-maps, a python package to generate plots. More information about
 psyplot and psy-maps can be found at https://psyplot.readthedocs.io/projects/psy-maps/en/latest/
 
-    ]]>    </help>
+    ]]></help>
+    <citations>
+    </citations>
 </tool>

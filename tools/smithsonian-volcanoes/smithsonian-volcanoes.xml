@@ -1,63 +1,63 @@
 <tool id="smithsonian-volcanoes" name="smithsonian volcanoes" version="0.1.0">
     <description>Retrieve Volcanoes of the World (VOTW)</description>
     <requirements>
-        <requirement type="package" version="3.6.7">python</requirement>
+        <requirement type="package" version="3">python</requirement>
         <requirement type="package" version="0.17.1">owslib</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-       python3 $__tool_directory__/wfs_download.py
+       python3 '$__tool_directory__/wfs_download.py'
                'https://webservices.volcano.si.edu/geoserver/GVP-VOTW/wfs' 
                '2.0.0'
-               $typename
+               '$typename'
                --verbose 
-               --format "$format_type.format"
+               --format '$format_type.format'
               #if str($format_type.format) == 'csv'
-                #if str($format_type.max_features) != ''
-                 --max "$format_type.max_features"
-                #end if
+                  #if $format_type.max_features
+                        --max '$format_type.max_features'
+                  #end if
               #end if
-               --output downloaded && 
-        mv "downloaded.$format_type.format" '$ofilename'
+              --output downloaded && 
+        mv 'downloaded.$format_type.format' '$ofilename'
     ]]></command>
     <inputs>
-       <param name="typename" type="select" label="Select feature type">
-           <option value="GVP-VOTW:E3WebApp_EmissionPixels" selected="true">SO2 Emission Pixels</option>
-           <option value="GVP-VOTW:E3WebApp_Emissions">SO2 Emissions</option>
-           <option value="GVP-VOTW:E3WebApp_Eruptions1960">Volcanic Eruptions</option>
-           <option value="GVP-VOTW:E3WebApp_HoloceneVolcanoes">Holocene Volcanoes</option>
-           <option value="GVP-VOTW:Smithsonian_VOTW_Holocene_Eruptions">Smithsonian VOTW Holocene Eruptions</option>
-           <option value="GVP-VOTW:Smithsonian_VOTW_Holocene_Volcanoes">Smithsonian VOTW Holocene Volcanoes</option>
-           <option value="GVP-VOTW:Smithsonian_VOTW_Pleistocene_Volcanoes">Smithsonian VOTW Pleistocene Volcanoes</option>
-       </param>
-       <conditional name="format_type">
-
-         <param name="format" type="select" label="Select output file format">
-           <option value="csv" selected="true">csv</option>
-           <option value="json">geojson</option>
-         </param>
-         <when value="csv">
-             <param name="max_features" type="text" value="" label="Maximum number of features (do not fill if you wish to retrieve the entire dataset" />
-         </when>
-       </conditional>
+        <param name="typename" type="select" label="Select feature type">
+            <option value="GVP-VOTW:E3WebApp_EmissionPixels" selected="true">SO2 Emission Pixels</option>
+            <option value="GVP-VOTW:E3WebApp_Emissions">SO2 Emissions</option>
+            <option value="GVP-VOTW:E3WebApp_Eruptions1960">Volcanic Eruptions</option>
+            <option value="GVP-VOTW:E3WebApp_HoloceneVolcanoes">Holocene Volcanoes</option>
+            <option value="GVP-VOTW:Smithsonian_VOTW_Holocene_Eruptions">Smithsonian VOTW Holocene Eruptions</option>
+            <option value="GVP-VOTW:Smithsonian_VOTW_Holocene_Volcanoes">Smithsonian VOTW Holocene Volcanoes</option>
+            <option value="GVP-VOTW:Smithsonian_VOTW_Pleistocene_Volcanoes">Smithsonian VOTW Pleistocene Volcanoes</option>
+        </param>
+        <conditional name="format_type">
+            <param name="format" type="select" label="Select output file format">
+                <option value="csv" selected="true">csv</option>
+                <option value="json">geojson</option>
+            </param>
+            <when value="csv">
+                <param name="max_features" type="integer" optional="true" label="Maximum number of features" help="Do not set if you wish to retrieve the entire dataset" />
+            </when>
+            <when value="json"/>
+        </conditional>
     </inputs>
     <outputs>
-        #if $format == 'json'
-           <data name="ofilename" format="json"></data>
-        #else
-           <data name="ofilename" format="csv"></data>
-        #endif
+           <data name="ofilename" format="json">
+                <change_format>
+                    <when input="format" value="csv" format="csv" />
+                </change_format>
+           </data>
     </outputs>
     <tests>
         <test>
            <param name="typename" value="GVP-VOTW:E3WebApp_Eruptions1960" />
            <param name="format" value="json" />
-           <output name="ofilename" ftype="json" file="E3WebApp_Eruptions1960.json" compare="sim_size" delta="500" />
+           <output name="ofilename" ftype="json" file="E3WebApp_Eruptions1960.json"/>
         </test>
         <test>
            <param name="typename" value="GVP-VOTW:E3WebApp_Eruptions1960" />
            <param name="format" value="csv" />
            <param name="csv.max_features" value="50" />
-           <output name="ofilename" ftype="csv" file="E3WebApp_Eruptions1960.csv" compare="sim_size" delta="500" />
+           <output name="ofilename" ftype="csv" file="E3WebApp_Eruptions1960.csv"/>
         </test>
     </tests>
     <help><![CDATA[
@@ -111,4 +111,6 @@ It uses owslib, a Python package for client programming with Open Geospatial Con
 owslib can be found at https://geopython.github.io/OWSLib/
 
     ]]></help>
+    <citations>
+    </citations>
 </tool>
