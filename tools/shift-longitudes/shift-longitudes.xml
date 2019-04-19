@@ -6,15 +6,17 @@
         <requirement type="package" version="0.10.9">xarray</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-       python3 $__tool_directory__/shift_lon.py
-               '$ifilename' '$longitude' '$ofilename'
+       python3 '$__tool_directory__/shift_lon.py'
+          '$ifilename'
+          '$longitude'
+          '$ofilename'
     ]]></command>
     <inputs>
        <param name="ifilename" type="data" format="netcdf" label="input with geographical coordinates (netCDF format)"></param>
        <param name="longitude" type="text" value="lon" label="variable name for longitude as given in the netCDF file" />
     </inputs>
     <outputs>
-      <data name="ofilename" format="netcdf"></data>
+        <data name="ofilename" format="netcdf"></data>
     </outputs>
     <tests>
         <test>
@@ -71,4 +73,6 @@ It uses ``xarray`` python package to generate plots. More information about
 ``xarray`` can be found at http://xarray.pydata.org/en/stable/
 
     ]]></help>
+    <citations>
+    </citations>
 </tool>

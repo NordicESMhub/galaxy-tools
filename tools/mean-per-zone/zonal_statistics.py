@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-#
+
 import matplotlib as mpl
 mpl.use('Agg')
 import argparse
@@ -50,7 +50,6 @@ if __name__ == '__main__':
   else:
       stat_type = args.stat
   
-# 
   dset = xr.open_dataset(args.raster)
   dset[args.variable].to_netcdf(".tmp.nc")
   zs = zonal_stats(args.shapefile, ".tmp.nc", stats = stat_type)
@@ -73,6 +72,6 @@ if __name__ == '__main__':
   else:
     f.suptitle(args.title)
   if args.verbose:
-      print("plot generated")
+    print("plot generated")
 
   plt.savefig(args.output, format='png')
