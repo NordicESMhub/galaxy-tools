@@ -7,11 +7,12 @@ import geopandas
 
 import pandas as pd
 
-from rasterstats import zonal_stats
 
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
+
+from rasterstats import zonal_stats
 
 import xarray as xr
 

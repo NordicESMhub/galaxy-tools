@@ -21,9 +21,9 @@
 import argparse
 import warnings
 
-from owslib.wfs import WebFeatureService
-
 from pathlib import Path
+
+from owslib.wfs import WebFeatureService
 
 
 class WFSservices ():

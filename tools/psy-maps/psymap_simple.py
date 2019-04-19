@@ -21,8 +21,8 @@
 #
 
 import argparse
-from pathlib import Path
 import warnings
+from pathlib import Path
 
 import matplotlib as mpl
 mpl.use('Agg')
