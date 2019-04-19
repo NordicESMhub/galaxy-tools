@@ -8,6 +8,22 @@ If you are working in Norway and at the University of Oslo, Tromso or Bergen, se
 
 Best practices for developing new tools are [https://galaxy-iuc-standards.readthedocs.io/en/latest/best_practices/tool_xml.html](https://galaxy-iuc-standards.readthedocs.io/en/latest/best_practices/tool_xml.html).
 
+- Always use quotes for tool directory (python3 '$__tool_directory__/psymap_simple.py') and tool parameters (--cmap '$adv.colormap')
+- When wrapping an existing underlying tool, use the same version than the underlying tool
+- `from_work_dir` will tell Galaxy to pick this file, this saves you the cp/mv command in the command section:
+
+~~~`bash`
+<data name="ofilename" format="png" from_work_dir="image.png"/>
+~~~
+
+- If the output format depends on the type of output file, try to avoid `auto_format` and use `change_format` instead:
+
+~~~`bash`
+<data name="ofilename" format="json">
+                <change_format>
+                    <when input="format" value="csv" format="csv" />
+~~~               
+
 ## Test a tool with planemo
 
 ~~~`bash`
