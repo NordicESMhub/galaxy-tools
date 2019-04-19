@@ -6,7 +6,7 @@
 #
 # positional arguments:
 #  url              Specify url for WFS service
-#  version          Specify which version to use for WFS services 
+#  version          Specify which version to use for WFS services
 #                   (1.0.0, 1.1.0, 2.0.0, 3.0.0)
 #  typename         Feature Type name to retrieve
 #
@@ -19,62 +19,67 @@
 #
 
 import argparse
-import os
 import warnings
+
 from owslib.wfs import WebFeatureService
+
 from pathlib import Path
 
+
 class WFSservices ():
-  def __init__(self, url, version, typename, format, output, maxlines, 
+    def __init__(self, url, version, typename, format, output, maxlines,
                  verbose=False
                  ):
-    self.url = url
-    self.version = version
-    self.typename = typename
-    if format is None:
-      self.format = 'json'
-    else:
-      self.format = format
-    if output is None:
-      self.output = Path(input).stem + '.' + self.format
-    else:
-      self.output = output + '.' + self.format
-    if maxlines is None:
-      self.maxlines = ''
-    else:
-      self.maxlines = maxlines
+        self.url = url
+        self.version = version
+        self.typename = typename
+        if format is None:
+            self.format = 'json'
+        else:
+            self.format = format
+        if output is None:
+            self.output = Path(input).stem + '.' + self.format
+        else:
+            self.output = output + '.' + self.format
+        if maxlines is None:
+            self.maxlines = ''
+        else:
+            self.maxlines = maxlines
 
-    self.verbose = verbose
-    if verbose:
-      print("url: ", self.url)
-      print("version: ", self.version)
-      print("typename: ", self.typename)
-      print("format: ", self.format)
-      print("output: ", self.output)
-      print("maxlines: ", self.maxlines)
-      print("verbose: ", self.verbose)
- 
-  def save(self):
-    wfs = WebFeatureService(url=self.url, version=self.version) 
-    # check that typename is in the list of available feature types
-    try:
-      idx = list(wfs.contents).index(self.typename)
-    except ValueError:
-      idx = -1
-      print("Invalid typename " + self.typename + ' with WFS service ' + self.url)
+        self.verbose = verbose
+        if verbose:
+            print("url: ", self.url)
+            print("version: ", self.version)
+            print("typename: ", self.typename)
+            print("format: ", self.format)
+            print("output: ", self.output)
+            print("maxlines: ", self.maxlines)
+            print("verbose: ", self.verbose)
 
-    if idx >= 0:
-      response = wfs.getfeature(typename=self.typename, outputFormat=self.format)
-      if self.maxlines != '' and self.format == 'csv':
-        ans=""
-        for i in range(int(self.maxlines)):
-          ans+=response.readline()
-      else:
-        ans = ''.join(response.readlines())
+    def save(self):
+        wfs = WebFeatureService(url=self.url, version=self.version)
+        # check that typename is in the list of available feature types
+        try:
+            idx = list(wfs.contents).index(self.typename)
+        except ValueError:
+            idx = -1
+            print("Invalid typename " + self.typename +
+                  ' with WFS service ' + self.url)
 
-      out = open(self.output, 'wb')
-      out.write(bytes(ans.encode('latin-1')))
-      out.close()
+        if idx >= 0:
+            response = wfs.getfeature(typename=self.typename,
+                                      outputFormat=self.format)
+            if self.maxlines != '' and self.format == 'csv':
+                ans = ""
+                for i in range(int(self.maxlines)):
+                    ans += response.readline()
+            else:
+                ans = ''.join(response.readlines())
+
+            out = open(self.output, 'wb')
+            out.write(bytes(ans.encode('latin-1')))
+            out.close()
+
 
 def retrieve_wfs(url, version, typename, format, output, maxlines, verbose):
     """Retrieve all data from WFS service"""
@@ -82,36 +87,39 @@ def retrieve_wfs(url, version, typename, format, output, maxlines, verbose):
     p = WFSservices(url, version, typename, format, output, maxlines, verbose)
     p.save()
 
+
 if __name__ == '__main__':
-  warnings.filterwarnings("ignore")
-  parser = argparse.ArgumentParser()
-  parser.add_argument(
+    warnings.filterwarnings("ignore")
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
         'url',
         help='Specify url for WFS service'
-  )
-  parser.add_argument(
+    )
+    parser.add_argument(
         'version',
-        help='Specify which version to use for WFS services (1.0.0, 1.1.0, 2.0.0)'
-  )
-  parser.add_argument(
+        help='Specify which version to use for WFS services (1.0.0, ...)'
+    )
+    parser.add_argument(
         'typename',
         help='Feature Type name to retrieve'
-  )
+    )
 
-  parser.add_argument(
+    parser.add_argument(
         '--format',
         help='Specify the output format (csv, json, gml, etc.)'
-  )
-  parser.add_argument(
+    )
+    parser.add_argument(
         '--output',
         help='output filename to store retrieved data'
-  )
-  parser.add_argument(
+    )
+    parser.add_argument(
         '--max',
         help='Maximum number of features to retrieve'
-  )
-  parser.add_argument("-v", "--verbose", help="switch on verbose mode",
-                    action="store_true")
-  args = parser.parse_args()
-  
-  retrieve_wfs(args.url, args.version, args.typename, args.format, args.output, args.max, args.verbose)
+    )
+    parser.add_argument(
+        "-v", "--verbose", help="switch on verbose mode",
+        action="store_true")
+    args = parser.parse_args()
+
+    retrieve_wfs(args.url, args.version, args.typename, args.format,
+                 args.output, args.max, args.verbose)
