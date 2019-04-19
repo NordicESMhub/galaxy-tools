@@ -3,14 +3,18 @@
 import argparse
 import warnings
 
-from rasterstats import zonal_stats
-import pandas as pd
 import geopandas
-import xarray as xr
+
+import pandas as pd
+
+from rasterstats import zonal_stats
 
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
+
+import xarray as xr
+
 
 if __name__ == '__main__':
     warnings.filterwarnings("ignore")
