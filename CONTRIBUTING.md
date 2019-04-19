@@ -4,6 +4,10 @@
 
 If you are working in Norway and at the University of Oslo, Tromso or Bergen, see documentation at [IaaS](http://docs.uh-iaas.no/en/latest/).
 
+## Develop a tool 
+
+Best practices for developing new tools are [https://galaxy-iuc-standards.readthedocs.io/en/latest/best_practices/tool_xml.html](https://galaxy-iuc-standards.readthedocs.io/en/latest/best_practices/tool_xml.html).
+
 ## Test a tool with planemo
 
 ~~~`bash`
