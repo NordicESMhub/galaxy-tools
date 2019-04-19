@@ -1,0 +1,15 @@
+categories:
+- Retrieve Data
+description: Retrieve data from Volcanoes of the World (VOTW) Database
+homepage_url: https://volcano.si.edu/gvp_votw.cfm
+long_description: |
+  The wrappers aims at accessing and retrieving VOTW data using WFS services.
+  This tools creates an output file (csv,json or gml format) with data
+  retrieved from VOTW database using the selected ``typename``.
+  By default, the output format is ``csv`` (Comma-Separated Values). 
+  This setting can be changed by selecting another output format.
+
+name: smithsonian-volcanoes
+owner: NordicESMHub
+remote_repository_url: https://github.com/NordicESMhub/galaxy-tools/tree/master/tools/smithsonian-volcanoes
+type: unrestricted

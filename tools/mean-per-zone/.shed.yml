@@ -1,0 +1,15 @@
+categories:
+- Map Visualization
+description:  Creates a png image showing statistic over areas as defined in the vector file
+homepage_url: https://github.com/NordicESMhub/galaxy-tools/blob/master/tools/mean-per-zone/zonal_statistics.py
+long_description: |
+  The wrapper aims at providing a utility to extract information
+  from geospatial raster data based on vector geometries (shapefile).
+  The raster input file must be in netCDF format with geographical coordinates
+  (latitudes, longitudes) with the same coordinate reference system as the
+  shapefile.
+
+name: mean-per-zone
+owner: NordicESMHub
+remote_repository_url: https://github.com/NordicESMhub/galaxy-tools/tree/master/tools/mean-per-zone
+type: unrestricted
