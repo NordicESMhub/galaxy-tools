@@ -1,5 +1,6 @@
 categories:
-- Map Visualization
+- Visualization
+- GIS
 description:  Creates a png image showing statistic over areas as defined in the vector file
 homepage_url: https://github.com/NordicESMhub/galaxy-tools/blob/master/tools/mean-per-zone/zonal_statistics.py
 long_description: |
@@ -13,3 +14,4 @@ name: mean-per-zone
 owner: NordicESMHub
 remote_repository_url: https://github.com/NordicESMhub/galaxy-tools/tree/master/tools/mean-per-zone
 type: unrestricted
+existin
