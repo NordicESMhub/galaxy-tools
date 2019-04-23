@@ -20,7 +20,6 @@
 
 import argparse
 import warnings
-
 from pathlib import Path
 
 from owslib.wfs import WebFeatureService
