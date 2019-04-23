@@ -56,7 +56,7 @@ if __name__ == '__main__':
     world = geopandas.read_file(args.shapefile)
     df = pd.concat([world, df_zonal_stats], axis=1)
     ddf = df.dropna()
-    f, ax = plt.subplots(1, figsize=(20, 10))
+    f, ax = pyplot.subplots(1, figsize=(20, 10))
 
     visu = ddf.plot(column=stat_type, scheme='Quantiles', k=15, cmap='jet',
                     legend=True, ax=ax,
@@ -76,4 +76,4 @@ if __name__ == '__main__':
     if args.verbose:
         print("plot generated")
 
-    plt.savefig(args.output, format='png')
+    pyplot.savefig(args.output, format='png')
