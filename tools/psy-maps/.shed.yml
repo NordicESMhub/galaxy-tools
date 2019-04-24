@@ -6,6 +6,6 @@ long_description: |
   This tool is a wrapper for the psyplot plugin for visualizations on a map. This package uses the cartopy package to project the plots that are made with the psy-simple plugin to an earth-referenced grid. It's main plot methods are the mapplot and mapvector plot methods which can plot rectangular and triangular plots.
 
 name: psy-maps
-owner: NordicESMHub
+owner: climate
 remote_repository_url: https://github.com/NordicESMhub/galaxy-tools/tree/master/tools/psy-maps
 type: unrestricted

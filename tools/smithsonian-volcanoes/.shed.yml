@@ -10,6 +10,6 @@ long_description: |
   This setting can be changed by selecting another output format.
 
 name: smithsonian-volcanoes
-owner: NordicESMHub
+owner: climate
 remote_repository_url: https://github.com/NordicESMhub/galaxy-tools/tree/master/tools/smithsonian-volcanoes
 type: unrestricted

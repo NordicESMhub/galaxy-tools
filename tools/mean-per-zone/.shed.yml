@@ -11,6 +11,6 @@ long_description: |
   shapefile.
 
 name: mean-per-zone
-owner: NordicESMHub
+owner: climate
 remote_repository_url: https://github.com/NordicESMhub/galaxy-tools/tree/master/tools/mean-per-zone
 type: unrestricted
