@@ -53,16 +53,20 @@ class PsyPlot ():
 
     def plot(self):
         if self.cmap is None and self.proj is None:
+            print("op1")
             psy.plot.mapplot(self.input, name=self.varname,
                              clabel='{desc}')
-        elif self.proj is None:
+        elif self.proj is None or self.proj == '':
+            print("op2")
             psy.plot.mapplot(self.input, name=self.varname,
                              cmap=self.cmap, clabel='{desc}')
-        elif self.cmap is None:
+        elif self.cmap is None or self.cmap == '':
+            print("op3")
             psy.plot.mapplot(self.input, name=self.varname,
                              projection=self.proj,
                              clabel='{desc}')
         else:
+            print("op4")
             psy.plot.mapplot(self.input, name=self.varname,
                              cmap=self.cmap,
                              projection=self.proj,
