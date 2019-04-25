@@ -1,4 +1,4 @@
-<tool id="psy-maps" name="map plot" version="1.2.0">
+<tool id="psy_maps" name="map plot" version="1.2.0">
     <description>gridded (lat/lon) netCDF data</description>
     <requirements>
         <requirement type="package" version="3">python</requirement>

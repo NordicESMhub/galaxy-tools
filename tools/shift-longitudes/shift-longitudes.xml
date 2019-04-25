@@ -1,4 +1,4 @@
-<tool id="shyft-longitudes" name="shift longitudes" version="0.1.0">
+<tool id="shyft_longitudes" name="shift longitudes" version="0.1.0">
     <description>from netCDF data</description>
     <requirements>
         <requirement type="package" version="3.6.7">python</requirement>
