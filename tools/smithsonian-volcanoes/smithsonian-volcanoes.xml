@@ -1,4 +1,4 @@
-<tool id="smithsonian-volcanoes" name="smithsonian volcanoes" version="0.1.0">
+<tool id="smithsonian_volcanoes" name="smithsonian volcanoes" version="0.1.0">
     <description>Retrieve Volcanoes of the World (VOTW)</description>
     <requirements>
         <requirement type="package" version="3">python</requirement>
