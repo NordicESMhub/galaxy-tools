@@ -1,5 +1,6 @@
 categories:
-- Map Visualization
+- Visualization
+- Climate Analysis
 description:  Visualization of regular geographical data on a map with psyplot
 homepage_url: https://github.com/Chilipp/psy-maps
 long_description: |

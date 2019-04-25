@@ -1,6 +1,7 @@
 categories:
 - Visualization
 - GIS
+- Climate Analysis
 description:  Creates a png image showing statistic over areas as defined in the vector file
 homepage_url: https://github.com/NordicESMhub/galaxy-tools/blob/master/tools/mean-per-zone/
 long_description: |
