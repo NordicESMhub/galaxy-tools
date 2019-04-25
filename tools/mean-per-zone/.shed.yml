@@ -10,7 +10,7 @@ long_description: |
   (latitudes, longitudes) with the same coordinate reference system as the
   shapefile.
 
-name: mean-per-zone
+name: mean_per_zone
 owner: climate
 remote_repository_url: https://github.com/NordicESMhub/galaxy-tools/tree/master/tools/mean-per-zone
 type: unrestricted
