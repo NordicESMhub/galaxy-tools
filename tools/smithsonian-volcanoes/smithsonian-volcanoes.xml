@@ -10,14 +10,22 @@
                '2.0.0'
                '$typename'
                --verbose 
+              #if str($format_type.format) == 'geojson'
+               --format 'json'
+              #else
                --format '$format_type.format'
+              #end if
               #if str($format_type.format) == 'csv'
                   #if $format_type.max_features
                         --max '$format_type.max_features'
                   #end if
               #end if
               --output downloaded && 
-        mv 'downloaded.$format_type.format' '$ofilename'
+              #if str($format_type.format) == 'geojson'
+                mv 'downloaded.json' '$ofilename'
+              #else
+                mv 'downloaded.$format_type.format' '$ofilename'
+              #end if
     ]]></command>
     <inputs>
         <param name="typename" type="select" label="Select feature type">
@@ -32,16 +40,16 @@
         <conditional name="format_type">
             <param name="format" type="select" label="Select output file format">
                 <option value="csv" selected="true">csv</option>
-                <option value="json">geojson</option>
+                <option value="geojson">geojson</option>
             </param>
             <when value="csv">
                 <param name="max_features" type="integer" optional="true" label="Maximum number of features" help="Do not set if you wish to retrieve the entire dataset" />
             </when>
-            <when value="json"/>
+            <when value="geojson"/>
         </conditional>
     </inputs>
     <outputs>
-           <data name="ofilename" format="json">
+           <data name="ofilename" format="geojson">
                 <change_format>
                     <when input="format" value="csv" format="csv" />
                 </change_format>
@@ -49,9 +57,9 @@
     </outputs>
     <tests>
         <test>
-           <param name="typename" value="GVP-VOTW:E3WebApp_Eruptions1960" />
-           <param name="format" value="json" />
-           <output name="ofilename" ftype="json" file="E3WebApp_Eruptions1960.json"/>
+           <param name="typename" value="GVP-VOTW:Smithsonian_VOTW_Pleistocene_Volcanoes" />
+           <param name="format" value="geojson" />
+           <output name="ofilename" ftype="geojson" file="E3WebApp_Pleistocene_volcanoes.geojson"/>
         </test>
         <test>
            <param name="typename" value="GVP-VOTW:E3WebApp_Eruptions1960" />

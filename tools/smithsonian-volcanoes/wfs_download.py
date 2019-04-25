@@ -12,7 +12,7 @@
 #
 # optional arguments:
 #  -h, --help       show this help message and exit
-#  --format FORMAT  Specify the output format (csv, json, gml, etc.)
+#  --format FORMAT  Specify the output format (csv, geojson, gml, etc.)
 #  --output OUTPUT  output filename to store retrieved data
 #  --max MAXLINES   Maximum number of features to retrieve
 #  -v, --verbose    switch on verbose mode
@@ -33,7 +33,7 @@ class WFSservices ():
         self.version = version
         self.typename = typename
         if format is None:
-            self.format = 'json'
+            self.format = 'geojson'
         else:
             self.format = format
         if output is None:
@@ -76,7 +76,7 @@ class WFSservices ():
                 ans = ''.join(response.readlines())
 
             out = open(self.output, 'wb')
-            out.write(bytes(ans.encode('latin-1')))
+            out.write(bytes(ans.encode('utf-8', 'ignore')))
             out.close()
 
 
@@ -105,7 +105,7 @@ if __name__ == '__main__':
 
     parser.add_argument(
         '--format',
-        help='Specify the output format (csv, json, gml, etc.)'
+        help='Specify the output format (csv, geojson, gml, etc.)'
     )
     parser.add_argument(
         '--output',

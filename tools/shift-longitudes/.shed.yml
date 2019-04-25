@@ -1,7 +1,7 @@
 categories:
 - Climate Data Analysis
 description: Shift longitudes ranging from 0. and 360 degrees to -180. and 180. degrees
-homepage_url: https://github.com/NordicESMhub/galaxy-tools/blob/master/tools/shift-longitudes/shift_lon.py
+homepage_url: https://github.com/NordicESMhub/galaxy-tools/blob/master/tools/shift-longitudes/
 long_description: |
   The wrapper aims at providing a simple utility to shift longitudes ranging from
   0. and 360 degrees to -180. and 180. degrees.

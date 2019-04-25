@@ -2,7 +2,7 @@ categories:
 - Visualization
 - GIS
 description:  Creates a png image showing statistic over areas as defined in the vector file
-homepage_url: https://github.com/NordicESMhub/galaxy-tools/blob/master/tools/mean-per-zone/zonal_statistics.py
+homepage_url: https://github.com/NordicESMhub/galaxy-tools/blob/master/tools/mean-per-zone/
 long_description: |
   The wrapper aims at providing a utility to extract information
   from geospatial raster data based on vector geometries (shapefile).
