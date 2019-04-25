@@ -8,7 +8,7 @@ long_description: |
   The input file must be in netCDF format with geographical coordinates 
   (latitudes, longitudes) given in degrees.
 
-name: shift-longitudes
+name: shift_longitudes
 owner: climate
 remote_repository_url: https://github.com/NordicESMhub/galaxy-tools/tree/master/tools/shift-longitudes
 type: unrestricted
