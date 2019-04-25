@@ -20,7 +20,7 @@
             #if str($title).strip() != ''
                 --title '$title'
             #end if
-    ]]>    </command>
+    ]]></command>
     <inputs>
         <param name="ifilename" type="data" format="netcdf,h5" label="input with geographical coordinates (netCDF format)"/>
         <param name="shapefile" type="data" format="binary" label="shapefile (shp) with polygons for which statistics will be computed"/>
