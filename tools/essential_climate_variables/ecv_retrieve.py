@@ -2,12 +2,12 @@
 #
 #
 
-import os
 import argparse
-import warnings
+import os
 import tarfile
-import tempfile
+import warnings
 import shutil
+import tempfile
 
 import cdsapi
 
