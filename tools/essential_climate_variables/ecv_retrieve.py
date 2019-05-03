@@ -1,6 +1,5 @@
-#!/usr/bin/env python3
-#
-#
+# Retrieve Copernicus ECV
+# (Essential climate Variables)
 
 import argparse
 import os
@@ -66,13 +65,13 @@ class ECV ():
                 self.outputfile)
 
     def checktar(self):
-        ofile = open(self.outputfile, 'rb')
-        is_grib = ofile.read(4)
-        ofile.close()
+        is_grib = False
+        with open(self.outputfile, 'rb') as ofile:
+            is_grib = ofile.read(4)
+            ofile.close()
         if (is_grib == b'GRIB' and self.format == 'tgz'):
             # we create a tgz to be consistent
             newfilename = tempfile.NamedTemporaryFile()
-            print(newfilename.name)
             gribfile = os.path.basename(newfilename.name) + '.grib'
             shutil.copyfile(self.outputfile, gribfile)
             newfilename.close()
@@ -86,14 +85,15 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     remove_apikey = False
-    current_pwd = os.getcwd()
-    if 'GALAXY_APIRC_KEY' in os.environ and not os.path.isfile('.cdsapirc'):
-        apikey = open(".cdsapirc", "w+")
-        apikey.write("url: https://cds.climate.copernicus.eu/api/v2\n")
-        apikey.write("key: " + os.environ['GALAXY_APIRC_KEY'])
-        apikey.close()
-        remove_apikey = True
-        os.environ['HOME'] = current_pwd
+    current_pwd = os.environ['HOME']
+    if 'GALAXY_COPERNICUS_CDSAPIRC_KEY' in os.environ and \
+       not os.path.isfile('.cdsapirc'):
+        with open(".cdsapirc", "w+") as apikey:
+            apikey.write("url: https://cds.climate.copernicus.eu/api/v2\n")
+            apikey.write(
+                  "key: " + os.environ['GALAXY_COPERNICUS_CDSAPIRC_KEY'])
+            apikey.close()
+            remove_apikey = True
 
     parser.add_argument(
         'archive',
@@ -144,4 +144,4 @@ if __name__ == '__main__':
     p.checktar()
     # remove api key file if it was created
     if remove_apikey and os.getcwd() == current_pwd:
-        os.remove(current_pwd + '/.cdsapirc')
+        os.remove(os.path.join(current_pwd, '.cdsapirc'))
