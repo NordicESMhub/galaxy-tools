@@ -107,12 +107,12 @@
     </outputs>
     <tests>
         <test>
-            <param name="variable" value="surface_air_temperature"/>
+            <param name="variable" value="0_7cm_volumetric_soil_moisture"/>
             <param name="product_type" value="climatology"/>
             <param name="time_aggregation" value="1_month"/>
             <param name="month" value="12"/>
             <param name="year" value="2018"/>
-            <output name="ofilename" ftype="netcdf" file="T2M.nc" compare="sim_size" delta="100"/>
+            <output name="ofilename" ftype="netcdf" file="soil_moisture.nc" compare="sim_size" delta="100"/>
         </test>
         <test>
             <param name="variable" value="precipitation,sea_ice"/>
@@ -160,8 +160,6 @@ License:
    Generated using Copernicus Climate Change Service information [2019].
    Neither the European Commission nor ECMWF is responsible for any use 
    that may be made of the Copernicus information or data it contains.
-
-   Full license available at https://cds.climate.copernicus.eu/api/v2/terms/static/20180314_Copernicus_License_V1.1.pdf
 
     ]]></help>
     <citations>
