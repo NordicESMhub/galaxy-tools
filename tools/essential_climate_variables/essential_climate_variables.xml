@@ -153,6 +153,16 @@ the corresponding anomalies.
    It allows to retrieve estimates of Essential Climate Variables (ECVs)
    derived from Earth observations.
 
+License:
+~~~~~~~~
+   Copernicus License V1.1
+
+   Generated using Copernicus Climate Change Service information [2019].
+   Neither the European Commission nor ECMWF is responsible for any use 
+   that may be made of the Copernicus information or data it contains.
+
+   Full license available at https://cds.climate.copernicus.eu/api/v2/terms/static/20180314_Copernicus_License_V1.1.pdf
+
     ]]></help>
     <citations>
     </citations>
