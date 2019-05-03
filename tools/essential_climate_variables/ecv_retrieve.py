@@ -11,6 +11,7 @@ import shutil
 
 import cdsapi
 
+
 class ECV ():
     def __init__(self, archive, variable, product_type, year,
                  month, time_aggregation, area, format, output,
@@ -54,13 +55,13 @@ class ECV ():
 
         self.cdsapi.retrieve(
             self.archive, {
-                'variable'            : self.variable,
-                'year'                : self.year,
-                'month'               : self.month,
-                'area'                : self.area,
-                'format'              : self.format,
-                'product_type'        : self.product_type,
-                'time_aggregation'    : self.time_aggregation,
+                'variable': self.variable,
+                'year': self.year,
+                'month': self.month,
+                'area': self.area,
+                'format': self.format,
+                'product_type': self.product_type,
+                'time_aggregation': self.time_aggregation,
                           },
                 self.outputfile)
 
@@ -68,7 +69,7 @@ class ECV ():
         ofile = open(self.outputfile, 'rb')
         is_grib = ofile.read(4)
         ofile.close()
-        if (is_grib == b'GRIB' and self.format == 'tgz'): 
+        if (is_grib == b'GRIB' and self.format == 'tgz'):
             # we create a tgz to be consistent
             newfilename = tempfile.NamedTemporaryFile()
             print(newfilename.name)
@@ -87,7 +88,7 @@ if __name__ == '__main__':
     remove_apikey = False
     current_pwd = os.getcwd()
     if 'GALAXY_APIRC_KEY' in os.environ and not os.path.isfile('.cdsapirc'):
-        apikey = open(".cdsapirc","w+")
+        apikey = open(".cdsapirc", "w+")
         apikey.write("url: https://cds.climate.copernicus.eu/api/v2\n")
         apikey.write("key: " + os.environ['GALAXY_APIRC_KEY'])
         apikey.close()
@@ -137,8 +138,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     p = ECV(args.archive, args.variable, args.product_type,
-             args.year, args.month, args.time_aggregation, args.area,
-             args.format, args.output, args.verbose)
+            args.year, args.month, args.time_aggregation, args.area,
+            args.format, args.output, args.verbose)
     p.retrieve()
     p.checktar()
     # remove api key file if it was created
