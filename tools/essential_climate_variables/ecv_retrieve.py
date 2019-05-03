@@ -4,8 +4,8 @@
 
 import argparse
 import os
-import tarfile
 import shutil
+import tarfile
 import tempfile
 import warnings
 
