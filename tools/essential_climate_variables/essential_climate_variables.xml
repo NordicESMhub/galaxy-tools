@@ -6,7 +6,7 @@
         <requirement type="package" version="1.9.6">cdo</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-##       HOME=`pwd`  &&
+       HOME=`pwd`  &&
        python3 '$__tool_directory__/ecv_retrieve.py'
             'ecv-for-climate-change' '$variable'
             --year '$year'
