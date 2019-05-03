@@ -84,8 +84,12 @@ if __name__ == '__main__':
     warnings.filterwarnings("ignore")
     parser = argparse.ArgumentParser()
 
-    if 'GALAXY_APIRC_KEY' in os.environ:
-        os.environ['HOME'] = os.environ['GALAXY_APIRC_KEY']
+    if 'GALAXY_APIRC_KEY' in os.environ and not os.path.isfile('.cdsapirc'):
+        apikey = open(".cdsapirc","w+")
+        apikey.write("url: https://cds.climate.copernicus.eu/api/v2\n")
+        apikey.write("key: " + os.environ['GALAXY_APIRC_KEY'])
+        apikey.close()
+        os.environ['HOME'] = os.getcwd()
 
     parser.add_argument(
         'archive',
