@@ -5,6 +5,9 @@
 import os
 import argparse
 import warnings
+import tarfile
+import tempfile
+import shutil
 
 import cdsapi
 
@@ -61,16 +64,29 @@ class ECV ():
                           },
                 self.outputfile)
 
+    def checktar(self):
+        ofile = open(self.outputfile, 'rb')
+        is_grib = ofile.read(4)
+        ofile.close()
+        if (is_grib == b'GRIB' and self.format == 'tgz'): 
+            # we create a tgz to be consistent
+            newfilename = tempfile.NamedTemporaryFile()
+            print(newfilename.name)
+            gribfile = os.path.basename(newfilename.name) + '.grib'
+            shutil.copyfile(self.outputfile, gribfile)
+            newfilename.close()
+            tar = tarfile.open(self.outputfile, 'w:gz')
+            tar.add(gribfile)
+            tar.close()
+
 
 if __name__ == '__main__':
     warnings.filterwarnings("ignore")
     parser = argparse.ArgumentParser()
 
     if 'GALAXY_APIRC_KEY' in os.environ:
-        print("use GALAXY_APIRC_KEY")
         os.environ['HOME'] = os.environ['GALAXY_APIRC_KEY']
-    else:
-        print("GALAXY_APIRC_KEY environment variable do not exist")
+
     parser.add_argument(
         'archive',
         help='Archive name'
@@ -117,3 +133,4 @@ if __name__ == '__main__':
              args.year, args.month, args.time_aggregation, args.area,
              args.format, args.output, args.verbose)
     p.retrieve()
+    p.checktar()

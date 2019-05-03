@@ -1,5 +1,5 @@
-<tool id="cds" name="Copernicus Essential" version="0.1.4">
-    <description>Climate Variables</description>
+<tool id="cds_essential_variability" name="Copernicus Essential Climate Variables" version="0.1.4">
+    <description>for assessing climate variability</description>
     <requirements>
         <requirement type="package" version="3">python</requirement>
         <requirement type="package" version="0.1.4">cdsapi</requirement>
@@ -9,7 +9,7 @@
        python3 '$__tool_directory__/ecv_retrieve.py'
             'ecv-for-climate-change' '$variable'
             --year '$year'
-        #if str($time_aggregation.selector) == 'monthly'
+        #if str($time_aggregation.selector) == '1_month'
             --month '$time_aggregation.month'
         #else
             --month '01'
@@ -20,7 +20,7 @@
            --verbose                                       &&
            tar zxvf tmp.tgz                                &&
            cat *.grib > tmp.grib                           &&
-           cdo -f nc -t ecmwf copy tmp.grib tmp.nc                   &&
+           cdo -f nc -t ecmwf copy tmp.grib tmp.nc         &&
            rm -rf *.grib
     ]]></command>
     <inputs>
@@ -105,42 +105,88 @@
     <outputs>
         <data name="ofilename" format="netcdf" from_work_dir="tmp.nc"/>
     </outputs>
+    <tests>
+      <test>
+        <param name="variable" value="surface_air_temperature"/>
+        <param name="product_type" value="climatology"/>
+        <param name="time_aggregation" value="1_month"/>
+        <param name="month" value="12"/>
+        <param name="year" value="2018"/>
+        <output name="ofilename" ftype="netcdf" file="T2M.nc" compare="sim_size" delta="100"/>
+      </test>
+      <test>
+        <param name="variable" value="precipitation,sea_ice"/>
+        <param name="product_type" value="anomaly"/>
+        <param name="time_aggregation" value="12_month"/>
+        <param name="year" value="2017"/>
+        <output name="ofilename" ftype="netcdf" file="prep_seaice.nc" compare="sim_size" delta="100"/>
+      </test>
+    </tests>
     <help><![CDATA[
 
-**Copernicus Essential Climate Variables**
-===========================================
+**Copernicus Essential climate variables for assessment of climate variability from 1979 to present**
+=======================================================================================================
 
-This tool allows to retrieve Essential Climate Variables from Copernicus..
+This tool is a wrapper to retrieve Copernicus Essential Climate Variables.
+It corresponds to the European Contribution to the Monitoring of Essential Climate Variables from Space.
+An Essential Climate Variable is a physical, chemical or biological variable or a group of linked variables
+that critically contributes to the characterization of Earth’ s climate.
 
+The Essential Climate Variables for assessment of climate variability from 1979 to present dataset contains
+a selection of climatologies and monthly anomalies of Essential Climate Variables (ECVs) suitable for
+monitoring and assessment of climate variability and change. Selection criteria are based on accuracy
+and temporal consistency on monthly to decadal time scales. The ECV data products in this set have been
+estimated from multiple sources and, depending on the source, may have been adjusted to account for biases
+and other known deficiencies. Data sources and adjustment methods used are described in the Product User
+Guide, as are various particulars such as the baseline periods used to calculate monthly climatologies and
+the corresponding anomalies.
+
+
+- ECV Factsheets: https://gcos.wmo.int/en/essential-climate-variables/ecv-factsheets
+- Copernicus Climate Data Store documentation on Essential Climate Variables:
+  https://cds.climate.copernicus.eu/cdsapp#!/dataset/ecv-for-climate-change?tab=overview
+
+  See climatedata.wmo.int/ for more information on Essential Climate Variables.
 
 .. class:: infomark
 
-        TODO: Fill in help.
+   It allows to retrieve estimates of Essential Climate Variables (ECVs)
+   derived from Earth observations.
 
 **What it does**
 ----------------
 
-TODO
+   This tool retrieves Essential Climate Variables (ECVs) from Copernicus
+   Climate Data Store.
 
 **Usage**
 
 ::
 
-  usage:
-
+  ecv_retrieve.py [-h] [--product_type PRODUCT_TYPE] [--year YEAR]
+                       [--month MONTH] [--time_aggregation TIME_AGGREGATION]
+                       [--area AREA] [--format FORMAT] [--output OUTPUT] [-v]
+                       archive variable
 
 Positional arguments:
 ~~~~~~~~~~~~~~~~~~~~~
-
-TO DO
+ - **archive**               Archive name
+ - **variable**              Specify which variable to retrieve
 
 Optional arguments:
-~~~~~~~~~~~~~~~~~~~~~
-
-TODO
-  --output OUTPUT  output filename to store resulting image (png format)
-  -v, --verbose    switch on verbose mode
-
+~~~~~~~~~~~~~~~~~~~~
+          -h, --help            show this help message and exit
+          --product_type        PRODUCT_TYPE
+                                Type of product (climatology or anomaly)
+          --year YEAR           Year(s) to retrieve.
+          --month MONTH         List of months to retrieve.
+          --time_aggregation    TIME_AGGREGATION
+                                Time range over which data is aggregated
+                                (monthly/yearly).
+          --area AREA           Desired sub-area to extract (North/West/South/East)
+          --format FORMAT       Output file format (GRIB or netCDF or tgz)
+          --output OUTPUT       output filename
+          -v, --verbose         switch on verbose mode
 
     ]]></help>
     <citations>
