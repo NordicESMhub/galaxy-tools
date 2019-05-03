@@ -5,8 +5,8 @@
 import argparse
 import os
 import tarfile
-import warnings
 import shutil
+import warnings
 import tempfile
 
 import cdsapi
