@@ -68,7 +68,6 @@ class ECV ():
         is_grib = False
         with open(self.outputfile, 'rb') as ofile:
             is_grib = ofile.read(4)
-            ofile.close()
         if (is_grib == b'GRIB' and self.format == 'tgz'):
             # we create a tgz to be consistent
             newfilename = tempfile.NamedTemporaryFile()
@@ -92,7 +91,6 @@ if __name__ == '__main__':
             apikey.write("url: https://cds.climate.copernicus.eu/api/v2\n")
             apikey.write(
                   "key: " + os.environ['GALAXY_COPERNICUS_CDSAPIRC_KEY'])
-            apikey.close()
             remove_apikey = True
 
     parser.add_argument(

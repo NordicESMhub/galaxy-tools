@@ -153,33 +153,6 @@ the corresponding anomalies.
    It allows to retrieve estimates of Essential Climate Variables (ECVs)
    derived from Earth observations.
 
-::
-
-  ecv_retrieve.py [-h] [--product_type PRODUCT_TYPE] [--year YEAR]
-                       [--month MONTH] [--time_aggregation TIME_AGGREGATION]
-                       [--area AREA] [--format FORMAT] [--output OUTPUT] [-v]
-                       archive variable
-
-Positional arguments:
-~~~~~~~~~~~~~~~~~~~~~
- - **archive**               Archive name
- - **variable**              Specify which variable to retrieve
-
-Optional arguments:
-~~~~~~~~~~~~~~~~~~~~
-          -h, --help            show this help message and exit
-          --product_type        PRODUCT_TYPE
-                                Type of product (climatology or anomaly)
-          --year YEAR           Year(s) to retrieve.
-          --month MONTH         List of months to retrieve.
-          --time_aggregation    TIME_AGGREGATION
-                                Time range over which data is aggregated
-                                (monthly/yearly).
-          --area AREA           Desired sub-area to extract (North/West/South/East)
-          --format FORMAT       Output file format (GRIB or netCDF or tgz)
-          --output OUTPUT       output filename
-          -v, --verbose         switch on verbose mode
-
     ]]></help>
     <citations>
     </citations>
