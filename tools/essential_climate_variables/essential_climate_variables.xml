@@ -7,6 +7,7 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
        HOME=`pwd`  &&
+       source \$COPERNICUS_CDSAPIRC_KEY_FILE 2> /dev/null | true &&
        python3 '$__tool_directory__/ecv_retrieve.py'
             'ecv-for-climate-change' '$variable'
             --year '$year'
@@ -20,7 +21,8 @@
            --format 'tgz' --output 'tmp.tgz'
            --verbose                                       &&
            tar zxvf tmp.tgz                                &&
-           cat *.grib > tmp.grib                           &&
+           cat *.grib > tmpg.grib                          &&
+           cdo remapcon,r1440x720 -setgridtype,regular tmpg.grib tmp.grib &&
            cdo -f nc -t ecmwf copy tmp.grib tmp.nc
     ]]></command>
     <inputs>
