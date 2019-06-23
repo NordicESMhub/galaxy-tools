@@ -34,7 +34,11 @@ class ECV ():
             self.time_aggregation = '1_month'
         else:
             self.time_aggregation = time_aggregation
-        self.area = area
+        if area == '':
+            self.area = 'global'
+        else:
+            self.area = area
+
         if format == '':
             self.format = 'tgz'
         else:
@@ -57,6 +61,7 @@ class ECV ():
                 'variable': self.variable,
                 'year': self.year,
                 'month': self.month,
+                'origin': 'era5',
                 'area': self.area,
                 'format': self.format,
                 'product_type': self.product_type,
