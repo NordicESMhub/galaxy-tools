@@ -1,4 +1,4 @@
-<tool id="mean_per_zone" name="zonal statistics" version="0.1.0">
+<tool id="mean_per_zone" name="zonal statistics" version="0.2.0">
     <description>over each area</description>
     <requirements>
         <requirement type="package" version="3">python</requirement>
@@ -82,7 +82,7 @@ Positional arguments:
 ~~~~~~~~~~~~~~~~~~~~~
 
 - **raster**:            input raster filename with geographical coordinates (netCDF format)
-- **vector**:            input raster filename with polygons
+- **vector**:            input shapefile filename with polygons
 - **variable**:          variable used from raster file to compute statistics
 - **output**:            output filename for png file containing the resulting plot.
 
