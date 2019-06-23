@@ -5,7 +5,7 @@
         <requirement type="package" version="0.13.1">rasterstats</requirement>
         <requirement type="package" version="0.4.1">geopandas</requirement>
         <requirement type="package" version="0.11.3">xarray</requirement>
-        <requirement type="package" version="1.4.3.2">netcdf4</requirement>
+        <requirement type="package" version="1.5.1.2">netcdf4</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
        python3 '$__tool_directory__/zonal_statistics.py'
