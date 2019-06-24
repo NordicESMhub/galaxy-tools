@@ -1,19 +1,16 @@
-<tool id="mean_per_zone" name="zonal statistics" version="0.1.0">
+<tool id="mean_per_zone" name="zonal statistics" version="0.2.0">
     <description>over each area</description>
     <requirements>
         <requirement type="package" version="3">python</requirement>
         <requirement type="package" version="0.13.1">rasterstats</requirement>
         <requirement type="package" version="0.4.1">geopandas</requirement>
         <requirement type="package" version="0.11.3">xarray</requirement>
-        <requirement type="package" version="1.4.3.2">netcdf4</requirement>
+        <requirement type="package" version="1.5.1.2">netcdf4</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-       mkdir -p shp_tmp &&
-       ln -s '$shapefile' 'shp_tmp/temp.shp' &&
-       ln -s '$shapefilex' 'shp_tmp/temp.shx' &&
        python3 '$__tool_directory__/zonal_statistics.py'
             '$ifilename'
-            'shp_tmp'
+            '$shapefile.extra_files_path'
             '$variable'
             '$ofilename'
             --stat '$stat_type'
@@ -23,16 +20,15 @@
     ]]></command>
     <inputs>
         <param name="ifilename" type="data" format="netcdf,h5" label="input with geographical coordinates (netCDF format)"/>
-        <param name="shapefile" type="data" format="binary" label="shapefile (shp) with polygons for which statistics will be computed"/>
-        <param name="shapefilex" type="data" format="binary" label="shapefile (shx) with polygons for which statistics will be computed"/>
+        <param name="shapefile" type="data" format="shp" label="shapefile (shp) with polygons for which statistics will be computed"/>
         <!--param name="name" type="text" value="" label="Shapefile name" /-->
         <param name="variable" type="text" value="TS" label="variable name as given in the netCDF file" />
         <param name="title" type="text" value="" label="Title of the generated plot" />
         <param name="stat_type" type="select">
-            <option value="min" selected="true">minimum</option>
-            <option value="max" selected="true">maximum</option>
+            <option value="min">minimum</option>
+            <option value="max">maximum</option>
             <option value="mean" selected="true">mean</option>
-            <option value="count" selected="true">count</option>
+            <option value="count">count</option>
         </param>
     </inputs>
     <outputs>
@@ -43,9 +39,13 @@
             <param name="ifilename" value="TS.f2000.T31T31.control.cam.h0.0014-12.180.nc" />
             <param name="variable" value="TS" />
             <param name="title" value="Mean Surface Temperature per country" />
-            <param name="shapefile" value="TM_WORLD_BORDERS_SIMPL-0.3/TM_WORLD_BORDERS_SIMPL-0.3.shp" />
-            <param name="shapefilex" value="TM_WORLD_BORDERS_SIMPL-0.3/TM_WORLD_BORDERS_SIMPL-0.3.shx" />
-            <param name="name" value="TM_WORLD_BORDERS_SIMPL-0.3" />
+            <param name="shapefile" value="TM_WORLD_BORDERS_SIMPL-0.3.html" ftype="shp" >
+                <composite_data value="TM_WORLD_BORDERS_SIMPL-0.3/TM_WORLD_BORDERS_SIMPL-0.3.shp"/>
+                <composite_data value="TM_WORLD_BORDERS_SIMPL-0.3/TM_WORLD_BORDERS_SIMPL-0.3.shx"/>
+                <composite_data value="TM_WORLD_BORDERS_SIMPL-0.3/TM_WORLD_BORDERS_SIMPL-0.3.dbf"/>
+                <composite_data value="TM_WORLD_BORDERS_SIMPL-0.3/TM_WORLD_BORDERS_SIMPL-0.3.prj"/>
+            </param>
+            <!--param name="name" value="TM_WORLD_BORDERS_SIMPL-0.3" /-->
             <output name="ofilename" ftype="png" file="TS.f2000.T31T31.control.cam.h0.0014-12.180.png" compare="sim_size" delta="1500"/>
         </test>
     </tests>
@@ -82,7 +82,7 @@ Positional arguments:
 ~~~~~~~~~~~~~~~~~~~~~
 
 - **raster**:            input raster filename with geographical coordinates (netCDF format)
-- **vector**:            input raster filename with polygons
+- **vector**:            input shapefile filename with polygons
 - **variable**:          variable used from raster file to compute statistics
 - **output**:            output filename for png file containing the resulting plot.
 
