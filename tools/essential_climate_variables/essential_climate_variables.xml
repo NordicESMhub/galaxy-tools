@@ -7,7 +7,7 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
        HOME=`pwd`  &&
-       source \$COPERNICUS_CDSAPIRC_KEY_FILE 2> /dev/null | true &&
+       cp \$COPERNICUS_CDSAPIRC_KEY_FILE .cdsapirc | true &&
        python3 '$__tool_directory__/ecv_retrieve.py'
             'ecv-for-climate-change' '$variable'
             --month '$month'
