@@ -1,8 +1,17 @@
 # How to add a new tool?
 
-## Create a IaaS instance on the cloud 
+## On which platform should you develop your new tool?
+
+### Create a Virtual Machine (IaaS)
 
 If you are working in Norway and at the University of Oslo, Tromso or Bergen, see documentation at [IaaS](http://docs.uh-iaas.no/en/latest/).
+
+Then install [planemo](https://planemo.readthedocs.io/en/latest/).
+
+
+### Use Planemo OVA image
+
+See [Planemo Virtual Appliance documentation](https://planemo.readthedocs.io/en/latest/appliance.html).
 
 ## Develop a tool 
 
