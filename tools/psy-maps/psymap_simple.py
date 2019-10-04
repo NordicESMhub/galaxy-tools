@@ -34,8 +34,8 @@ from psyplot import rcParams   # noqa: I202,E402
 
 class PsyPlot ():
     def __init__(self, input, proj, varname, cmap, output, verbose=False,
-                 time=[], nrow = 1, ncol = 1, format = "%B %e, %Y",
-                 title = ""):
+                 time=[], nrow=1, ncol=1, format="%B %e, %Y",
+                 title=""):
         self.input = input
         self.proj = proj
         self.varname = varname
@@ -86,27 +86,27 @@ class PsyPlot ():
 
         if self.cmap is None and self.proj is None:
             print("op1")
-            psy.plot.mapplot(self.input, name = self.varname,
-                             title = title,
-                             clabel = '{desc}')
+            psy.plot.mapplot(self.input, name=self.varname,
+                             title=title,
+                             clabel='{desc}')
         elif (self.proj is None or self.proj == ''):
             print("op2")
-            psy.plot.mapplot(self.input, name = self.varname,
-                             title = title,
-                             cmap = self.cmap, clabel = '{desc}')
+            psy.plot.mapplot(self.input, name=self.varname,
+                             title=title,
+                             cmap=self.cmap, clabel='{desc}')
         elif self.cmap is None or self.cmap == '':
             print("op3")
-            psy.plot.mapplot(self.input, name = self.varname,
-                             projection = self.proj,
-                             title = title,
-                             clabel = '{desc}')
+            psy.plot.mapplot(self.input, name=self.varname,
+                             projection=self.proj,
+                             title=title,
+                             clabel='{desc}')
         else:
             print("op4")
-            psy.plot.mapplot(self.input, name = self.varname,
-                             cmap = self.cmap,
-                             projection = self.proj,
-                             title = title,
-                             clabel = '{desc}')
+            psy.plot.mapplot(self.input, name=self.varname,
+                             cmap=self.cmap,
+                             projection=self.proj,
+                             title=title,
+                             clabel='{desc}')
 
         pyplot.savefig(self.output)
 
@@ -123,38 +123,38 @@ class PsyPlot ():
         rcParams.update({'plotter.maps.grid_labelsize': 8.0})
         if self.cmap is None and self.proj is None:
             print("op1 time")
-            m = psy.plot.mapplot(self.input, name = self.varname,
-                             title = title,
-                             ax = (self.nrow,self.ncol),
-                             time = self.time, sort = ['time'],
-                             clabel = '{desc}')
+            m = psy.plot.mapplot(self.input, name=self.varname,
+                             title=title,
+                             ax=(self.nrow,self.ncol),
+                             time=self.time, sort=['time'],
+                             clabel='{desc}')
             m.share(keys = 'bounds')
         elif (self.proj is None or self.proj == ''):
             print("op2 time")
-            m = psy.plot.mapplot(self.input, name = self.varname,
-                             title = title,
-                             ax = (self.nrow,self.ncol),
-                             time = self.time, sort = ['time'],
-                             cmap = self.cmap, clabel = '{desc}')
+            m = psy.plot.mapplot(self.input, name=self.varname,
+                             title=title,
+                             ax=(self.nrow,self.ncol),
+                             time=self.time, sort=['time'],
+                             cmap=self.cmap, clabel='{desc}')
             m.share(keys = 'bounds')
         elif self.cmap is None or self.cmap == '':
             print("op3 time")
-            m = psy.plot.mapplot(self.input, name = self.varname,
-                             projection = self.proj,
-                             ax = (self.nrow,self.ncol),
-                             time = self.time, sort = ['time'],
-                             title = title,
-                             clabel = '{desc}')
+            m = psy.plot.mapplot(self.input, name=self.varname,
+                             projection=self.proj,
+                             ax=(self.nrow,self.ncol),
+                             time=self.time, sort=['time'],
+                             title=title,
+                             clabel='{desc}')
             m.share(keys = 'bounds')
         else:
             print("op4 time")
             m = psy.plot.mapplot(self.input, name=self.varname,
                              cmap=self.cmap,
                              projection=self.proj,
-                             ax = (self.nrow, self.ncol),
-                             time = self.time, sort = ['time'],
-                             title = title,
-                             clabel = '{desc}')
+                             ax=(self.nrow, self.ncol),
+                             time=self.time, sort=['time'],
+                             title=title,
+                             clabel='{desc}')
             m.share(keys = 'bounds')
 
         pyplot.savefig(self.output)
