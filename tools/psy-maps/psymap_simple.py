@@ -130,37 +130,37 @@ class PsyPlot ():
             print("op1 time")
             m = psy.plot.mapplot(self.input, name=self.varname,
                                  title=title,
-                                 ax=(self.nrow,self.ncol),
+                                 ax=(self.nrow, self.ncol),
                                  time=self.time, sort=['time'],
                                  clabel='{desc}')
-            m.share(keys = 'bounds')
+            m.share(keys='bounds')
         elif (self.proj is None or self.proj == ''):
             print("op2 time")
             m = psy.plot.mapplot(self.input, name=self.varname,
                                  title=title,
-                                 ax=(self.nrow,self.ncol),
+                                 ax=(self.nrow, self.ncol),
                                  time=self.time, sort=['time'],
                                  cmap=self.cmap, clabel='{desc}')
-            m.share(keys = 'bounds')
+            m.share(keys='bounds')
         elif self.cmap is None or self.cmap == '':
             print("op3 time")
             m = psy.plot.mapplot(self.input, name=self.varname,
                                  projection=self.proj,
-                                 ax=(self.nrow,self.ncol),
+                                 ax=(self.nrow, self.ncol),
                                  time=self.time, sort=['time'],
                                  title=title,
                                  clabel='{desc}')
-            m.share(keys = 'bounds')
+            m.share(keys='bounds')
         else:
             print("op4 time")
             m = psy.plot.mapplot(self.input, name=self.varname,
-                             cmap=self.cmap,
-                             projection=self.proj,
-                             ax=(self.nrow, self.ncol),
-                             time=self.time, sort=['time'],
-                             title=title,
-                             clabel='{desc}')
-            m.share(keys = 'bounds')
+                                 cmap=self.cmap,
+                                 projection=self.proj,
+                                 ax=(self.nrow, self.ncol),
+                                 time=self.time, sort=['time'],
+                                 title=title,
+                                 clabel='{desc}')
+            m.share(keys='bounds')
 
         pyplot.savefig(self.output)
 
@@ -176,6 +176,7 @@ def psymap_plot(input, proj, varname, cmap, output, verbose, time,
         p.plot()
     else:
         p.multiple_plot()
+
 
 if __name__ == '__main__':
     warnings.filterwarnings("ignore")
@@ -232,5 +233,5 @@ if __name__ == '__main__':
     else:
         time = list(map(int, args.time.split(" ")))
     psymap_plot(args.input, args.proj, args.varname, args.cmap,
-                args.output, args.verbose,  time ,
+                args.output, args.verbose, time ,
                 args.nrow, args.ncol, args.format, args.title)
