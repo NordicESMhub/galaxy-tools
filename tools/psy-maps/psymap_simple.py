@@ -231,7 +231,7 @@ if __name__ == '__main__':
     if args.time is None:
         time = []
     else:
-        time = list(map(int, args.time.split(" ")))
+        time = list(map(int, args.time.split(",")))
     psymap_plot(args.input, args.proj, args.varname, args.cmap,
                 args.output, args.verbose, time,
                 args.nrow, args.ncol, args.format, args.title)
