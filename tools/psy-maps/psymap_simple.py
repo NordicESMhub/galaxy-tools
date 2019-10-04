@@ -28,9 +28,8 @@ import matplotlib as mpl
 mpl.use('Agg')
 from matplotlib import pyplot  # noqa: I202,E402
 
-from psyplot import rcParams   # noqa: I202,E402
 import psyplot.project as psy  # noqa: I202,E402
-
+from psyplot import rcParams   # noqa: I202,E402
 
 
 class PsyPlot ():
