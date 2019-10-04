@@ -17,6 +17,11 @@
 #  --proj PROJ      Specify the projection on which we draw
 #  --cmap CMAP      Specify which colormap to use for plotting
 #  --output OUTPUT  output filename to store resulting image (png format)
+#  --time TIMES     time index from the file for multiple plots ("0 1 2 3")
+#  --nrow NROW      number of rows for multiple plot grid
+#  --ncol NCOL      number of columns for multiple plot grid
+#  --format         date format such as %Y (for year) %B (for month), etc.
+#  --title          plot or subplot title
 #  -v, --verbose    switch on verbose mode
 #
 
@@ -118,33 +123,33 @@ class PsyPlot ():
             title = self.format
         else:
             title = self.title + "\n" + self.format
-        mpl.rcParams['figure.figsize'] = [40,8]
+        mpl.rcParams['figure.figsize'] = [40, 8]
         mpl.rcParams.update({'font.size': 8})
         rcParams.update({'plotter.maps.grid_labelsize': 8.0})
         if self.cmap is None and self.proj is None:
             print("op1 time")
             m = psy.plot.mapplot(self.input, name=self.varname,
-                             title=title,
-                             ax=(self.nrow,self.ncol),
-                             time=self.time, sort=['time'],
-                             clabel='{desc}')
+                                 title=title,
+                                 ax=(self.nrow,self.ncol),
+                                 time=self.time, sort=['time'],
+                                 clabel='{desc}')
             m.share(keys = 'bounds')
         elif (self.proj is None or self.proj == ''):
             print("op2 time")
             m = psy.plot.mapplot(self.input, name=self.varname,
-                             title=title,
-                             ax=(self.nrow,self.ncol),
-                             time=self.time, sort=['time'],
-                             cmap=self.cmap, clabel='{desc}')
+                                 title=title,
+                                 ax=(self.nrow,self.ncol),
+                                 time=self.time, sort=['time'],
+                                 cmap=self.cmap, clabel='{desc}')
             m.share(keys = 'bounds')
         elif self.cmap is None or self.cmap == '':
             print("op3 time")
             m = psy.plot.mapplot(self.input, name=self.varname,
-                             projection=self.proj,
-                             ax=(self.nrow,self.ncol),
-                             time=self.time, sort=['time'],
-                             title=title,
-                             clabel='{desc}')
+                                 projection=self.proj,
+                                 ax=(self.nrow,self.ncol),
+                                 time=self.time, sort=['time'],
+                                 title=title,
+                                 clabel='{desc}')
             m.share(keys = 'bounds')
         else:
             print("op4 time")
@@ -202,7 +207,7 @@ if __name__ == '__main__':
     )
     parser.add_argument(
         '--format',
-        help='format for date/time (default is %B %e, %Y)'
+        help='format for date/time (default is Month d, yyyy)'
     )
     parser.add_argument(
         '--title',

@@ -14,8 +14,14 @@
             --proj '$adv.projection'
             --cmap '$adv.colormap'
             --output image.png
-       #if str($adv.title) != ""
-            --title '$adv.title'
+            --title '$'
+       #if str($adv.multiple_plot.selector) == 'yes'
+            --format '$adv.multiple_plot.format'
+            --ncol '$adv.multiple_plot.ncol'
+            --nrow '$adv.multiple_plot.nrow'
+       #end if
+       #if str($adv.multiple_plot.title) != ""
+            --title '$adv.multiple_plot.title'
        #end if
     ]]></command>
     <inputs>
@@ -172,7 +178,8 @@ netCDF file (input file). By default, the projection is ``PlateCarree`` and colo
 
 ::
 
-  usage: psymap_simple.py [-h] [--proj PROJ] [--cmap CMAP] [--output OUTPUT] [-v] input varname
+  usage: psymap_simple.py [-h] [--proj PROJ] [--cmap CMAP] [--output OUTPUT] [--time TIME]
+                          [--format FORMAT] [--title TITLE] [--ncol NCOL] [--nrow NROW] [-v] input varname
 
 
 Positional arguments:
@@ -189,6 +196,11 @@ Optional arguments:
   --cmap CMAP      Specify which colormap to use for plotting
   --output OUTPUT  output filename to store resulting image (png format)
   -v, --verbose    switch on verbose mode
+  --time TIME      list of times to plot for multiple plots
+  --format FORMAT  format for date/time (default is Month d, yyyy)
+  --title TITLE    plot title
+  --ncol NCOL      number of columns for multiple plots
+  --nrow NROW      number of rows for multiple plots
 
 It uses psy-maps, a python package to generate plots. More information about
 psyplot and psy-maps can be found at https://psyplot.readthedocs.io/projects/psy-maps/en/latest/
