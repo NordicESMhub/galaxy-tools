@@ -1,23 +1,42 @@
-<tool id="psy_maps" name="map plot" version="1.2.0">
+<tool id="psy_maps" name="map plot" version="1.2.1">
     <description>gridded (lat/lon) netCDF data</description>
     <requirements>
         <requirement type="package" version="3">python</requirement>
+        <requirement type="package" version="1.2.1">psyplot</requirement>
         <requirement type="package" version="1.2.0">psy-maps</requirement>
         <requirement type="package" version="1.2.0">psy-reg</requirement>
-        <requirement type="package" version="1.2.2">psyplot-gui</requirement>
-        <requirement type="package" version="1.4.1">netcdf4</requirement>
+        <requirement type="package" version="1.4.2">netcdf4</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
+       HOME=`pwd`  &&
        python3 '$__tool_directory__/psymap_simple.py'
             '$ifilename' '$variable'
             --proj '$adv.projection'
             --cmap '$adv.colormap'
             --output image.png
+       #if str($adv.title) != ""
+            --title '$adv.title'
+       #end if
     ]]></command>
     <inputs>
         <param name="ifilename" type="data" format="netcdf" label="input with geographical coordinates (netCDF format)"></param>
         <param name="variable" type="text" value="TS" label="variable name as given in the netCDF file" />
         <section name="adv" title="Advanced Options" expanded="false">
+            <conditional name="multiple_plot">
+                <param name="selector" type="select" label="multiple times">
+                    <option value="yes">yes</option>
+                    <option value="no" selected="true">no</option>
+                </param>
+                <when value="yes">
+                    <param name="format" type="text" value="%Y-%m-%d %H:%M:%S" label="date and time format" />
+                    <param name="ncol" type="integer" value="1" min="1" max="4" label="number of columns for subplot grid" />
+                    <param name="nrow" type="integer" value="1" min="1" max="20" label="number of rows for subplot grid" />
+                    <param name="title" type="text" value="" label="subplot title (repeated on each subplot)" />
+                </when>
+                <when value="no">
+                    <param name="title" type="text" value="" label="plot title" />
+                </when>
+            </conditional>
             <param name="projection" type="select">
                 <option value="" selected="true">PlateCarree</option>
                 <option value="robin">Robinson</option>
