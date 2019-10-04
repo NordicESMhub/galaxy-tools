@@ -14,7 +14,6 @@
             --proj '$adv.projection'
             --cmap '$adv.colormap'
             --output image.png
-            --title '$'
        #if str($adv.multiple_plot.selector) == 'yes'
             --format '$adv.multiple_plot.format'
             --ncol '$adv.multiple_plot.ncol'

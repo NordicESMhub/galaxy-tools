@@ -49,7 +49,7 @@ class PsyPlot ():
         if format is None:
             self.format = ""
         else:
-            self.format = format
+            self.format = format.replace('X', '%')
         if title is None:
             self.title = ""
         else:
@@ -123,7 +123,7 @@ class PsyPlot ():
             title = self.format
         else:
             title = self.title + "\n" + self.format
-        mpl.rcParams['figure.figsize'] = [40, 8]
+        mpl.rcParams['figure.figsize'] = [20, 8]
         mpl.rcParams.update({'font.size': 8})
         rcParams.update({'plotter.maps.grid_labelsize': 8.0})
         if self.cmap is None and self.proj is None:
