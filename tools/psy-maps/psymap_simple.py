@@ -80,33 +80,29 @@ class PsyPlot ():
             print("output: ", self.output)
 
     def plot(self):
-        if self.title == "" and self.format == "":
-            title = '%(long_name)s'
-        elif self.title == "" and self.format != "":
+        if self.title and self.format:
+            title = self.title + "\n" + self.format
+        elif not self.title and self.format:
             title = self.format
-        elif self.title != "" and self.format == "":
+        elif self.title and not self.format:
             title = self.title
         else:
-            title = self.title + "\n" + self.format
+            title = '%(long_name)s'
 
         if self.cmap is None and self.proj is None:
-            print("op1")
             psy.plot.mapplot(self.input, name=self.varname,
                              title=title,
                              clabel='{desc}')
-        elif (self.proj is None or self.proj == ''):
-            print("op2")
+        elif self.proj is None or not self.proj:
             psy.plot.mapplot(self.input, name=self.varname,
                              title=title,
                              cmap=self.cmap, clabel='{desc}')
-        elif self.cmap is None or self.cmap == '':
-            print("op3")
+        elif self.cmap is None or not self.cmap:
             psy.plot.mapplot(self.input, name=self.varname,
                              projection=self.proj,
                              title=title,
                              clabel='{desc}')
         else:
-            print("op4")
             psy.plot.mapplot(self.input, name=self.varname,
                              cmap=self.cmap,
                              projection=self.proj,
@@ -116,10 +112,10 @@ class PsyPlot ():
         pyplot.savefig(self.output)
 
     def multiple_plot(self):
-        if self.format == "":
+        if not self.format:
             self.format = "%B %e, %Y"
 
-        if self.title == "":
+        if not self.title:
             title = self.format
         else:
             title = self.title + "\n" + self.format
@@ -127,23 +123,20 @@ class PsyPlot ():
         mpl.rcParams.update({'font.size': 8})
         rcParams.update({'plotter.maps.grid_labelsize': 8.0})
         if self.cmap is None and self.proj is None:
-            print("op1 time")
             m = psy.plot.mapplot(self.input, name=self.varname,
                                  title=title,
                                  ax=(self.nrow, self.ncol),
                                  time=self.time, sort=['time'],
                                  clabel='{desc}')
             m.share(keys='bounds')
-        elif (self.proj is None or self.proj == ''):
-            print("op2 time")
+        elif (self.proj is None or not self.proj):
             m = psy.plot.mapplot(self.input, name=self.varname,
                                  title=title,
                                  ax=(self.nrow, self.ncol),
                                  time=self.time, sort=['time'],
                                  cmap=self.cmap, clabel='{desc}')
             m.share(keys='bounds')
-        elif self.cmap is None or self.cmap == '':
-            print("op3 time")
+        elif self.cmap is None or not self.cmap:
             m = psy.plot.mapplot(self.input, name=self.varname,
                                  projection=self.proj,
                                  ax=(self.nrow, self.ncol),
@@ -152,7 +145,6 @@ class PsyPlot ():
                                  clabel='{desc}')
             m.share(keys='bounds')
         else:
-            print("op4 time")
             m = psy.plot.mapplot(self.input, name=self.varname,
                                  cmap=self.cmap,
                                  projection=self.proj,
@@ -171,7 +163,6 @@ def psymap_plot(input, proj, varname, cmap, output, verbose, time,
 
     p = PsyPlot(input, proj, varname, cmap, output, verbose, time,
                 nrow, ncol, format, title)
-    print("time", time)
     if len(time) == 0:
         p.plot()
     else:
