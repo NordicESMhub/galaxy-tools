@@ -153,7 +153,7 @@
             <param name="variable" value="TS" />
             <param name="projection" value="ortho" />
             <param name="colormap" value="RdBu_r" />
-            <output name="ofilename" ftype="png" file="TS.f2000.T31T31.control.cam.h0.0014-12.png" compare="sim_size" delta="500"/>
+            <output name="ofilename" ftype="png" file="TS.f2000.T31T31.control.cam.h0.0014-12_ortho.png" compare="sim_size" delta="500"/>
         </test>
     </tests>
     <help><![CDATA[
