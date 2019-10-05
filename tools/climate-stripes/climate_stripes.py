@@ -35,13 +35,13 @@ mpl.use('Agg')
 
 import numpy as np
 
-import pandas as pd
-
 import matplotlib.pyplot as plt   # noqa: I202,E402
+
+import pandas as pd
 
 
 class Stripes ():
-    def __init__(self, input, valname, cmap, output, xname = "",
+    def __init__(self, input, valname, cmap, output, xname="",
                  date_format='%Y%m',
                  plot_format='%Y',
                  nxsplit=10,
@@ -77,12 +77,11 @@ class Stripes ():
     def create_stripes(self):
         data = np.zeros((2, self.data[self.valname].shape[0]), dtype='float')
         data[:] = np.NaN
-        data[0,:] = self.data[self.valname]
-        data[1,:] = self.data[self.valname]
-        fig = plt.figure(figsize=(10,2))
+        data[0, :] = self.data[self.valname]
+        data[1, :] = self.data[self.valname]
+        fig = plt.figure(figsize=(10, 2))
         ax = plt.subplot(111)
-        cmap = mpl.cm.get_cmap(self.cmap, 10)
-        cf = plt.pcolor(data, cmap = self.cmap, vmin = self.data[self.valname].min(),
+        plt.pcolor(data, cmap = self.cmap, vmin = self.data[self.valname].min(),
                         vmax = self.data[self.valname].max())
         if self.title:
             plt.title(self.title)
