@@ -129,7 +129,7 @@ class PsyPlot ():
                                  time=self.time, sort=['time'],
                                  clabel='{desc}')
             m.share(keys='bounds')
-        elif (self.proj is None or not self.proj):
+        elif self.proj is None or not self.proj:
             m = psy.plot.mapplot(self.input, name=self.varname,
                                  title=title,
                                  ax=(self.nrow, self.ncol),
