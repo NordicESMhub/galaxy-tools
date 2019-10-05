@@ -1,0 +1,14 @@
+categories:
+- Climate Analysis
+- Visualization
+description: Create climate stripes from a tabular input file
+homepage_url: https://www.climate-lab-book.ac.uk/2018/warming-stripes/
+long_description: |
+  This tools creates an image (png format) corresponding to the visualization of a timeseries as
+  climate stripes (see https://www.climate-lab-book.ac.uk/2018/warming-stripes/).
+  Additional parameters can be used to customize the plot.
+  For instance, the colormap can be changed to accomodate different variable (temperature, humidity, etc.).
+name: climate_stripes
+owner: climate
+remote_repository_url: https://github.com/NordicESMhub/galaxy-tools/tree/master/tools/climate-stripes
+type: unrestricted

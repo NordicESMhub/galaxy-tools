@@ -1,0 +1,162 @@
+<tool id="climate_stripes" name="climate stripes" version="1.0.0">
+    <description>from timeseries</description>
+    <requirements>
+        <requirement type="package" version="3">python</requirement>
+        <requirement type="package" version="3.1.1">matplotlib</requirement>
+        <requirement type="package" version="0.25.1">pandas</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+       python3 '$__tool_directory__/climate_stripes.py'
+            '$ifilename' '$variable'
+            --cmap '$adv.colormap'
+            #if str($title).strip()
+                --title '$title'
+            #end if
+            #if str($adv.xname).strip()
+                --xname '$adv.xname'
+            #end if
+            #if str($adv.format_date).strip()
+                --format_date '$adv.format_date'
+            #end if
+            #if str($adv.format_plot).strip()
+                --format_plot '$adv.format_plot'
+            #end if
+            --output image.png
+    ]]></command>
+    <inputs>
+        <param name="ifilename" type="data" format="tabular" label="timeseries to plot"></param>
+        <param name="variable" type="text" value="global" label="column name to use for plotting" />
+        <param name="title" type="text" value="" label="plot title" />
+        <section name="adv" title="Advanced Options" expanded="false">
+            <param name="xname" type="text" value="" label="column name to use for x-axis" />
+            <param name="format_date" type="text" value="" label="format for input date/time column" />
+            <param name="format_plot" type="text" value="" label="format for plotting dates on the x-axis" />
+            <param name="colormap" type="select">
+                <option value="Accent">Accent</option>
+                <option value="Blues">Blues</option>
+                <option value="BrBG">BrBG</option>
+                <option value="BuGn">BuGn</option>
+                <option value="BuPu">BuPu</option>
+                <option value="CMRmap">CMRmap</option>
+                <option value="Dark2">Dark2</option>
+                <option value="GnBu">GnBu</option>
+                <option value="Greens">Greens</option>
+                <option value="Greys">Greys</option>
+                <option value="OrRd">OrRd</option>
+                <option value="Oranges">Oranges</option>
+                <option value="PRGn">PRGn</option>
+                <option value="Paired">Paired</option>
+                <option value="Pastel1">Pastel1</option>
+                <option value="Pastel2">Pastel2</option>
+                <option value="PiYG">PiYG</option>
+                <option value="PuBu">PuBu</option>
+                <option value="PuBuGn">PuBuGn</option>
+                <option value="PuOr">PuOr</option>
+                <option value="PuRd">PuRd</option>
+                <option value="Purples">Purples</option>
+                <option value="RdBu">RdBu</option>
+                <option value="RdGy">RdGy</option>
+                <option value="RdPu">RdPu</option>
+                <option value="RdBu_r" selected="true">RdBu_r</option>
+                <option value="RdGy_r">RdGy_r</option>
+                <option value="RdPu_r">RdPu_r</option>
+                <option value="RdYlBu">RdYlBu</option>
+                <option value="RdYlGn">RdYlGn</option>
+                <option value="Reds">Reds</option>
+                <option value="Set1">Set1</option>
+                <option value="Set2">Set2</option>
+                <option value="Set3">Set3</option>
+                <option value="Spectral">Spectral</option>
+                <option value="Wistia">Wistia</option>
+                <option value="YlGn">YlGn</option>
+                <option value="YlGnBu">YlGnBu</option>
+                <option value="YlOrBr">YlOrBr</option>
+                <option value="YlOrRd">YlOrRd</option>
+                <option value="afmhot">afmhot</option>
+                <option value="autumn">autumn</option>
+                <option value="binary">binary</option>
+                <option value="bone">bone</option>
+                <option value="brg">brg</option>
+                <option value="bwr">bwr</option>
+                <option value="cool">cool</option>
+                <option value="coolwarm">coolwarm</option>
+                <option value="copper">copper</option>
+                <option value="cubehelix">cubehelix</option>
+                <option value="flag">flag</option>
+                <option value="gist_earth">gist_earth</option>
+                <option value="gist_gray">gist_gray</option>
+                <option value="gist_heat">gist_heat</option>
+                <option value="gist_ncar">gist_ncar</option>
+                <option value="gist_rainbow">gist_rainbow</option>
+                <option value="gist_stern">gist_stern</option>
+                <option value="gist_yarg">gist_yarg</option>
+                <option value="gnuplot">gnuplot</option>
+                <option value="gnuplot2">gnuplot2</option>
+                <option value="gray">gray</option>
+                <option value="hot">hot</option>
+                <option value="hsv">hsv</option>
+                <option value="jet">jet</option>
+                <option value="nipy_spectral">nipy_spectral</option>
+                <option value="ocean">ocean</option>
+                <option value="pink">pink</option>
+                <option value="prism">prism</option>
+                <option value="rainbow">rainbow</option>
+                <option value="seismic">seismic</option>
+                <option value="spring">spring</option>
+                <option value="summer">summer</option>
+                <option value="tab10">tab10</option>
+                <option value="tab20">tab20</option>
+                <option value="tab20b">tab20b</option>
+                <option value="tab20c">tab20c</option>
+                <option value="terrain">terrain</option>
+                <option value="winter">winter</option>
+            </param>
+        </section>
+    </inputs>
+    <outputs>
+        <data name="ofilename" format="png" from_work_dir="image.png"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="ifilename" value="T2Mclimatology.txt" />
+            <param name="variable" value="global" />
+            <output name="ofilename" ftype="png" file="T2Mstripes.png" compare="sim_size" delta="50"/>
+        </test>
+        <test>
+            <param name="ifilename" value="T2Mclimatology.txt" />
+            <param name="variable" value="global" />
+            <param name="title" value="Surface Temperature stripes (1979-2019)" />
+            <param name="colormap" value="OrRd" />
+            <param name="xname" value="Month" />
+            <param name="format_date" value="XYXm" />
+            <param name="format_plot" value="XY" />
+            <output name="ofilename" ftype="png" file="T2Mstripes_with_axis.png" compare="sim_size" delta="50"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+**Climate stripes**
+=========================================
+
+This tool generate stripes from timeseries and is often used to generate warming stripes.
+
+
+.. class:: infomark
+
+        The wrappers aims at creating stripes from a timeseries.
+        The input file must be in tabular format and must contain at least one column that is used
+        for creating stripes. By default, no title and no axis are plotted. An additional column
+        can be specified for date/time and its date and time format must then be specified
+        with an additional options.
+
+**What it does**
+----------------
+
+This tools creates an image (png format) corresponding to the visualization of a timeseries as
+stripes (see https://www.climate-lab-book.ac.uk/2018/warming-stripes/).
+By default, the colormap is ``RdBu_r`` and no axis nor title are plotted. These settings can be
+changed in *Advanced settings*.
+    ]]></help>
+    <citations>
+    </citations>
+</tool>
