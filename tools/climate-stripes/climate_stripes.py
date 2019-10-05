@@ -29,23 +29,22 @@
 
 import argparse
 import warnings
-from pathlib import Path
-
-import pandas as pd
-
-import numpy as np
 
 import matplotlib as mpl
 mpl.use('Agg')
+
+import numpy as np
+
+import pandas as pd
 
 import matplotlib.pyplot as plt   # noqa: I202,E402
 
 
 class Stripes ():
     def __init__(self, input, valname, cmap, output, xname = "",
-                 date_format = '%Y%m',
-                 plot_format = '%Y',
-                 nxsplit = 10,
+                 date_format='%Y%m',
+                 plot_format='%Y',
+                 nxsplit=10,
                  title=""):
         self.input = input
         self.valname = valname
