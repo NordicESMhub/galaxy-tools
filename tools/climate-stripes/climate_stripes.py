@@ -33,9 +33,9 @@ import warnings
 import matplotlib as mpl
 mpl.use('Agg')
 
-import numpy as np
-
 import matplotlib.pyplot as plt   # noqa: I202,E402
+
+import numpy as np
 
 import pandas as pd
 
@@ -81,8 +81,9 @@ class Stripes ():
         data[1, :] = self.data[self.valname]
         fig = plt.figure(figsize=(10, 2))
         ax = plt.subplot(111)
-        plt.pcolor(data, cmap = self.cmap, vmin = self.data[self.valname].min(),
-                        vmax = self.data[self.valname].max())
+        plt.pcolor(data, cmap=self.cmap,
+                   vmin=self.data[self.valname].min(),
+                   vmax=self.data[self.valname].max())
         if self.title:
             plt.title(self.title)
         if self.xname:
@@ -144,8 +145,9 @@ if __name__ == '__main__':
         help='number of ticks on the x-axis'
     )
     args = parser.parse_args()
-    stripes = Stripes(args.input, args.varname, args.cmap, args.output, xname=args.xname,
-                      date_format=args.format_date, plot_format=args.format_plot,
-                      title=args.title, nxsplit=args.nxsplit)
+    stripes = Stripes(args.input, args.varname, args.cmap, args.output,
+                      xname=args.xname, date_format=args.format_date,
+                      plot_format=args.format_plot, title=args.title,
+                      nxsplit=args.nxsplit)
     stripes.read_data()
     stripes.create_stripes()
