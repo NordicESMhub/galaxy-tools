@@ -20,7 +20,7 @@
             --ncol '$adv.multiple_plot.ncol'
             --nrow '$adv.multiple_plot.nrow'
        #end if
-       #if str($adv.multiple_plot.title) != ""
+       #if str($adv.multiple_plot.title).strip()
             --title '$adv.multiple_plot.title'
        #end if
     ]]></command>
