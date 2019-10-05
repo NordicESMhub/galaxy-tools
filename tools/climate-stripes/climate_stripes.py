@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 #
 #
-# usage: climate_stripes.py [-h] [--cmap CMAP] 
-#                           [--output OUTPUT] 
+# usage: climate_stripes.py [-h] [--cmap CMAP]
+#                           [--output OUTPUT]
 #                           [--xname XNAME]
 #                           [--format_plot FORMAT_PLOT]
 #                           [--format_date FORMAT_DATE]
@@ -11,7 +11,7 @@
 #                          input varname
 #
 # positional arguments:
-#   input                 input filename with geographical coordinates (netCDF format)
+#   input                 input filename with timeseries (tabular format)
 #   varname               column name to use for plotting (case sensitive)
 #
 # optional arguments:
@@ -22,7 +22,7 @@
 #   --format_plot FORMAT_PLOT
 #                         format for plotting dates on the x-axis
 #   --format_date FORMAT_DATE
-#                         format for input date/time column (default is Month d, yyyy)
+#                         format for input date/time column
 #   --title TITLE         plot title
 #   --nxsplit NXSPLIT     number of ticks on the x-axis
 #
@@ -31,12 +31,15 @@ import argparse
 import warnings
 from pathlib import Path
 
+import pandas as pd
+
+import numpy as np
+
 import matplotlib as mpl
 mpl.use('Agg')
 
 import matplotlib.pyplot as plt   # noqa: I202,E402
-import pandas as pd
-import numpy as np
+
 
 class Stripes ():
     def __init__(self, input, valname, cmap, output, xname = "",
@@ -68,10 +71,10 @@ class Stripes ():
             self.plot_format = self.format
         else:
             self.plot_format = plot_format
-            
+
     def read_data(self):
         self.data = pd.read_csv(self.input, sep='\t')
-        
+
     def create_stripes(self):
         data = np.zeros((2, self.data[self.valname].shape[0]), dtype='float')
         data[:] = np.NaN
@@ -89,7 +92,7 @@ class Stripes ():
             n = int(np.floor((nrange.max() - nrange.min())/int(self.nxsplit)))
             date_list = self.data[self.xname].loc[::n].apply(
                              lambda x: pd.to_datetime(str(x),
-                                                      format=self.format)) 
+                                                      format=self.format))
             date_list = [i.strftime(self.plot_format) for i in date_list]
             print(date_list)
             nval = int(self.data[self.xname].loc[::n].shape[0])
@@ -101,6 +104,7 @@ class Stripes ():
         ax.set_yticks([])
         fig.tight_layout()
         fig.savefig(self.output)
+
 
 if __name__ == '__main__':
     warnings.filterwarnings("ignore")
@@ -142,8 +146,8 @@ if __name__ == '__main__':
         help='number of ticks on the x-axis'
     )
     args = parser.parse_args()
-    stripes = Stripes(args.input, args.varname, args.cmap, args.output, xname=args.xname, 
-                      date_format=args.format_date, plot_format=args.format_plot, 
+    stripes = Stripes(args.input, args.varname, args.cmap, args.output, xname=args.xname,
+                      date_format=args.format_date, plot_format=args.format_plot,
                       title=args.title, nxsplit=args.nxsplit)
     stripes.read_data()
     stripes.create_stripes()

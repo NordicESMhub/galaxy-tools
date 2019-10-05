@@ -134,50 +134,54 @@
     </tests>
     <help><![CDATA[
 
-**Visualization on a map with psyplot**
+**Climate stripes**
 =========================================
 
-This tool wraps the functionality of ``psyplot.plot.mapplot``.
+This tool generate stripes from timeseries and is often used to generate warming stripes.
 
 
 .. class:: infomark
 
-        The wrappers aims at providing the same functionality as ``psyplot.plot.mapplot`` but it has some limitations.
-        The input file must be in netCDF format and must contain 2D arrays with geographical coordinatates
-        (latitudes, longitudes) given in degrees.
-        TODO: Fill in help.
+        The wrappers aims at creating stripes from a timeseries.
+        The input file must be in tabular format and must contain at least one column that is used
+        for creating stripes. By default, no title and no axis are plotted. An additional column
+        can be specified for date/time and its date and time format must then be specified
+        with an additional options.
 
 **What it does**
 ----------------
 
-This tools creates an image (png format) corresponding to the visualization on a geographical map of a variable extracted from a
-netCDF file (input file). By default, the projection is ``PlateCarree`` and colormap is ``jet``. These settings can be changed in *Advanced settings*.
+This tools creates an image (png format) corresponding to the visualization of a timeseries as
+stripes (see https://www.climate-lab-book.ac.uk/2018/warming-stripes/).
+By default, the colormap is ``RdBu_r`` and no axis nor title are plotted. These settings can be
+changed in *Advanced settings*.
 
 
 **Usage**
 
 ::
 
-  usage: psymap_simple.py [-h] [--proj PROJ] [--cmap CMAP] [--output OUTPUT] [-v] input varname
-
+usage: climate_stripes.py [-h] [--cmap CMAP] [--output OUTPUT] [--xname XNAME] [--format_plot FORMAT_PLOT] [--format_date FORMAT_DATE]
+                          [--title TITLE] [--nxsplit NXSPLIT]
+                          input varname
 
 Positional arguments:
 ~~~~~~~~~~~~~~~~~~~~~
 
-- **input**:            input filename with geographical coordinates (netCDF format)
-- **varname**:          Specify which variable to plot (case sensitive)
+- **input**        input filename with timeseries (tabular format)
+- **varname**      column name to use for plotting (case sensitive)
 
 Optional arguments:
 ~~~~~~~~~~~~~~~~~~~~~
 
-  -h, --help       show this help message and exit
-  --proj PROJ      Specify the projection on which we draw
-  --cmap CMAP      Specify which colormap to use for plotting
-  --output OUTPUT  output filename to store resulting image (png format)
-  -v, --verbose    switch on verbose mode
-
-It uses psy-maps, a python package to generate plots. More information about
-psyplot and psy-maps can be found at https://psyplot.readthedocs.io/projects/psy-maps/en/latest/
+-h, --help            show this help message and exit
+--cmap CMAP           Specify which colormap to use for plotting
+--output OUTPUT       output filename to store resulting image (png format)
+--xname XNAME         column name to use for x-axis
+--format_plot FORMAT  format for plotting dates on the x-axis
+--format_date FORMAT  format for input date/time column
+--title TITLE         plot title
+--nxsplit NXSPLIT     number of ticks on the x-axis
 
     ]]></help>
     <citations>
