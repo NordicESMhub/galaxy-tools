@@ -35,9 +35,9 @@ mpl.use('Agg')
 
 import matplotlib.pyplot as plt   # noqa: I202,E402
 
-import numpy as np # noqa: I202,E402
+import numpy as np  # noqa: I202,E402
 
-import pandas as pd # noqa: I202,E402
+import pandas as pd  # noqa: I202,E402
 
 
 class Stripes ():
