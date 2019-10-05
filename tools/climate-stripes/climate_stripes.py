@@ -65,11 +65,11 @@ class Stripes ():
         if not date_format:
             self.format = '%Y%m'
         else:
-            self.format = date_format
+            self.format = date_format.replace('X', '%')
         if not plot_format:
             self.plot_format = self.format
         else:
-            self.plot_format = plot_format
+            self.plot_format = plot_format.replace('X', '%')
 
     def read_data(self):
         self.data = pd.read_csv(self.input, sep='\t')
