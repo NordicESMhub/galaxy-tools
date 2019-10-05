@@ -30,7 +30,7 @@
         <param name="variable" type="text" value="global" label="column name to use for plotting" />
         <param name="title" type="text" value="" label="plot title" />
         <section name="adv" title="Advanced Options" expanded="false">
-            <param name="xname" type="text" value="" label="column name to use for x-axis" />    
+            <param name="xname" type="text" value="" label="column name to use for x-axis" />
             <param name="format_date" type="text" value="" label="format for input date/time column" />
             <param name="format_plot" type="text" value="" label="format for plotting dates on the x-axis" />
             <param name="colormap" type="select">
@@ -117,18 +117,19 @@
     </outputs>
     <tests>
         <test>
-            <param name="ifilename" value="TS.f2000.T31T31.control.cam.h0.0014-12.nc" />
-            <param name="variable" value="TS" />
-            <param name="adv.projection" value="" />
-            <param name="adv.colormap" value="jet" />
-            <output name="ofilename" ftype="png" file="TS.f2000.T31T31.control.cam.h0.0014-12.png" compare="sim_size" delta="500"/>
+            <param name="ifilename" value="T2Mclimatology.txt" />
+            <param name="variable" value="global" />
+            <output name="ofilename" ftype="png" file="T2Mstripes.png" compare="sim_size" delta="50"/>
         </test>
         <test>
-            <param name="ifilename" value="TS.f2000.T31T31.control.cam.h0.0014-12.nc" />
-            <param name="variable" value="TS" />
-            <param name="adv.projection" value="ortho" />
-            <param name="adv.colormap" value="jet" />
-            <output name="ofilename" ftype="png" file="TS.f2000.T31T31.control.cam.h0.0014-12.png" compare="sim_size" delta="500"/>
+            <param name="ifilename" value="T2Mclimatology.txt" />
+            <param name="variable" value="global" />
+            <param name="title" value="Surface Temperature stripes (1979-2019)" />
+            <param name="adv.colormap" value="OrRd" />
+            <param name="adv.xname" value="Month" />
+            <param name="adv.format_date" value="%Y%m" />
+            <param name="adv.format_plot" value="%Y" />
+            <output name="ofilename" ftype="png" file="T2Mstripes_with_axis.png" compare="sim_size" delta="50"/>
         </test>
     </tests>
     <help><![CDATA[
