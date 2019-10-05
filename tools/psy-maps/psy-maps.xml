@@ -81,6 +81,9 @@
                 <option value="RdBu">RdBu</option>
                 <option value="RdGy">RdGy</option>
                 <option value="RdPu">RdPu</option>
+                <option value="RdBu_r">RdBu_r</option>
+                <option value="RdGy_r">RdGy_r</option>
+                <option value="RdPu_r">RdPu_r</option>
                 <option value="RdYlBu">RdYlBu</option>
                 <option value="RdYlGn">RdYlGn</option>
                 <option value="Reds">Reds</option>
