@@ -7,16 +7,16 @@
        python3 '$__tool_directory__/psymap_simple.py'
             '$ifilename' '$variable'
             --cmap '$adv.colormap'
-            #if str($title).strip() != ''
+            #if str($title).strip()
                 --title '$title'
             #end if
-            #if str($adv.xname).strip() != ''
+            #if str($adv.xname).strip()
                 --xname '$adv.xname'
             #end if
-            #if str($adv.format_date).strip() != ''
+            #if str($adv.format_date).strip()
                 --xname '$adv.format_date'
             #end if
-            #if str($adv.format_plot).strip() != ''
+            #if str($adv.format_plot).strip()
                 --xname '$adv.format_plot'
             #end if
             --output image.png
