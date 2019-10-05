@@ -93,7 +93,6 @@ class Stripes ():
                              lambda x: pd.to_datetime(str(x),
                                                       format=self.format))
             date_list = [i.strftime(self.plot_format) for i in date_list]
-            print(date_list)
             nval = int(self.data[self.xname].loc[::n].shape[0])
             ax.xaxis.set_major_locator(plt.MaxNLocator(nval))
             ax.xaxis.set_ticklabels(date_list)

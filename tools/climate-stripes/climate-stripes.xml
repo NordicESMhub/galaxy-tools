@@ -156,34 +156,6 @@ This tools creates an image (png format) corresponding to the visualization of a
 stripes (see https://www.climate-lab-book.ac.uk/2018/warming-stripes/).
 By default, the colormap is ``RdBu_r`` and no axis nor title are plotted. These settings can be
 changed in *Advanced settings*.
-
-
-**Usage**
-
-::
-
-usage: climate_stripes.py [-h] [--cmap CMAP] [--output OUTPUT] [--xname XNAME] [--format_plot FORMAT_PLOT] [--format_date FORMAT_DATE]
-                          [--title TITLE] [--nxsplit NXSPLIT]
-                          input varname
-
-Positional arguments:
-~~~~~~~~~~~~~~~~~~~~~
-
-- **input**        input filename with timeseries (tabular format)
-- **varname**      column name to use for plotting (case sensitive)
-
-Optional arguments:
-~~~~~~~~~~~~~~~~~~~~~
-
--h, --help            show this help message and exit
---cmap CMAP           Specify which colormap to use for plotting
---output OUTPUT       output filename to store resulting image (png format)
---xname XNAME         column name to use for x-axis
---format_plot FORMAT  format for plotting dates on the x-axis
---format_date FORMAT  format for input date/time column
---title TITLE         plot title
---nxsplit NXSPLIT     number of ticks on the x-axis
-
     ]]></help>
     <citations>
     </citations>
