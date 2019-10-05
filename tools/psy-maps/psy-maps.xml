@@ -1,23 +1,49 @@
-<tool id="psy_maps" name="map plot" version="1.2.0">
+<tool id="psy_maps" name="map plot" version="1.2.1">
     <description>gridded (lat/lon) netCDF data</description>
     <requirements>
         <requirement type="package" version="3">python</requirement>
+        <requirement type="package" version="1.2.1">psyplot</requirement>
         <requirement type="package" version="1.2.0">psy-maps</requirement>
         <requirement type="package" version="1.2.0">psy-reg</requirement>
-        <requirement type="package" version="1.2.2">psyplot-gui</requirement>
-        <requirement type="package" version="1.4.1">netcdf4</requirement>
+        <requirement type="package" version="1.4.2">netcdf4</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
+       HOME=`pwd`  &&
        python3 '$__tool_directory__/psymap_simple.py'
             '$ifilename' '$variable'
             --proj '$adv.projection'
             --cmap '$adv.colormap'
             --output image.png
+       #if str($adv.multiple_plot.selector) == 'yes'
+            --time '$adv.multiple_plot.time'
+            --format '$adv.multiple_plot.format'
+            --ncol '$adv.multiple_plot.ncol'
+            --nrow '$adv.multiple_plot.nrow'
+       #end if
+       #if str($adv.multiple_plot.title).strip()
+            --title '$adv.multiple_plot.title'
+       #end if
     ]]></command>
     <inputs>
         <param name="ifilename" type="data" format="netcdf" label="input with geographical coordinates (netCDF format)"></param>
         <param name="variable" type="text" value="TS" label="variable name as given in the netCDF file" />
         <section name="adv" title="Advanced Options" expanded="false">
+            <conditional name="multiple_plot">
+                <param name="selector" type="select" label="multiple times">
+                    <option value="yes">yes</option>
+                    <option value="no" selected="true">no</option>
+                </param>
+                <when value="yes">
+                    <param name="time" type="text" value="0" label="comma separated list of indexes for fields to plot" />
+                    <param name="format" type="text" value="%Y-%m-%d %H:%M:%S" label="date and time format" />
+                    <param name="ncol" type="integer" value="1" min="1" max="4" label="number of columns for subplot grid" />
+                    <param name="nrow" type="integer" value="1" min="1" max="20" label="number of rows for subplot grid" />
+                    <param name="title" type="text" value="" label="subplot title (repeated on each subplot)" />
+                </when>
+                <when value="no">
+                    <param name="title" type="text" value="" label="plot title" />
+                </when>
+            </conditional>
             <param name="projection" type="select">
                 <option value="" selected="true">PlateCarree</option>
                 <option value="robin">Robinson</option>
@@ -55,6 +81,9 @@
                 <option value="RdBu">RdBu</option>
                 <option value="RdGy">RdGy</option>
                 <option value="RdPu">RdPu</option>
+                <option value="RdBu_r">RdBu_r</option>
+                <option value="RdGy_r">RdGy_r</option>
+                <option value="RdPu_r">RdPu_r</option>
                 <option value="RdYlBu">RdYlBu</option>
                 <option value="RdYlGn">RdYlGn</option>
                 <option value="Reds">Reds</option>
@@ -115,16 +144,16 @@
         <test>
             <param name="ifilename" value="TS.f2000.T31T31.control.cam.h0.0014-12.nc" />
             <param name="variable" value="TS" />
-            <param name="adv.projection" value="" />
-            <param name="adv.colormap" value="jet" />
+            <param name="projection" value="" />
+            <param name="colormap" value="jet" />
             <output name="ofilename" ftype="png" file="TS.f2000.T31T31.control.cam.h0.0014-12.png" compare="sim_size" delta="500"/>
         </test>
         <test>
             <param name="ifilename" value="TS.f2000.T31T31.control.cam.h0.0014-12.nc" />
             <param name="variable" value="TS" />
-            <param name="adv.projection" value="ortho" />
-            <param name="adv.colormap" value="jet" />
-            <output name="ofilename" ftype="png" file="TS.f2000.T31T31.control.cam.h0.0014-12.png" compare="sim_size" delta="500"/>
+            <param name="projection" value="ortho" />
+            <param name="colormap" value="RdBu_r" />
+            <output name="ofilename" ftype="png" file="TS.f2000.T31T31.control.cam.h0.0014-12_ortho.png" compare="sim_size" delta="500"/>
         </test>
     </tests>
     <help><![CDATA[
@@ -153,7 +182,8 @@ netCDF file (input file). By default, the projection is ``PlateCarree`` and colo
 
 ::
 
-  usage: psymap_simple.py [-h] [--proj PROJ] [--cmap CMAP] [--output OUTPUT] [-v] input varname
+  usage: psymap_simple.py [-h] [--proj PROJ] [--cmap CMAP] [--output OUTPUT] [--time TIME]
+                          [--format FORMAT] [--title TITLE] [--ncol NCOL] [--nrow NROW] [-v] input varname
 
 
 Positional arguments:
@@ -170,6 +200,11 @@ Optional arguments:
   --cmap CMAP      Specify which colormap to use for plotting
   --output OUTPUT  output filename to store resulting image (png format)
   -v, --verbose    switch on verbose mode
+  --time TIME      list of times to plot for multiple plots
+  --format FORMAT  format for date/time (default is Month d, yyyy)
+  --title TITLE    plot title
+  --ncol NCOL      number of columns for multiple plots
+  --nrow NROW      number of rows for multiple plots
 
 It uses psy-maps, a python package to generate plots. More information about
 psyplot and psy-maps can be found at https://psyplot.readthedocs.io/projects/psy-maps/en/latest/
