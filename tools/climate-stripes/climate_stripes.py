@@ -82,8 +82,8 @@ class Stripes ():
         fig = plt.figure(figsize=(10, 2))
         ax = plt.subplot(111)
         plt.pcolor(data, cmap=self.cmap,
-                   vmin=self.data[self.valname].min(),
-                   vmax=self.data[self.valname].max())
+                   vmin=self.data[self.valname].quantile(q=0.01),
+                   vmax=self.data[self.valname].quantile(q=0.99))
         if self.title:
             plt.title(self.title)
         if self.xname:
