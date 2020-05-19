@@ -23,6 +23,9 @@
           #if str($adv.condi_user_mods).strip() == 'yes'
               --user-mods-dir ./usermods_dirs
           #end if
+          #if str($compset).strip() == 'F2000climo'
+              --run-unsupported
+          #end if
               --res '$resolution' --machine espresso > output_dir/case.txt  2>&1  &&
           mpif90 --version > output_dir/case.txt  2>&1  &&
           cd '$casename' &&
