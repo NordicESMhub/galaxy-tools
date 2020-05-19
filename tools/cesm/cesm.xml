@@ -5,25 +5,33 @@
         <requirement type="package" version="2.1.3">cesm</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
+          HOME=`pwd` &&
+          mkdir -p .cime &&
+          cp '$__tool_directory__/config' .cime/config &&
+          cp '$__tool_directory__/config_compilers.xml' '.cime/config_compilers.xml' &&
+          cp '$__tool_directory__/config_machines.xml' '.cime/config_machines.xml' &&
+          mkdir inputdata &&
           mkdir output_dir &&
           mkdir usermods_dirs &&
-          #if str($adv.usermods).strip() 
+          #if str($adv.condi_user_mods).strip() == 'yes'
               # should create a new type user_mods.tar
-              cd usermods_dirs && 
-              tar xf '$user_mods' && 
-              cd .. && 
-          #end if 
-          create_newcase --case '$casename' --compset '$compset' --res '$resolution' --user-mods-dir ./usermods_dirs &&
+              cd usermods_dirs &&
+              tar xf '$user_mods' &&
+              cd .. &&
+          #end if
+          create_newcase --case '$casename' --compset '$compset'
+          #if str($adv.condi_user_mods).strip() == 'yes'
+              --user-mods-dir ./usermods_dirs
+          #end if
+              --res '$resolution' --machine espresso > output_dir/case.txt  2>&1  &&
+          mpif90 --version > output_dir/case.txt  2>&1  &&
           cd '$casename' &&
-          ./case.setup   && 
-          #if str($adv.stopn).strip()
-              ./xmlchange STOP_N=$adv.stopn
-          #end if
-          #if str($adv.stop_option).strip()
-              ./xmlchange STOP_OPTION=$adv.stop_option
-          #end if
-         ./case.build
-         ./case.submit
+          ./case.setup  >> ../output_dir/case.txt  2>&1   && 
+          ./xmlchange STOP_N=$adv.stopn &&
+          ./xmlchange STOP_OPTION=$adv.stop_option &&
+         ./case.build >> ../output_dir/case.txt  2>&1 && 
+         -/case.submit >> ../output_dir/case.txt  2>&1  || 
+         (cd .. && printf "Case failed" && tar cvf output_dir/work.tar work) 
     ]]></command>
     <inputs>
         <param name="casename" type="text" value="usecase" label="Name of your CESM case"></param>
@@ -50,15 +58,15 @@
                     <param name="run_refcase" type="text" value="" label="Reference case for hybrid or branch runs"></param>
                     <param name="run_refdate" type="text" value="" label="Reference date for hybrid or branch runs (yyyy-mm-dd)"></param>
                 </when>
-            </conditional>
                 <when value="hybrid">
                     <param name="run_refcase" type="text" value="" label="Reference case for hybrid or branch runs"></param>
                     <param name="run_refdate" type="text" value="" label="Reference date for hybrid or branch runs (yyyy-mm-dd)"></param>
                     <param name="run_startdate" type="text" value="" label="Run start date (yyyy-mm-dd). Only used for startup or hybrid runs."></param>
                 </when>
             </conditional>
-            <param name="stopn" type="float" value="" label="Provides a numerical count for STOP_OPTION."></param>
+            <param name="stopn" type="integer" value="5" label="Provides a numerical count for STOP_OPTION."></param>
             <param name="stop_option" type="select" label=" Sets the run length along with STOP_N and STOP_DATE">
+                <option value="ndays" default="true">ndays</option>
                 <option value="none">none</option>
                 <option value="never">never</option>
                 <option value="nsteps">nsteps</option>
@@ -69,23 +77,30 @@
                 <option value="nminute">nminute</option>
                 <option value="nhours">nhours</option>
                 <option value="nhour">nhour</option>
-                <option value="ndays">ndays</option>
                 <option value="nday">nday</option>
-                <option value="nmonths">nmonths</option> 
-                <option value="nmonth">nmonth</option> 
-                <option value="nyears">nyears</option> 
-                <option value="nyear">nyear</option> 
-                <option value="date">date</option> 
-                <option value="ifdays0">ifday0</option> 
+                <option value="nmonths">nmonths</option>
+                <option value="nmonth">nmonth</option>
+                <option value="nyears">nyears</option>
+                <option value="nyear">nyear</option>
+                <option value="date">date</option>
+                <option value="ifdays0">ifday0</option>
                 <option value="end">end</option>
             </param>
-            </condi_type_run>
-            <param name="usermods" type="data" format="tar" label="user modifications"></param>
+            <conditional name="condi_user_mods">
+                <param name="add_changes" type="select" label="Additional user modifications">
+                    <option value="no" default="true">no</option>
+                    <option value="yes">yes</option>
+                </param>
+                <when value="yes">
+                    <param name="usermods" type="data" format="tar" label="user modifications"></param>
+               </when>
+               <when value="no"/>
+        </conditional>
         </section>
     </inputs>
     <outputs>
         <collection type="list" name="output">
-            <discover_datasets pattern="__designation_and_ext__" visible="false" format="netcdf" directory="output_dir"/>
+            <discover_datasets pattern="__designation_and_ext__" visible="false" format="netcdf,txt,tar" directory="output_dir"/>
         </collection>
     </outputs>
     <tests>
