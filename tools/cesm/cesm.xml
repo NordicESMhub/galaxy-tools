@@ -33,7 +33,7 @@
           ./xmlchange STOP_N=$adv.stopn &&
           ./xmlchange STOP_OPTION=$adv.stop_option &&
          ./case.build >> ../output_dir/case.txt  2>&1 && 
-         -/case.submit >> ../output_dir/case.txt  2>&1  || 
+         ./case.submit >> ../output_dir/case.txt  2>&1  || 
          (cd .. && printf "Case failed" && tar cvf output_dir/work.tar work) 
     ]]></command>
     <inputs>
