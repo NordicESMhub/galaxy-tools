@@ -1,0 +1,178 @@
+<tool id="ctsm-fates" name="CTSM/FATES-EMERALD" version="1.0.1">
+    <description>Functionally Assembled Terrestrial Ecosystem Simulator</description>
+    <requirements>
+        <requirement type="package" version="3">python</requirement>
+        <requirement type="package" version="2.27.0">git</requirement>
+        <requirement type="package" version="2.1.3">cesm</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+          HOME=`pwd` &&
+          mkdir -p .cime &&
+          cp '$__tool_directory__/config' .cime/config &&
+          cp '$__tool_directory__/config_compilers.xml' '.cime/config_compilers.xml' &&
+          cp '$__tool_directory__/config_machines.xml' '.cime/config_machines.xml' &&
+          mkdir inputdata &&
+          mkdir output_dir &&
+          mkdir usermods_dirs &&
+          #if str($adv.condi_user_mods).strip() == 'yes'
+              # should create a new type user_mods.tar
+              cd usermods_dirs &&
+              tar xf '$user_mods' &&
+              cd .. &&
+          #end if
+          git clone -b release-emerald1.0.1 https://github.com/NordicESMhub/ctsm.git fates-emerald &&
+          cd fates-emerald &&
+          ./manage_externals/checkout_externals &&
+          sed -i.bak 's/# ARCHIVE COMMAND SIMILAR ACROSS ALL PLATFORMS/AR="\$AR cq"/' fates-emerald/cime/src/externals/mct/configure &&
+          cd cime/scripts &&
+          ./create_newcase --case '$casename' --compset 2000_DATM%1PTGSWP3_CLM50%FATES_SICE_SOCN_MOSART_SGLC_SWAV 
+                           --machine espresso --run-unsupported 
+          #if str($adv.condi_user_mods).strip() == 'yes'
+              --user-mods-dir ./usermods_dirs
+          #end if
+              --res '$resolution' > output_dir/case.txt  2>&1  &&
+          cd '$casename' &&
+          ./case.setup  >> ../output_dir/case.txt  2>&1   &&
+          ./xmlchange STOP_N=$adv.stopn &&
+          ./xmlchange STOP_OPTION=$adv.stop_option &&
+          ./xmlchange DOUT_S=FALSE &&
+          cp '$__tool_directory__/user_nl_clm user_nl_clm &&
+         ./case.build >> ../output_dir/case.txt  2>&1 &&
+         ./case.submit >> ../output_dir/case.txt  2>&1  ||
+         (cd .. && printf "Case failed" && tar cvf output_dir/work.tar work)
+    ]]></command>
+    <inputs>
+        <param name="casename" type="text" value="usecase" label="Name of your CESM case"></param>
+        <param name="resolution" type="select" label="Model resolution">
+                <option value="1x1_ALP1">1x1_ALP1</option>
+                <option value="1x1_ALP2">1x1_ALP2</option>
+                <option value="1x1_ALP3">1x1_ALP3</option>
+                <option value="1x1_ALP4">1x1_ALP4</option>
+                <option value="1x1_SUB1">1x1_SUB1</option>
+                <option value="1x1_SUB2">1x1_SUB2</option>
+                <option value="1x1_SUB3">1x1_SUB3</option>
+                <option value="1x1_SUB4">1x1_SUB4</option>
+                <option value="1x1_BOR1">1x1_BOR1</option>
+                <option value="1x1_BOR2">1x1_BOR2</option>
+                <option value="1x1_BOR3">1x1_BOR3</option>
+                <option value="1x1_BOR4">1x1_BOR4</option>
+        </param>
+        <section name="adv" title="Advanced user customisation" expanded="false">
+
+            <conditional name="condi_type_run">
+                <param name="run_type" type="select" label="Determines the model run initialization type.">
+                    <option value="startup" default="true">startup</option>
+                    <option value="hybrid">hybrid</option>
+                    <option value="branch">branch</option>
+                </param>
+                <when value="startup">
+                    <param name="run_startdate" type="text" value="" label="Run start date (yyyy-mm-dd). Only used for startup or hybrid runs."></param>
+                </when>
+                <when value="branch">
+                    <param name="run_refcase" type="text" value="" label="Reference case for hybrid or branch runs"></param>
+                    <param name="run_refdate" type="text" value="" label="Reference date for hybrid or branch runs (yyyy-mm-dd)"></param>
+                </when>
+                <when value="hybrid">
+                    <param name="run_refcase" type="text" value="" label="Reference case for hybrid or branch runs"></param>
+                    <param name="run_refdate" type="text" value="" label="Reference date for hybrid or branch runs (yyyy-mm-dd)"></param>
+                    <param name="run_startdate" type="text" value="" label="Run start date (yyyy-mm-dd). Only used for startup or hybrid runs."></param>
+                </when>
+            </conditional>
+            <param name="stopn" type="integer" value="5" label="Provides a numerical count for STOP_OPTION."></param>
+            <param name="stop_option" type="select" label=" Sets the run length along with STOP_N and STOP_DATE">
+                <option value="ndays" default="true">ndays</option>
+                <option value="none">none</option>
+                <option value="never">never</option>
+                <option value="nsteps">nsteps</option>
+                <option value="nstep">nstep</option>
+                <option value="nseconds">nseconds</option>
+                <option value="nsecond">nsecond</option>
+                <option value="nminutes">nminutes</option>
+                <option value="nminute">nminute</option>
+                <option value="nhours">nhours</option>
+                <option value="nhour">nhour</option>
+                <option value="nday">nday</option>
+                <option value="nmonths">nmonths</option>
+                <option value="nmonth">nmonth</option>
+                <option value="nyears">nyears</option>
+                <option value="nyear">nyear</option>
+                <option value="date">date</option>
+                <option value="ifdays0">ifday0</option>
+                <option value="end">end</option>
+            </param>
+            <conditional name="condi_user_mods">
+                <param name="add_changes" type="select" label="Additional user modifications">
+                    <option value="no" default="true">no</option>
+                    <option value="yes">yes</option>
+                </param>
+                <when value="yes">
+                    <param name="usermods" type="data" format="tar" label="user modifications"></param>
+               </when>
+               <when value="no"/>
+        </conditional>
+        </section>
+    </inputs>
+    <outputs>
+        <collection type="list" name="output">
+            <discover_datasets pattern="__designation_and_ext__" visible="false" format="netcdf,txt,tar" directory="output_dir"/>
+        </collection>
+    </outputs>
+    <tests>
+        <test>
+            <param name="casename" value="test_ALP1" />
+            <param name="resolution" value="1x1_ALP1" />
+            <output name="output" ftype="netcdf" file="test_ALP1.netcdf" compare="sim_size" delta="50"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+**The Functionally Assembled Terrestrial Ecosystem Simulator (FATES)**
+==========================================================================
+
+This tool create and run CTSM-FATES EMERALD experiments.
+#### Clone git repository
+git clone https://github.com/NordicESMhub/ctsm.git
+
+#### Checkout branch "fates_emerald_api"
+cd ~/ctsm
+git checkout fates_emerald_api
+
+#### Download other external codes
+./manage_externals/checkout_externals 
+
+#### Create a case: 
+#--case: which directory your case will be create
+#--compset: which model component will be used, only DATM%1PTGSWP3 is available at the moment 
+#--res: currently available resolution are SeedClim Sites: 1x1_ALP1,1x1_ALP2,1x1_ALP3,1x1_ALP4,1x1_SUB1,1x1_SUB2,1x1_SUB3,1x1_SUB4,1x1_BOR1,1x1_BOR2,1x1_BOR3,1x1_BOR4
+#--machine: where to run the model, saga is the only option at the moment
+#--project: your project number on saga
+
+cd ~/ctsm/cime/scripts
+./create_newcase --case ../../../ctsm_cases/YOUR_CASE_NAME --compset 2000_DATM%1PTGSWP3_CLM50%FATES_SICE_SOCN_MOSART_SGLC_SWAV --res 1x1_ALP1 --machine saga --run-unsupported --project nn2806k
+
+#### Run a case
+
+cd ~/ctsm_cases/YOUR_CASE_NAME
+./case.setup      # create the $CASE.run file
+./case.build      # build model and create namelists
+./case.submit     # submit script
+                  # default setting only allow you to run 5 days test run.
+
+#### To run a longer simulation
+
+# Following parameters can be adapted for longer simulation
+
+./xmlchange --file env_run.xml --id RUN_STARTDATE --val 0001-01-01      # set up the starting date of your simulation 
+./xmlchange --file env_run.xml --id STOP_OPTION --val nyears            # set the simulation periods to "years"
+./xmlchange --file env_run.xml --id STOP_N --val 5                      # set the length of simulation, i.e, how many years
+./xmlchange --file env_run.xml --id CONTINUE_RUN --val TRUE             # if you want to continue your simulation from restart file, set it to TRUE
+./xmlchange --file env_run.xml --id RESUBMIT --val 10                   # set up how many times you want to resubmit your simulation.
+                                                                        # e.g, STOP_N=5, RESUBMIT=10, you will have simulation for 5+5*10=55 
+./xmlchange --file env_run.xml --id DATM_CLMNCEP_YR_START --val 1901    # set up the start year of the atmospheric forcing 
+./xmlchange --file env_run.xml --id DATM_CLMNCEP_YR_END --val 1950      # set up the end year of the atmospheric forcing 
+
+    ]]></help>
+    <citations>
+
+    </citations>
+</tool>
