@@ -11,7 +11,7 @@
           cp '$__tool_directory__/config' .cime/config &&
           cp '$__tool_directory__/config_compilers.xml' '.cime/config_compilers.xml' &&
           cp '$__tool_directory__/config_machines.xml' '.cime/config_machines.xml' &&
-          mkdir inputdata &&
+          tar xf $inputdata &&
           mkdir output_dir &&
           mkdir usermods_dirs &&
           #if str($adv.condi_user_mods).strip() == 'yes'
@@ -40,6 +40,7 @@
          (cd .. && printf "Case failed" && tar cf output_dir/work.tar work)
     ]]></command>
     <inputs>
+        <param name="inputdata" type="data" format='tar' label="inputdata for running FATES EMERALD"></param>
         <param name="casename" type="text" value="usecase" label="Name of your CESM case"></param>
         <param name="resolution" type="select" label="Model resolution">
                 <option value="1x1_ALP1">1x1_ALP1</option>
