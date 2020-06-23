@@ -3,7 +3,7 @@
     <requirements>
         <requirement type="package" version="3">python</requirement>
         <requirement type="package" version="2.27.0">git</requirement>
-        <requirement type="package" version="2.1.3">cesm</requirement>
+        <requirement type="package" version="2.1.1">cesm</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
           HOME=`pwd` &&
@@ -22,24 +22,22 @@
           #end if
           git clone -b release-emerald1.0.1 https://github.com/NordicESMhub/ctsm.git fates-emerald &&
           cd fates-emerald &&
-          ./manage_externals/checkout_externals &&
-          sed -i.bak 's/# ARCHIVE COMMAND SIMILAR ACROSS ALL PLATFORMS/AR="\$AR cq"/' fates-emerald/cime/src/externals/mct/configure &&
+          ./manage_externals/checkout_externals  &&
           cd cime/scripts &&
-          ./create_newcase --case '$casename' --compset 2000_DATM%1PTGSWP3_CLM50%FATES_SICE_SOCN_MOSART_SGLC_SWAV 
-                           --machine espresso --run-unsupported 
+          ./create_newcase --case '../../../$casename' --compset 2000_DATM%1PTGSWP3_CLM50%FATES_SICE_SOCN_MOSART_SGLC_SWAV --machine espresso --run-unsupported 
           #if str($adv.condi_user_mods).strip() == 'yes'
-              --user-mods-dir ./usermods_dirs
+              --user-mods-dir ../../../usermods_dirs
           #end if
-              --res '$resolution' > output_dir/case.txt  2>&1  &&
-          cd '$casename' &&
-          ./case.setup  >> ../output_dir/case.txt  2>&1   &&
+              --res '$resolution'  && 
+          cd '../../../$casename' &&
+          ./case.setup  > ../output_dir/case.txt  2>&1   &&
           ./xmlchange STOP_N=$adv.stopn &&
           ./xmlchange STOP_OPTION=$adv.stop_option &&
           ./xmlchange DOUT_S=FALSE &&
-          cp '$__tool_directory__/user_nl_clm user_nl_clm &&
+          cp '$__tool_directory__/user_nl_clm' user_nl_clm && 
          ./case.build >> ../output_dir/case.txt  2>&1 &&
          ./case.submit >> ../output_dir/case.txt  2>&1  ||
-         (cd .. && printf "Case failed" && tar cvf output_dir/work.tar work)
+         (cd .. && printf "Case failed" && tar cf output_dir/work.tar work)
     ]]></command>
     <inputs>
         <param name="casename" type="text" value="usecase" label="Name of your CESM case"></param>
@@ -116,6 +114,7 @@
         <collection type="list" name="output">
             <discover_datasets pattern="__designation_and_ext__" visible="false" format="netcdf,txt,tar" directory="output_dir"/>
         </collection>
+        <data name="ofilename" format="txt"></data>
     </outputs>
     <tests>
         <test>
