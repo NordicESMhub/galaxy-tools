@@ -159,4 +159,11 @@ changed in *Advanced settings*.
     ]]></help>
     <citations>
     </citations>
+    <edam_topics>
+      <edam_topic>topic_3855</edam_topic>
+      <edam_topic>topic_3318</edam_topic>
+    </edam_topics>
+    <edam_operations>
+      <edam_operation>operation_0337</edam_operation>
+    </edam_operations>
 </tool>

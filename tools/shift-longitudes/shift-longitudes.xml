@@ -75,4 +75,13 @@ It uses ``xarray`` python package to generate plots. More information about
     ]]></help>
     <citations>
     </citations>
+    <edam_topics>
+      <edam_topic>topic_3855</edam_topic>
+      <edam_topic>topic_3318</edam_topic>
+    </edam_topics>
+    <edam_operations>
+      <edam_operation>operation_3096</edam_operation>
+      <edam_operation>operation_3438</edam_operation>
+      <edam_operation>operation_3434</edam_operation>
+    </edam_operations>
 </tool>

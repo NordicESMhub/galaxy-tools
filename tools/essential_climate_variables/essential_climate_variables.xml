@@ -229,4 +229,13 @@ License:
         <citation type="doi">10.1002/qj.828</citation>
         <citation type="doi">10.1002/qj.2949</citation>
     </citations>
+    <edam_topics>
+      <edam_topic>topic_3855</edam_topic>
+      <edam_topic>topic_3318</edam_topic>
+    </edam_topics>
+    <edam_operations>
+      <edam_operation>operation_2422</edam_operation>
+      <edam_operation>operation_3357</edam_operation>
+      <edam_operation>operation_0335</edam_operation>
+    </edam_operations>
 </tool>
