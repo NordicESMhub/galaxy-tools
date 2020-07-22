@@ -14,7 +14,7 @@
           tar xf $inputdata &&
           mkdir output_dir &&
           mkdir usermods_dirs &&
-          #if str($adv.condi_user_mods).strip() == 'yes'
+          #if str($adv_period.condi_user_mods).strip() == 'yes'
               # should create a new type user_mods.tar
               cd usermods_dirs &&
               tar xf '$user_mods' &&
@@ -25,14 +25,14 @@
           ./manage_externals/checkout_externals  &&
           cd cime/scripts &&
           ./create_newcase --case '../../../$casename' --compset 2000_DATM%1PTGSWP3_CLM50%FATES_SICE_SOCN_MOSART_SGLC_SWAV --machine espresso --run-unsupported 
-          #if str($adv.condi_user_mods).strip() == 'yes'
+          #if str($adv_period.condi_user_mods).strip() == 'yes'
               --user-mods-dir ../../../usermods_dirs
           #end if
               --res '$resolution'  && 
           cd '../../../$casename' &&
           ./case.setup  > ../output_dir/case.txt  2>&1   &&
-          ./xmlchange STOP_N=$adv.stopn &&
-          ./xmlchange STOP_OPTION=$adv.stop_option &&
+          ./xmlchange STOP_N=$adv_period.stopn &&
+          ./xmlchange STOP_OPTION=$adv_period.stop_option &&
           ./xmlchange DOUT_S=FALSE &&
           cp '$__tool_directory__/user_nl_clm' user_nl_clm && 
          ./case.build >> ../output_dir/case.txt  2>&1 &&
@@ -56,7 +56,7 @@
                 <option value="1x1_BOR3">1x1_BOR3</option>
                 <option value="1x1_BOR4">1x1_BOR4</option>
         </param>
-        <section name="adv" title="Advanced user customisation" expanded="false">
+        <section name="adv_period" title="Customize the model run period" expanded="false">
 
             <conditional name="condi_type_run">
                 <param name="run_type" type="select" label="Determines the model run initialization type.">
@@ -109,6 +109,8 @@
                </when>
                <when value="no"/>
         </conditional>
+        </section>
+        <section name="adv" title="Advanced customization" expanded="false">
         </section>
     </inputs>
     <outputs>

@@ -11,7 +11,7 @@
     <MPIFC>mpifort</MPIFC>
     <MPICC>mpicc</MPICC>
     <MPICXX>mpicxx</MPICXX>
-    <NETCDF_PATH>/usr/local</NETCDF_PATH>
+    <NETCDF_PATH>$(CONDA_PREFIX)</NETCDF_PATH>
     <FFLAGS>
       <append DEBUG="FALSE"> -O2 </append>
       <append MODEL="micom"> -fdefault-real-8 </append>
