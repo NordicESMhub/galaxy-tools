@@ -47,6 +47,9 @@ Best practices for developing new tools are [https://galaxy-iuc-standards.readth
 
 We may need to update all the tools later when additional topics will be added for geosciences.
  
+
+- Do not forget to follow [Galaxy IUC coding style](https://galaxy-iuc-standards.readthedocs.io/en/latest/best_practices/tool_xml.html?highlight=order#coding-style).
+
 ## Test a tool with planemo
 
 ~~~`bash`
