@@ -1,5 +1,12 @@
 <tool id="climate_stripes" name="climate stripes" version="1.0.1">
     <description>from timeseries</description>
+    <edam_topics>
+      <edam_topic>topic_3855</edam_topic>
+      <edam_topic>topic_3318</edam_topic>
+    </edam_topics>
+    <edam_operations>
+      <edam_operation>operation_0337</edam_operation>
+    </edam_operations>
     <requirements>
         <requirement type="package" version="3">python</requirement>
         <requirement type="package" version="3.1.1">matplotlib</requirement>
