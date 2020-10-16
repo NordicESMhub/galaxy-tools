@@ -14,14 +14,14 @@
           tar xf $inputdata &&
           mkdir output_dir &&
           mkdir usermods_dirs &&
-          #if str($adv_period.condi_user_mods).strip() == 'yes'
+          #if str($adv.condi_user_mods).strip() == 'yes'
               # should create a new type user_mods.tar
               cd usermods_dirs &&
               tar xf '$user_mods' &&
               cd .. &&
           #end if
           create_newcase --case '$casename' --compset 2000_DATM%1PTGSWP3_CLM50%FATES_SICE_SOCN_MOSART_SGLC_SWAV --machine espresso --run-unsupported 
-          #if str($adv_period.condi_user_mods).strip() == 'yes'
+          #if str($adv.condi_user_mods).strip() == 'yes'
               --user-mods-dir usermods_dirs
           #end if
               --res '$resolution'  && 
@@ -32,12 +32,18 @@
           ./xmlchange DOUT_S=FALSE &&
           cp '$__tool_directory__/user_nl_clm' user_nl_clm &&
          ./case.build >> ../output_dir/case.txt  2>&1 &&
-         ./case.submit >> ../output_dir/case.txt  2>&1  ||
+         ./case.submit >> ../output_dir/case.txt  2>&1 &&
+         mkdir -p restart                              &&
+         cp '../work/$casename/run/$casename'.r*.*.nc restart &&
+         cp '../work/$casename/run/rpointer.* restart &&
+         tar cvf ../output_dir/restart_'$casename'.tar restart &&
+         cp '../work/$casename/run/'*.log.* ../output_dir/ &&
+         cp '../work/$casename/run/$casename'.*.h*.*.nc ../output_dir/ ||
          (printf "Case failed" && tar cf ../output_dir/work.tar ../work)
     ]]></command>
     <inputs>
         <param name="inputdata" type="data" format='tar' label="inputdata for running FATES EMERALD"></param>
-        <param name="casename" type="text" value="usecase" label="Name of your CESM case"></param>
+        <param name="casename" type="text" value="usecase" label="Name of your case"></param>
         <param name="resolution" type="select" label="Model resolution">
                 <option value="1x1_ALP1">ALP1</option>
                 <option value="1x1_ALP2">ALP2</option>
@@ -86,34 +92,28 @@
                 <option value="none">none</option>
                 <option value="never">never</option>
                 <option value="nsteps">nsteps</option>
-                <option value="nstep">nstep</option>
                 <option value="nseconds">nseconds</option>
-                <option value="nsecond">nsecond</option>
                 <option value="nminutes">nminutes</option>
-                <option value="nminute">nminute</option>
                 <option value="nhours">nhours</option>
-                <option value="nhour">nhour</option>
-                <option value="nday">nday</option>
+                <option value="nday">ndays</option>
                 <option value="nmonths">nmonths</option>
-                <option value="nmonth">nmonth</option>
                 <option value="nyears">nyears</option>
-                <option value="nyear">nyear</option>
                 <option value="date">date</option>
                 <option value="ifdays0">ifday0</option>
                 <option value="end">end</option>
             </param>
+        </section>
+        <section name="adv" title="Advanced customization" expanded="false">
             <conditional name="condi_user_mods">
-                <param name="add_changes" type="select" label="Additional user modifications">
+                <param name="add_changes" type="select" label="user-modified source code">
                     <option value="no" default="true">no</option>
                     <option value="yes">yes</option>
                 </param>
                 <when value="yes">
-                    <param name="usermods" type="data" format="tar" label="user modifications"></param>
+                    <param name="usermods" type="data" format="tar" label="SourceMods"></param>
                </when>
                <when value="no"/>
         </conditional>
-        </section>
-        <section name="adv" title="Advanced customization" expanded="false">
             <conditional name="condi_adv">
                 <param name="adv_options" type="select" label="Additional xmlchanges.">
                     <option value="no" default="true">no</option>
