@@ -144,47 +144,48 @@
 **The Functionally Assembled Terrestrial Ecosystem Simulator (FATES)**
 ==========================================================================
 
-This tool create and run CTSM-FATES EMERALD experiments.
-#### Clone git repository
-git clone https://github.com/NordicESMhub/ctsm.git
+This tool create and run CTSM-FATES EMERALD experiments from fates-emerald release.
 
-#### Checkout branch "fates_emerald_api"
-cd ~/ctsm
-git checkout fates_emerald_api
+This version of FATES is maintained by the University of Oslo.
 
-#### Download other external codes
-./manage_externals/checkout_externals 
+Currently available resolution are as following:
 
-#### Create a case: 
-#--case: which directory your case will be create
-#--compset: which model component will be used, only DATM%1PTGSWP3 is available at the moment 
-#--res: currently available resolution are SeedClim Sites: 1x1_ALP1,1x1_ALP2,1x1_ALP3,1x1_ALP4,1x1_SUB1,1x1_SUB2,1x1_SUB3,1x1_SUB4,1x1_BOR1,1x1_BOR2,1x1_BOR3,1x1_BOR4
-#--machine: where to run the model, saga is the only option at the moment
-#--project: your project number on saga
+SeedClim Sites:
+~~~~~~~~~~~~~~~
 
-cd ~/ctsm/cime/scripts
-./create_newcase --case ../../../ctsm_cases/YOUR_CASE_NAME --compset 2000_DATM%1PTGSWP3_CLM50%FATES_SICE_SOCN_MOSART_SGLC_SWAV --res 1x1_ALP1 --machine saga --run-unsupported --project nn2806k
+- ALP1,61.0243N,8.12343E
+- ALP2,60.8231N,7.27596E
+- ALP3,60.8328N,7.17561E
+- ALP4,60.9335N,6.41504E
+- SUB1,60.8203N,8.70466E
+- SUB2,60.8760N,7.17666E
+- SUB3,61.0866N,6.63028E
+- SUB4,60.5445N,6.51468E
+- BOR1,61.0355N,9.07876E
+- BOR2,60.8803N,7.16982E
+- BOR3,60.6652N,6.33738E
+- BOR4,60.6901N,5.96487E
 
-#### Run a case
+LandPress Sites:
+~~~~~~~~~~~~~~~~
 
-cd ~/ctsm_cases/YOUR_CASE_NAME
-./case.setup      # create the $CASE.run file
-./case.build      # build model and create namelists
-./case.submit     # submit script
-                  # default setting only allow you to run 5 days test run.
+- LYG,60.70084N,5.092566E  
+- BUO,65.83677N,12.224506E
+- HAV,64.779N,11.2193E
+- SKO,65.79602N,12.219299E
 
-#### To run a longer simulation
+Three-D Sites:
+~~~~~~~~~~~~~~
 
-# Following parameters can be adapted for longer simulation
+- VIKE,60.88019N,7.16990E
+- JOAS,60.86183N,7.16800E
+- LIAH,60.85994N,7.19504E
 
-./xmlchange --file env_run.xml --id RUN_STARTDATE --val 0001-01-01      # set up the starting date of your simulation 
-./xmlchange --file env_run.xml --id STOP_OPTION --val nyears            # set the simulation periods to "years"
-./xmlchange --file env_run.xml --id STOP_N --val 5                      # set the length of simulation, i.e, how many years
-./xmlchange --file env_run.xml --id CONTINUE_RUN --val TRUE             # if you want to continue your simulation from restart file, set it to TRUE
-./xmlchange --file env_run.xml --id RESUBMIT --val 10                   # set up how many times you want to resubmit your simulation.
-                                                                        # e.g, STOP_N=5, RESUBMIT=10, you will have simulation for 5+5*10=55 
-./xmlchange --file env_run.xml --id DATM_CLMNCEP_YR_START --val 1901    # set up the start year of the atmospheric forcing 
-./xmlchange --file env_run.xml --id DATM_CLMNCEP_YR_END --val 1950      # set up the end year of the atmospheric forcing 
+
+Finnmark Site:
+~~~~~~~~~~~~~~
+
+- FINN,69.341088N,25.293524E
 
     ]]></help>
     <citations>
