@@ -34,11 +34,12 @@
          ./case.build >> ../output_dir/case.txt  2>&1 &&
          ./case.submit >> ../output_dir/case.txt  2>&1 &&
          mkdir -p restart                              &&
-         cp '../work/$casename/run/$casename'.r*.*.nc restart &&
-         cp '../work/$casename/run/rpointer.* restart &&
-         tar cvf '../output_dir/restart_$casename.tar' restart &&
-         cp '../work/$casename/run/'*.log.* ../output_dir/ &&
-         cp '../work/$casename/run/$casename'.*.h*.*.nc ../output_dir/ ||
+         (cat '../work/$casename/run/rpointer'.* > $rinfo || printf "No restarts\n") &&
+         (cp '../work/$casename/run/$casename'.*.r*.*.nc restart/ || printf "No restarts\n") &&
+         (cp '../work/$casename/run/rpointer'.* restart/ || printf "no rpointer\n") &&
+         tar cvf ../output_dir/restart.tar restart &&
+         (cp '../work/$casename/run/$casename'.*.h*.*.nc ../output_dir/ || printf "no netCDF outputs\n") &&
+         cp '../work/$casename/run/'*.log.* ../output_dir/ ||
          (printf "Case failed" && tar cf ../output_dir/work.tar ../work)
     ]]></command>
     <inputs>
@@ -132,7 +133,7 @@
         <collection type="list" name="output">
             <discover_datasets pattern="__designation_and_ext__" visible="false" format="netcdf,txt,tar" directory="output_dir"/>
         </collection>
-        <data name="ofilename" format="txt"></data>
+        <data name="rinfo" format="txt"></data>
     </outputs>
     <tests>
         <test>
