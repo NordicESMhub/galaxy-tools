@@ -27,11 +27,22 @@
               --res '$resolution'  && 
           cd '$casename' &&
           ./case.setup  > ../output_dir/case.txt  2>&1   &&
+          #if (str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch')
+              ./xmlchange RUN_TYPE=$adv_period.condi_type_run.run_type &&
+              ./xmlchange RUN_REFDATE=$adv_period.condi_type_run.run_refdate &&
+              ./xmlchange RUN_REFCASE=$adv_period.condi_type_run.run_refcase &&
+          #end if
+          #if (str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'startup')
+              ./xmlchange RUN_STARTDATE=$adv_period.condi_type_run.run_startdate &&
+          #end if
           ./xmlchange STOP_N=$adv_period.stopn &&
           ./xmlchange STOP_OPTION=$adv_period.stop_option &&
           ./xmlchange DOUT_S=FALSE &&
           cp '$__tool_directory__/user_nl_clm' user_nl_clm &&
          ./case.build >> ../output_dir/case.txt  2>&1 &&
+          #if (str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch')
+             tar -xf '$adv_period.condi_type_run.restart' -C '../work/$casename/run/' && 
+          #end if
          ./case.submit >> ../output_dir/case.txt  2>&1 &&
          mkdir -p restart                              &&
          (cat '../work/$casename/run/rpointer'.* > $rinfo || printf "No restarts\n") &&
@@ -82,11 +93,13 @@
                 <when value="branch">
                     <param name="run_refcase" type="text" value="" label="Reference case for hybrid or branch runs"></param>
                     <param name="run_refdate" type="text" value="" label="Reference date for hybrid or branch runs (yyyy-mm-dd)"></param>
+                    <param name="restart" type="data" format='tar' label="restart for running FATES EMERALD"></param>
                 </when>
                 <when value="hybrid">
                     <param name="run_refcase" type="text" value="" label="Reference case for hybrid or branch runs"></param>
                     <param name="run_refdate" type="text" value="" label="Reference date for hybrid or branch runs (yyyy-mm-dd)"></param>
                     <param name="run_startdate" type="text" value="" label="Run start date (yyyy-mm-dd). Only used for startup or hybrid runs."></param>
+                    <param name="restart" type="data" format='tar' label="restart for running FATES EMERALD"></param>
                 </when>
             </conditional>
             <param name="stopn" type="integer" value="5" label="Provides a numerical count for STOP_OPTION."></param>
