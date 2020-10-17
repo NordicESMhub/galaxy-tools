@@ -36,7 +36,7 @@
          mkdir -p restart                              &&
          cp '../work/$casename/run/$casename'.r*.*.nc restart &&
          cp '../work/$casename/run/rpointer.* restart &&
-         tar cvf ../output_dir/restart_'$casename'.tar restart &&
+         tar cvf '../output_dir/restart_$casename.tar' restart &&
          cp '../work/$casename/run/'*.log.* ../output_dir/ &&
          cp '../work/$casename/run/$casename'.*.h*.*.nc ../output_dir/ ||
          (printf "Case failed" && tar cf ../output_dir/work.tar ../work)
