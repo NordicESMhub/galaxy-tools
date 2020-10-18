@@ -164,10 +164,14 @@
         </section>
         <section name="adv_clm" title="CLM namelist customization" expanded="false">
             <conditional name="condi_clm_namelist">
-                <param name="use_fates" type="select" label="CLM or CLM/FATES">
-                    <option value=".true." default="true">FATES</option>
-                </param>
+                <param name="use_fates" type="boolean" label="FATES or CLM" truevalue=".true." falsevalue=".false."  checked="true"/>
                 <when value=".true.">
+                    <param name="use_fates_planthydro" type="boolean" label="Toggle to turn on plant hydraulics" truevalue=".true." falsevalue=".false."  checked="false"/>
+                    <param name="use_fates_cohort_age_tracking" type="boolean" label="Toggle to turn on cohort age tracking" truevalue=".true." falsevalue=".false."  checked="false"/>
+                    <param name="use_fates_ed_st3" type="boolean" label="Toggle to turn on Static Stand Structure Mode" truevalue=".true." falsevalue=".false."  checked="false"/>
+                    <param name="use_fates_ed_prescribed_phys" type="boolean" label="Toggle to turn on prescribed physiology" truevalue=".true." falsevalue=".false."  checked="false"/>
+                    <param name="use_fates_logging" type="boolean" label="Toggle to turn on the logging module" truevalue=".true." falsevalue=".false."  checked="false"/>
+                    <param name="use_fates_fixed_biogeog" type="boolean" label="Toggle to turn on fixed biogeography mode" truevalue=".true." falsevalue=".false."  checked="false"/>
                     <param name="fates_spitfire_mode" type="select" label="Spitfire module to simulate fire">
                         <option value="0" default="true">None</option>
                         <option value="1">Use a global constant lightning rate found in fates_params</option>
@@ -175,30 +179,6 @@
                         <option value="3">Use an external confirmed ignitions dataset</option>
                         <option value="4">Use external lightning and population datasets to simulate both natural and anthropogenic ignitions</option>
                    </param>
-                    <param name="use_fates_planthydro" type="select" label="Toggle to turn on plant hydraulics">
-                        <option value=".false." default="true">Off</option>
-                        <option value=".true.">On</option>
-                    </param>
-                    <param name="use_fates_cohort_age_tracking" type="select" label="Toggle to turn on cohort age tracking">
-                        <option value=".false." default="true">Off</option>
-                        <option value=".true.">On</option>
-                    </param>
-                    <param name="use_fates_ed_st3" type="select" label="Toggle to turn on Static Stand Structure Mode">
-                        <option value=".false." default="true">Off</option>
-                        <option value=".true.">On</option>
-                    </param>
-                    <param name="use_fates_ed_prescribed_phys" type="select" label="Toggle to turn on prescribed physiology">
-                        <option value=".false." default="true">Off</option>
-                        <option value=".true.">On</option>
-                    </param>
-                    <param name="use_fates_logging" type="select" label="Toggle to turn on the logging module">
-                        <option value=".false." default="true">Off</option>
-                        <option value=".true.">On</option>
-                    </param>
-                    <param name="use_fates_fixed_biogeog" type="select" label="Toggle to turn on fixed biogeography mode">
-                        <option value=".false." default="true">Off</option>
-                        <option value=".true.">On</option>
-                    </param>
                     <param name="fates_parteh_mode" type="select" label="Switch deciding which nutrient model to use in FATES">
                         <option value="" default="true">None</option>
                         <option value="1">1</option>
