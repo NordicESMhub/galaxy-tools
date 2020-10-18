@@ -46,6 +46,7 @@
           #end if
           ./xmlchange STOP_N=$adv_period.stopn &&
           ./xmlchange STOP_OPTION=$adv_period.stop_option &&
+          ./xmlchange CCSM_CO2_PPMV==$adv.co2 &&
           ./xmlchange DOUT_S=FALSE &&
           cp '$user_nl_clm_customization' user_nl_clm &&
          ./case.build >> ../output_dir/case.txt  2>&1 &&
@@ -165,7 +166,6 @@
             <conditional name="condi_clm_namelist">
                 <param name="use_fates" type="select" label="CLM or CLM/FATES">
                     <option value=".true." default="true">FATES</option>
-                    <option value=".false.">CLM</option>
                 </param>
                 <when value=".true.">
                     <param name="fates_spitfire_mode" type="select" label="Spitfire module to simulate fire">
@@ -209,6 +209,7 @@
         </conditional>
         </section>
         <section name="adv" title="Advanced customization" expanded="false">
+            <param name="co2" type="float" value="367.0" label="Atmospheric CO2 molar ratio (by volume) only used when co2_type==constant (umol/mol)"></param>
             <conditional name="condi_user_mods">
                 <param name="add_changes" type="select" label="user-modified source code">
                     <option value="no" default="true">no</option>
@@ -229,9 +230,9 @@
     </outputs>
     <tests>
         <test>
-            <param name="casename" value="test_ALP1" />
+            <param name="inputdata" value="inputdata_test.tar" />
+            <param name="casename" value="test" />
             <param name="resolution" value="1x1_ALP1" />
-            <output name="output" ftype="netcdf" file="test_ALP1.netcdf" compare="sim_size" delta="50"/>
         </test>
     </tests>
     <help><![CDATA[
