@@ -46,7 +46,7 @@
           #end if
           ./xmlchange STOP_N=$adv_period.stopn &&
           ./xmlchange STOP_OPTION=$adv_period.stop_option &&
-          ./xmlchange CCSM_CO2_PPMV==$adv.co2 &&
+          ./xmlchange CCSM_CO2_PPMV=$adv.co2 &&
           ./xmlchange DOUT_S=FALSE &&
           cp '$user_nl_clm_customization' user_nl_clm &&
          ./case.build >> ../output_dir/case.txt  2>&1 &&
