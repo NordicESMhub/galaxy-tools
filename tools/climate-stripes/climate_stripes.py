@@ -88,10 +88,9 @@ class Stripes ():
             plt.title(self.title)
         if self.xname:
             nrange = self.data.index.values
-            n = int(np.floor((nrange.max() - nrange.min())/int(self.nxsplit)))
+            n = int(np.floor((nrange.max() - nrange.min()) / int(self.nxsplit)))
             date_list = self.data[self.xname].loc[::n].apply(
-                             lambda x: pd.to_datetime(str(x),
-                                                      format=self.format))
+                lambda x: pd.to_datetime(str(x), format=self.format))
             date_list = [i.strftime(self.plot_format) for i in date_list]
             nval = int(self.data[self.xname].loc[::n].shape[0])
             ax.xaxis.set_major_locator(plt.MaxNLocator(nval))

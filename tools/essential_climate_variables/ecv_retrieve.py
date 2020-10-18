@@ -66,8 +66,8 @@ class ECV ():
                 'format': self.format,
                 'product_type': self.product_type,
                 'time_aggregation': self.time_aggregation,
-                          },
-                self.outputfile)
+            },
+            self.outputfile)
 
     def checktar(self):
         is_grib = False
@@ -94,8 +94,7 @@ if __name__ == '__main__':
        not os.path.isfile('.cdsapirc'):
         with open(".cdsapirc", "w+") as apikey:
             apikey.write("url: https://cds.climate.copernicus.eu/api/v2\n")
-            apikey.write(
-                  "key: " + os.environ['GALAXY_COPERNICUS_CDSAPIRC_KEY'])
+            apikey.write("key: " + os.environ['GALAXY_COPERNICUS_CDSAPIRC_KEY'])
             remove_apikey = True
 
     parser.add_argument(
