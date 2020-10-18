@@ -11,7 +11,8 @@
           cp '$__tool_directory__/config' .cime/config &&
           cp '$__tool_directory__/config_compilers.xml' '.cime/config_compilers.xml' &&
           cp '$__tool_directory__/config_machines.xml' '.cime/config_machines.xml' &&
-          tar xf $inputdata &&
+          mkdir inputdata &&
+          tar -xf '$inputdata' -C 'inputdata/' && 
           mkdir output_dir &&
           mkdir usermods_dirs &&
           #if str($adv.condi_user_mods).strip() == 'yes'
@@ -42,13 +43,17 @@
          ./case.build >> ../output_dir/case.txt  2>&1 &&
           #if (str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch')
              tar -xf '$adv_period.condi_type_run.restart' -C '../work/$casename/run/' && 
+             
           #end if
          ./case.submit >> ../output_dir/case.txt  2>&1 &&
          mkdir -p restart                              &&
          (cat '../work/$casename/run/rpointer'.* > $rinfo || printf "No restarts\n") &&
-         (cp '../work/$casename/run/$casename'.*.r*.*.nc restart/ || printf "No restarts\n") &&
+         (cp '../work/$casename/run/$casename'.*.r*.*.nc restart/ || printf "No netCDF restarts\n") &&
+         (cp '../work/$casename/run/$casename'.*.r*.*.bin restart/ || printf "No bin restarts\n") &&
          (cp '../work/$casename/run/rpointer'.* restart/ || printf "no rpointer\n") &&
-         tar cvf ../output_dir/restart.tar restart &&
+         cd restart && 
+         tar cvf ../../output_dir/restart.tar . &&
+         cd .. && 
          (cp '../work/$casename/run/$casename'.*.h*.*.nc ../output_dir/ || printf "no netCDF outputs\n") &&
          cp '../work/$casename/run/'*.log.* ../output_dir/ ||
          (printf "Case failed" && tar cf ../output_dir/work.tar ../work)
@@ -56,6 +61,7 @@
     <inputs>
         <param name="inputdata" type="data" format='tar' label="inputdata for running FATES EMERALD"></param>
         <param name="casename" type="text" value="usecase" label="Name of your case">
+            <validator type="regex" message="start with a letter and no blanks">^[A-Za-z][A-Za-z0-9]*</validator>
         </param>
         <param name="resolution" type="select" label="Model resolution">
                 <option value="1x1_ALP1">ALP1</option>
@@ -88,17 +94,24 @@
                 </param>
                 <when value="startup">
                     <param name="run_startdate" type="text" value="" label="Run start date (yyyy-mm-dd). Only used for startup or hybrid runs.">
+                       <validator type="regex" message="YYYY-MM-DD">(^$|(\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])))</validator>
                     </param>
                 </when>
                 <when value="branch">
                     <param name="run_refcase" type="text" value="" label="Reference case for hybrid or branch runs"></param>
-                    <param name="run_refdate" type="text" value="" label="Reference date for hybrid or branch runs (yyyy-mm-dd)"></param>
+                    <param name="run_refdate" type="text" value="" label="Reference date for hybrid or branch runs (yyyy-mm-dd)">
+                       <validator type="regex" message="YYYY-MM-DD">(^$|(\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])))</validator>
+                    </param>
                     <param name="restart" type="data" format='tar' label="restart for running FATES EMERALD"></param>
                 </when>
                 <when value="hybrid">
                     <param name="run_refcase" type="text" value="" label="Reference case for hybrid or branch runs"></param>
-                    <param name="run_refdate" type="text" value="" label="Reference date for hybrid or branch runs (yyyy-mm-dd)"></param>
-                    <param name="run_startdate" type="text" value="" label="Run start date (yyyy-mm-dd). Only used for startup or hybrid runs."></param>
+                    <param name="run_refdate" type="text" value="" label="Reference date for hybrid or branch runs (yyyy-mm-dd)">
+                       <validator type="regex" message="YYYY-MM-DD">(^$|(\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])))</validator>
+                    </param>
+                    <param name="run_startdate" type="text" value="" label="Run start date (yyyy-mm-dd). Only used for startup or hybrid runs.">
+                       <validator type="regex" message="YYYY-MM-DD">(^$|(\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])))</validator>
+                    </param>
                     <param name="restart" type="data" format='tar' label="restart for running FATES EMERALD"></param>
                 </when>
             </conditional>
