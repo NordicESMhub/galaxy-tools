@@ -41,13 +41,13 @@
               ./xmlchange RUN_REFDATE=$adv_period.condi_type_run.run_refdate &&
               ./xmlchange RUN_REFCASE=$adv_period.condi_type_run.run_refcase &&
           #end if
-          #if (str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'startup')
+          #if ((str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'startup') and ($adv_period.condi_type_run.run_startdate != ''))
               ./xmlchange RUN_STARTDATE=$adv_period.condi_type_run.run_startdate &&
           #end if
           ./xmlchange STOP_N=$adv_period.stopn &&
           ./xmlchange STOP_OPTION=$adv_period.stop_option &&
           ./xmlchange DOUT_S=FALSE &&
-          cp '$__tool_directory__/user_nl_clm' user_nl_clm &&
+          cp '$user_nl_clm_customization' user_nl_clm &&
          ./case.build >> ../output_dir/case.txt  2>&1 &&
           #if (str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch')
              tar -xf '$adv_period.condi_type_run.restart' -C '../work/$casename/run/' && 
@@ -66,6 +66,27 @@
          cp '../work/$casename/run/'*.log.* ../output_dir/ ||
          (printf "Case failed" && tar cf ../output_dir/work.tar ../work)
     ]]></command>
+    <configfiles>
+        <configfile name="user_nl_clm_customization"><![CDATA[
+&clm_inparm
+            hist_mfilt = 120,
+            use_fates = $adv_clm.condi_clm_namelist.use_fates,
+            #if (str($adv_clm.condi_clm_namelist.use_fates).strip() == '.true.')
+              fates_spitfire_mode = $adv_clm.condi_clm_namelist.fates_spitfire_mode,
+              use_fates_planthydro = $adv_clm.condi_clm_namelist.use_fates_planthydro,
+              use_fates_cohort_age_tracking = $adv_clm.condi_clm_namelist.use_fates_cohort_age_tracking,
+              use_fates_ed_st3 = $adv_clm.condi_clm_namelist.use_fates_ed_st3,
+              use_fates_ed_prescribed_phys = $adv_clm.condi_clm_namelist.use_fates_ed_prescribed_phys,
+              use_fates_logging = $adv_clm.condi_clm_namelist.use_fates_logging,
+              use_fates_fixed_biogeog = $adv_clm.condi_clm_namelist.use_fates_fixed_biogeog,
+              #if (str($adv_clm.condi_clm_namelist.fates_parteh_mode).strip() != '')
+                fates_parteh_mode = $adv_clm.condi_clm_namelist.fates_parteh_mode   
+              #end if
+            #end if
+/
+        ]]>
+        </configfile>
+    </configfiles>
     <inputs>
         <param name="inputdata" type="data" format='tar' label="inputdata for running FATES EMERALD"></param>
         <param name="casename" type="text" value="usecase" label="Name of your case">
@@ -143,10 +164,10 @@
         <section name="adv_clm" title="CLM namelist customization" expanded="false">
             <conditional name="condi_clm_namelist">
                 <param name="use_fates" type="select" label="CLM or CLM/FATES">
-                    <option value="true" default="true">FATES</option>
-                    <option value="false">CLM</option>
+                    <option value=".true." default="true">FATES</option>
+                    <option value=".false.">CLM</option>
                 </param>
-                <when value="true">
+                <when value=".true.">
                     <param name="fates_spitfire_mode" type="select" label="Spitfire module to simulate fire">
                         <option value="0" default="true">None</option>
                         <option value="1">Use a global constant lightning rate found in fates_params</option>
@@ -155,28 +176,28 @@
                         <option value="4">Use external lightning and population datasets to simulate both natural and anthropogenic ignitions</option>
                    </param>
                     <param name="use_fates_planthydro" type="select" label="Toggle to turn on plant hydraulics">
-                        <option value="false" default="true">Off</option>
-                        <option value="true">On</option>
+                        <option value=".false." default="true">Off</option>
+                        <option value=".true.">On</option>
                     </param>
                     <param name="use_fates_cohort_age_tracking" type="select" label="Toggle to turn on cohort age tracking">
-                        <option value="false" default="true">Off</option>
-                        <option value="true">On</option>
+                        <option value=".false." default="true">Off</option>
+                        <option value=".true.">On</option>
                     </param>
                     <param name="use_fates_ed_st3" type="select" label="Toggle to turn on Static Stand Structure Mode">
-                        <option value="false" default="true">Off</option>
-                        <option value="true">On</option>
+                        <option value=".false." default="true">Off</option>
+                        <option value=".true.">On</option>
                     </param>
                     <param name="use_fates_ed_prescribed_phys" type="select" label="Toggle to turn on prescribed physiology">
-                        <option value="false" default="true">Off</option>
-                        <option value="true">On</option>
+                        <option value=".false." default="true">Off</option>
+                        <option value=".true.">On</option>
                     </param>
                     <param name="use_fates_logging" type="select" label="Toggle to turn on the logging module">
-                        <option value="false" default="true">Off</option>
-                        <option value="true">On</option>
+                        <option value=".false." default="true">Off</option>
+                        <option value=".true.">On</option>
                     </param>
                     <param name="use_fates_fixed_biogeog" type="select" label="Toggle to turn on fixed biogeography mode">
-                        <option value="false" default="true">Off</option>
-                        <option value="true">On</option>
+                        <option value=".false." default="true">Off</option>
+                        <option value=".true.">On</option>
                     </param>
                     <param name="fates_parteh_mode" type="select" label="Switch deciding which nutrient model to use in FATES">
                         <option value="" default="true">None</option>
@@ -184,7 +205,7 @@
                         <option value="2">2</option>
                     </param>
                </when>
-               <when value="no"/>
+               <when value=".false."/>
         </conditional>
         </section>
         <section name="adv" title="Advanced customization" expanded="false">
