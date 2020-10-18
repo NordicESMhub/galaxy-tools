@@ -71,18 +71,16 @@
         <configfile name="user_nl_clm_customization"><![CDATA[
 &clm_inparm
             hist_mfilt = 120,
-            use_fates = $adv_clm.condi_clm_namelist.use_fates,
-            #if (str($adv_clm.condi_clm_namelist.use_fates).strip() == '.true.')
-              fates_spitfire_mode = $adv_clm.condi_clm_namelist.fates_spitfire_mode,
-              use_fates_planthydro = $adv_clm.condi_clm_namelist.use_fates_planthydro,
-              use_fates_cohort_age_tracking = $adv_clm.condi_clm_namelist.use_fates_cohort_age_tracking,
-              use_fates_ed_st3 = $adv_clm.condi_clm_namelist.use_fates_ed_st3,
-              use_fates_ed_prescribed_phys = $adv_clm.condi_clm_namelist.use_fates_ed_prescribed_phys,
-              use_fates_logging = $adv_clm.condi_clm_namelist.use_fates_logging,
-              use_fates_fixed_biogeog = $adv_clm.condi_clm_namelist.use_fates_fixed_biogeog,
-              #if (str($adv_clm.condi_clm_namelist.fates_parteh_mode).strip() != '')
-                fates_parteh_mode = $adv_clm.condi_clm_namelist.fates_parteh_mode   
-              #end if
+            use_fates = .true.,
+            fates_spitfire_mode = $adv_clm.fates_spitfire_mode,
+            use_fates_planthydro = $adv_clm.use_fates_planthydro,
+            use_fates_cohort_age_tracking = $adv_clm.use_fates_cohort_age_tracking,
+            use_fates_ed_st3 = $adv_clm.use_fates_ed_st3,
+            use_fates_ed_prescribed_phys = $adv_clm.use_fates_ed_prescribed_phys,
+            use_fates_logging = $adv_clm.use_fates_logging,
+            use_fates_fixed_biogeog = $adv_clm.use_fates_fixed_biogeog,
+            #if (str($adv_clm.fates_parteh_mode).strip() != '')
+              fates_parteh_mode = $adv_clm.fates_parteh_mode   
             #end if
 /
         ]]>
@@ -118,7 +116,7 @@
 
             <conditional name="condi_type_run">
                 <param name="run_type" type="select" label="Determines the model run initialization type.">
-                    <option value="startup" default="true">startup</option>
+                    <option value="startup" selected="true">startup</option>
                     <option value="hybrid">hybrid</option>
                     <option value="branch">branch</option>
                 </param>
@@ -147,7 +145,7 @@
             </conditional>
             <param name="stopn" type="integer" value="5" label="Provides a numerical count for STOP_OPTION."></param>
             <param name="stop_option" type="select" label=" Sets the run length along with STOP_N and STOP_DATE">
-                <option value="ndays" default="true">ndays</option>
+                <option value="ndays" selected="true">ndays</option>
                 <option value="none">none</option>
                 <option value="never">never</option>
                 <option value="nsteps">nsteps</option>
@@ -163,36 +161,30 @@
             </param>
         </section>
         <section name="adv_clm" title="CLM namelist customization" expanded="false">
-            <conditional name="condi_clm_namelist">
-                <param name="use_fates" type="boolean" label="FATES or CLM" truevalue=".true." falsevalue=".false."  checked="true"/>
-                <when value=".true.">
-                    <param name="use_fates_planthydro" type="boolean" label="Toggle to turn on plant hydraulics" truevalue=".true." falsevalue=".false."  checked="false"/>
-                    <param name="use_fates_cohort_age_tracking" type="boolean" label="Toggle to turn on cohort age tracking" truevalue=".true." falsevalue=".false."  checked="false"/>
-                    <param name="use_fates_ed_st3" type="boolean" label="Toggle to turn on Static Stand Structure Mode" truevalue=".true." falsevalue=".false."  checked="false"/>
-                    <param name="use_fates_ed_prescribed_phys" type="boolean" label="Toggle to turn on prescribed physiology" truevalue=".true." falsevalue=".false."  checked="false"/>
-                    <param name="use_fates_logging" type="boolean" label="Toggle to turn on the logging module" truevalue=".true." falsevalue=".false."  checked="false"/>
-                    <param name="use_fates_fixed_biogeog" type="boolean" label="Toggle to turn on fixed biogeography mode" truevalue=".true." falsevalue=".false."  checked="false"/>
-                    <param name="fates_spitfire_mode" type="select" label="Spitfire module to simulate fire">
-                        <option value="0" default="true">None</option>
-                        <option value="1">Use a global constant lightning rate found in fates_params</option>
-                        <option value="2">Use an external lightning dataset</option>
-                        <option value="3">Use an external confirmed ignitions dataset</option>
-                        <option value="4">Use external lightning and population datasets to simulate both natural and anthropogenic ignitions</option>
-                   </param>
-                    <param name="fates_parteh_mode" type="select" label="Switch deciding which nutrient model to use in FATES">
-                        <option value="" default="true">None</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                    </param>
-               </when>
-               <when value=".false."/>
-        </conditional>
+            <param name="use_fates_planthydro" type="boolean" label="Toggle to turn on plant hydraulics" truevalue=".true." falsevalue=".false."  checked="false"/>
+            <param name="use_fates_cohort_age_tracking" type="boolean" label="Toggle to turn on cohort age tracking" truevalue=".true." falsevalue=".false."  checked="false"/>
+            <param name="use_fates_ed_st3" type="boolean" label="Toggle to turn on Static Stand Structure Mode" truevalue=".true." falsevalue=".false."  checked="false"/>
+            <param name="use_fates_ed_prescribed_phys" type="boolean" label="Toggle to turn on prescribed physiology" truevalue=".true." falsevalue=".false."  checked="false"/>
+            <param name="use_fates_logging" type="boolean" label="Toggle to turn on the logging module" truevalue=".true." falsevalue=".false."  checked="false"/>
+            <param name="use_fates_fixed_biogeog" type="boolean" label="Toggle to turn on fixed biogeography mode" truevalue=".true." falsevalue=".false."  checked="false"/>
+            <param name="fates_spitfire_mode" type="select" label="Spitfire module to simulate fire">
+                <option value="0" selected="true">None</option>
+                <option value="1">Use a global constant lightning rate found in fates_params</option>
+                <option value="2">Use an external lightning dataset</option>
+                <option value="3">Use an external confirmed ignitions dataset</option>
+                <option value="4">Use external lightning and population datasets to simulate both natural and anthropogenic ignitions</option>
+           </param>
+           <param name="fates_parteh_mode" type="select" label="Switch deciding which nutrient model to use in FATES">
+               <option value="" selected="true">None</option>
+               <option value="1">1</option>
+               <option value="2">2</option>
+           </param>
         </section>
         <section name="adv" title="Advanced customization" expanded="false">
             <param name="co2" type="float" value="367.0" label="Atmospheric CO2 molar ratio (by volume) only used when co2_type==constant (umol/mol)"></param>
             <conditional name="condi_user_mods">
                 <param name="add_changes" type="select" label="user-modified source code">
-                    <option value="no" default="true">no</option>
+                    <option value="no" selected="true">no</option>
                     <option value="yes">yes</option>
                 </param>
                 <when value="yes">
