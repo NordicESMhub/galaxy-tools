@@ -8,6 +8,7 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
           HOME=`pwd` &&
+          USER='jovyan' &&
           mkdir -p .cime &&
           cp '$__tool_directory__/config' .cime/config &&
           cp '$__tool_directory__/config_compilers.xml' '.cime/config_compilers.xml' &&
