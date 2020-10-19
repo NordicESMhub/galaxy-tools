@@ -199,6 +199,9 @@
             <param name="inputdata" value="inputdata_test.tar" />
             <param name="casename" value="test" />
             <param name="resolution" value="1x1_ALP1" />
+            <param name="run_startdate" value="2000-01-01" />
+            <param name="stop_option" value="nsteps" />
+            <param name="stopn" value="1" />
         </test>
     </tests>
     <help><![CDATA[
