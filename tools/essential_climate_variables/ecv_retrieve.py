@@ -98,8 +98,8 @@ if __name__ == '__main__':
             remove_apikey = True
 
     # Add debug
-    file= open('.cdsapirc', 'r')
-    content_cdsapirc= file.read()
+    file = open('.cdsapirc', 'r')
+    content_cdsapirc = file.read()
     print(content_cdsapirc)
 
     parser.add_argument(
