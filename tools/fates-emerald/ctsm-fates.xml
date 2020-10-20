@@ -29,7 +29,7 @@
           #end if
               --res '$resolution'  && 
           cd '$casename' &&
-          ./case.setup  > ../output_dir/case.txt  2>&1   &&
+          ./case.setup  > $case_info  2>&1   &&
           #if (str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch')
               ./xmlchange RUN_TYPE=$adv_period.condi_type_run.run_type &&
               ./xmlchange RUN_REFDATE=$adv_period.condi_type_run.run_refdate &&
@@ -43,23 +43,28 @@
           ./xmlchange CCSM_CO2_PPMV=$adv.co2 &&
           ./xmlchange DOUT_S=FALSE &&
           cp '$user_nl_clm_customization' user_nl_clm &&
-         ./case.build >> ../output_dir/case.txt  2>&1 &&
+         ./case.build >> $case_info  2>&1 &&
           #if (str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch')
              tar -xf '$adv_period.condi_type_run.restart' -C '../work/$casename/run/' && 
              
           #end if
-         ./case.submit >> ../output_dir/case.txt  2>&1 &&
+         ./case.submit >> $case_info  2>&1 &&
          mkdir -p restart                              &&
          (cat '../work/$casename/run/rpointer'.* > $rinfo || printf "No restarts\n") &&
          (cp '../work/$casename/run/$casename'.*.r*.*.nc restart/ || printf "No netCDF restarts\n") &&
          (cp '../work/$casename/run/$casename'.*.r*.*.bin restart/ || printf "No bin restarts\n") &&
          (cp '../work/$casename/run/rpointer'.* restart/ || printf "no rpointer\n") &&
          cd restart && 
-         tar cvf ../../output_dir/restart.tar . &&
+         tar cvf $restart . &&
          cd .. && 
-         (cp '../work/$casename/run/$casename'.*.h*.*.nc ../output_dir/ || printf "no netCDF outputs\n") &&
-         cp '../work/$casename/run/'*.log.* ../output_dir/ ||
-         (printf "Case failed" && tar cf ../output_dir/work.tar ../work)
+         (gunzip '../work/$casename/run/'*.log.* || printf "no compressed logs") && 
+         cat '../work/$casename/run/'atm.log.* >> $atm_log &&
+         cat '../work/$casename/run/'cesm.log.* >> $cesm_log &&
+         cat '../work/$casename/run/'cpl.log.* >> $cpl_log &&
+         cat '../work/$casename/run/'lnd.log.* >> $lnd_log &&
+         cat '../work/$casename/run/'rof.log.* >> $rof_log &&
+         (cp '../work/$casename/run/$casename'.*.h*.*.nc ../output_dir/ || printf "no netCDF outputs\n") ||
+         (printf "Case failed" && tar cf $work ../work)
     ]]></command>
     <configfiles>
         <configfile name="user_nl_clm_customization"><![CDATA[
@@ -189,10 +194,19 @@
         </section>
     </inputs>
     <outputs>
-        <collection type="list" name="output">
-            <discover_datasets pattern="__designation_and_ext__" visible="false" format="netcdf,txt,tar" directory="output_dir"/>
-        </collection>
-        <data name="rinfo" format="txt"></data>
+        <data name="history_files" format="netcdf" label="${tool.name} on ${inputdata.name} (history file)">
+            <discover_datasets pattern="__designation_and_ext__" directory="output_dir" visible="true" />
+        </data>
+        <data name="atm_log" format="txt" label="${tool.name} on ${inputdata.name} (atm.log)"/>
+        <data name="cesm_log" format="txt" label="${tool.name} on ${inputdata.name} (cesm.log)"/>
+        <data name="cpl_log" format="txt" label="${tool.name} on ${inputdata.name} (cpl.log)"/>
+        <data name="lnd_log" format="txt" label="${tool.name} on ${inputdata.name} (lnd.log)"/>
+        <data name="rof_log" format="txt" label="${tool.name} on ${inputdata.name} (rof.log)"/>
+        <data name="restart" format="tar" label="${tool.name} on ${inputdata.name} (restart)"></data>
+        <data name="case_info" format="txt" label="${tool.name} on ${inputdata.name} (case info)"></data>
+        <data name="rinfo" format="txt" label="${tool.name} on ${inputdata.name} (restart info)"></data>
+        <data name="work" format="tar" label="${tool.name} on ${inputdata.name} (workdir)">
+        </data>
     </outputs>
     <tests>
         <test>
@@ -202,6 +216,56 @@
             <param name="run_startdate" value="2000-01-01" />
             <param name="stop_option" value="nsteps" />
             <param name="stopn" value="1" />
+            <output name="atm_log" ftype="txt" file="atm.log">
+              <assert_contents>
+                  <has_text text="atm: end of main integration loop" />
+              </assert_contents>
+            </output>
+            <output name="cesm_log" ftype="txt" file="cesm.log">
+              <assert_contents>
+                  <has_text text="pes participating in computation for CLM" />
+              </assert_contents>
+            </output>
+            <output name="cpl_log" ftype="txt" file="cpl.log">
+              <assert_contents>
+                  <has_text text="SUCCESSFUL TERMINATION" />
+              </assert_contents>
+            </output>
+            <output name="lnd_log" ftype="txt" file="lnd.log">
+              <assert_contents>
+                  <has_text text="Successfully" />
+              </assert_contents>
+            </output>
+            <output name="rof_log" ftype="txt" file="rof.log">
+              <assert_contents>
+                  <has_text text="MOSART model initialization" />
+              </assert_contents>
+            </output>
+            <output name="case_info" ftype="txt" file="case_info.txt">
+              <assert_contents>
+                  <has_text text="MODEL BUILD HAS FINISHED SUCCESSFULLY" />
+                  <has_text text="Submitted job" />
+              </assert_contents>
+            </output>
+            <output name="work" ftype="tar" file="workdir.tar">
+               <assert_contents>
+                    <has_size value="0"/>
+                </assert_contents>
+            </output>
+            <output name="restart" ftype="tar" file="restart.tar" compare="sim_size" delta="100" />
+            <output name="rinfo" ftype="txt" file="restart_info.txt">
+              <assert_contents>
+                  <has_text text="datm.r.2000-01-01-01800.nc" />
+                  <has_text text="datm.rs1.2000-01-01-01800.bin" />
+                  <has_text text="cpl.r.2000-01-01-01800.nc" />
+                  <has_text text="clm2.r.2000-01-01-01800.nc" />
+              </assert_contents>
+            </output>
+            <output name="history_files" ftype="netcdf" file="history_file.netcdf">
+               <assert_contents>
+                    <has_size value="0"/>
+                </assert_contents>
+            </output>
         </test>
     </tests>
     <help><![CDATA[
