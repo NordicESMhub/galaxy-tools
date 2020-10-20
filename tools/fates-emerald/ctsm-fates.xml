@@ -2,6 +2,7 @@
     <description>Functionally Assembled Terrestrial Ecosystem Simulator</description>
     <requirements>
         <requirement type="package" version="2.0.1">fates-emerald</requirement>
+        <requirement type="package" version="1.32">tar</requirement>
         <requirement type="package" version="3">python</requirement>
         <requirement type="package" version="2.0132">perl-xml-libxml</requirement>
     </requirements>
@@ -63,7 +64,7 @@
          cat '../work/$casename/run/'lnd.log.* >> $lnd_log &&
          cat '../work/$casename/run/'rof.log.* >> $rof_log &&
          (cp '../work/$casename/run/$casename'.*.h*.*.nc ../output_dir/ || printf "no netCDF outputs\n") ||
-         (printf "Case failed" && tar cf $work ../work)
+         (printf "Case failed" && tar cf $work \${HOME}/work)
     ]]></command>
     <configfiles>
         <configfile name="user_nl_clm_customization"><![CDATA[
