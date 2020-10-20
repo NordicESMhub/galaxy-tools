@@ -2,7 +2,6 @@
     <description>Functionally Assembled Terrestrial Ecosystem Simulator</description>
     <requirements>
         <requirement type="package" version="2.0.1">fates-emerald</requirement>
-        <requirement type="package" version="1.32">tar</requirement>
         <requirement type="package" version="3">python</requirement>
         <requirement type="package" version="2.0132">perl-xml-libxml</requirement>
     </requirements>
@@ -218,33 +217,33 @@
             <param name="stopn" value="1" />
             <output name="atm_log" ftype="txt" file="atm.log">
               <assert_contents>
-                  <has_text text="atm: end of main integration loop" />
+                  <has_line_matching expression="*atm: end of main integration loop*" />
               </assert_contents>
             </output>
             <output name="cesm_log" ftype="txt" file="cesm.log">
               <assert_contents>
-                  <has_text text="pes participating in computation for CLM" />
+                  <has_line_matching expression="*pes participating in computation for CLM*" />
               </assert_contents>
             </output>
             <output name="cpl_log" ftype="txt" file="cpl.log">
               <assert_contents>
-                  <has_text text="SUCCESSFUL TERMINATION" />
+                  <has_line_matching expression="*SUCCESSFUL TERMINATION*" />
               </assert_contents>
             </output>
             <output name="lnd_log" ftype="txt" file="lnd.log">
               <assert_contents>
-                  <has_text text="Successfully" />
+                  <has_line_matching expression="*Successfully*" />
               </assert_contents>
             </output>
             <output name="rof_log" ftype="txt" file="rof.log">
               <assert_contents>
-                  <has_text text="MOSART model initialization" />
+                  <has_line_matching expression="*MOSART model initialization*" />
               </assert_contents>
             </output>
             <output name="case_info" ftype="txt" file="case_info.txt">
               <assert_contents>
-                  <has_text text="MODEL BUILD HAS FINISHED SUCCESSFULLY" />
-                  <has_text text="Submitted job" />
+                  <has_line_matching expression="*MODEL BUILD HAS FINISHED SUCCESSFULLY*" />
+                  <has_line_matching expression="*Submitted job*" />
               </assert_contents>
             </output>
             <output name="work" ftype="tar" file="workdir.tar">
@@ -255,10 +254,10 @@
             <output name="restart" ftype="tar" file="restart.tar" compare="sim_size" delta="100" />
             <output name="rinfo" ftype="txt" file="restart_info.txt">
               <assert_contents>
-                  <has_text text="datm.r.2000-01-01-01800.nc" />
-                  <has_text text="datm.rs1.2000-01-01-01800.bin" />
-                  <has_text text="cpl.r.2000-01-01-01800.nc" />
-                  <has_text text="clm2.r.2000-01-01-01800.nc" />
+                  <has_line_matching expression="*datm.r.2000-01-01-01800.nc*" />
+                  <has_line_matching expression="*datm.rs1.2000-01-01-01800.bin*" />
+                  <has_line_matching expression="*cpl.r.2000-01-01-01800.nc*" />
+                  <has_line_matching expression="*clm2.r.2000-01-01-01800.nc*" />
               </assert_contents>
             </output>
             <output name="history_files" ftype="netcdf" file="history_file.netcdf">
