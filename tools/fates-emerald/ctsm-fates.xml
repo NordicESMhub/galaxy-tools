@@ -1,4 +1,4 @@
-<tool id="ctsm-fates" name="CTSM/FATES-EMERALD" version="2.0.1">
+<tool id="ctsm_fates" name="CTSM/FATES-EMERALD" version="2.0.1">
     <description>Functionally Assembled Terrestrial Ecosystem Simulator</description>
     <requirements>
         <requirement type="package" version="2.0.1">fates-emerald</requirement>
