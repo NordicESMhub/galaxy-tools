@@ -3,17 +3,13 @@
     <requirements>
         <requirement type="package" version="2.0.1">fates-emerald</requirement>
         <requirement type="package" version="1.32">tar</requirement>
+        <requirement type="package" version="2.35">binutils</requirement>
         <requirement type="package" version="3">python</requirement>
         <requirement type="package" version="2.0132">perl-xml-libxml</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
           ( export HOME=`pwd` &&
           export USER='jovyan' &&
-          export AR=/usr/local/bin/x86_64-conda_cos6-linux-gnu-ar &&
-          mkdir bin && 
-          cd bin && ln -s /usr/local/bin/x86_64-conda_cos6-linux-gnu-ar ar &&
-          cd .. &&
-          export PATH=\$HOME/bin:\$PATH &&
           mkdir -p .cime &&
           cp '$__tool_directory__/config' .cime/config &&
           cp '$__tool_directory__/config_compilers.xml' '.cime/config_compilers.xml' &&
@@ -69,7 +65,7 @@
          cat '../work/$casename/run/'cpl.log.* >> $cpl_log &&
          cat '../work/$casename/run/'lnd.log.* >> $lnd_log &&
          cat '../work/$casename/run/'rof.log.* >> $rof_log ) ||
-         (printf "Case failed" && tar cf $work \${HOME}/work)
+         (printf "Case failed" && sleep 1000 && tar cf $work \${HOME}/work)
     ]]></command>
     <configfiles>
         <configfile name="user_nl_clm_customization"><![CDATA[
@@ -199,9 +195,9 @@
         </section>
     </inputs>
     <outputs>
-        <data name="history_files" format="netcdf" label="${tool.name} on ${inputdata.name} (history file)">
-            <discover_datasets pattern="__designation_and_ext__" directory="output_dir" visible="true" />
-        </data>
+        <collection name="history_files" type="list" label="${tool.name} on ${inputdata.name} (history file)">
+            <discover_datasets pattern="__designation_and_ext__" directory="output_dir" visible="true" format="netcdf"/>
+        </collection>
         <data name="atm_log" format="txt" label="${tool.name} on ${inputdata.name} (atm.log)"/>
         <data name="cesm_log" format="txt" label="${tool.name} on ${inputdata.name} (cesm.log)"/>
         <data name="cpl_log" format="txt" label="${tool.name} on ${inputdata.name} (cpl.log)"/>
@@ -266,11 +262,8 @@
                   <has_line_matching expression="*clm2.r.2000-01-01-01800.nc*" />
               </assert_contents>
             </output>
-            <output name="history_files" ftype="netcdf" file="history_file.netcdf">
-               <assert_contents>
-                    <has_size value="0"/>
-                </assert_contents>
-            </output>
+            <output_collection name="history_files" count="0">
+            </output_collection>
         </test>
     </tests>
     <help><![CDATA[
