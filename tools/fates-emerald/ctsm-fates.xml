@@ -217,44 +217,44 @@
             <param name="run_startdate" value="2000-01-01" />
             <param name="stop_option" value="nsteps" />
             <param name="stopn" value="1" />
-            <output name="atm_log" ftype="txt" file="atm.log">
+            <output name="atm_log" ftype="txt" file="atm.log" compare="sim_size" delta="1000">
               <assert_contents>
                   <has_text text="(datm_comp_final) atm: end of main integration loop" />
               </assert_contents>
             </output>
-            <output name="cesm_log" ftype="txt" file="cesm.log">
+            <output name="cesm_log" ftype="txt" file="cesm.log" compare="sim_size" delta="1000">
               <assert_contents>
                   <has_text text="pes participating in computation for CLM" />
               </assert_contents>
             </output>
-            <output name="cpl_log" ftype="txt" file="cpl.log">
+            <output name="cpl_log" ftype="txt" file="cpl.log" compare="sim_size" delta="1000">
               <assert_contents>
                   <has_text text="SUCCESSFUL TERMINATION" />
               </assert_contents>
             </output>
-            <output name="lnd_log" ftype="txt" file="lnd.log">
+            <output name="lnd_log" ftype="txt" file="lnd.log" compare="sim_size" delta="1000">
               <assert_contents>
                   <has_text text="Successfully" />
               </assert_contents>
             </output>
-            <output name="rof_log" ftype="txt" file="rof.log">
+            <output name="rof_log" ftype="txt" file="rof.log" compare="sim_size" delta="1000">
               <assert_contents>
                   <has_text text="MOSART model initialization" />
               </assert_contents>
             </output>
-            <output name="case_info" ftype="txt" file="case_info.txt">
+            <output name="case_info" ftype="txt" file="case_info.txt" compare="sim_size" delta="1000">
               <assert_contents>
                   <has_text text="MODEL BUILD HAS FINISHED SUCCESSFULLY" />
                   <has_text text="Submitted job" />
               </assert_contents>
             </output>
-            <output name="work" ftype="tar" file="workdir.tar">
+            <output name="work" ftype="tar" file="workdir.tar" compare="sim_size" delta="1000">
                <assert_contents>
                     <has_size value="0"/>
                 </assert_contents>
             </output>
             <output name="restart" ftype="tar" file="restart.tar" compare="sim_size" delta="100" />
-            <output name="rinfo" ftype="txt" file="restart_info.txt">
+            <output name="rinfo" ftype="txt" file="restart_info.txt" compare="sim_size" delta="1000">
               <assert_contents>
                   <has_text text="datm.r.2000-01-01-01800.nc" />
                   <has_text text="datm.rs1.2000-01-01-01800.bin" />
