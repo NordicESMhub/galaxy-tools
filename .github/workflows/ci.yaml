@@ -7,6 +7,7 @@ on:
     types: [run-all-tool-tests-command]
 env:
   GALAXY_RELEASE: release_20.09
+  COPERNICUS_CDSAPIRC_KEY_FILE: ${{ secrets.COPERNICUS_CDSAPIRC_KEY_FILE }}
 jobs:
   setup:
     name: Setup cache
