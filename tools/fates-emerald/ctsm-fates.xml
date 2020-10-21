@@ -256,10 +256,10 @@
             <output name="restart" ftype="tar" file="restart.tar" compare="sim_size" delta="100" />
             <output name="rinfo" ftype="txt" file="restart_info.txt">
               <assert_contents>
-                  <has_line_matching expression="*datm.r.2000-01-01-01800.nc*" />
-                  <has_line_matching expression="*datm.rs1.2000-01-01-01800.bin*" />
-                  <has_line_matching expression="*cpl.r.2000-01-01-01800.nc*" />
-                  <has_line_matching expression="*clm2.r.2000-01-01-01800.nc*" />
+                  <has_text text="datm.r.2000-01-01-01800.nc" />
+                  <has_text text="datm.rs1.2000-01-01-01800.bin" />
+                  <has_text text="cpl.r.2000-01-01-01800.nc" />
+                  <has_text text="clm2.r.2000-01-01-01800.nc" />
               </assert_contents>
             </output>
             <output_collection name="history_files" count="0">
