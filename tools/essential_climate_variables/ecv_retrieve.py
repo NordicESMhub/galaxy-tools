@@ -92,15 +92,11 @@ if __name__ == '__main__':
     current_pwd = os.environ['HOME']
     if 'GALAXY_COPERNICUS_CDSAPIRC_KEY' in os.environ and \
        not os.path.isfile('.cdsapirc'):
+        print('GALAXY_COPERNICUS_CDSAPIRC_KEY ')
         with open(".cdsapirc", "w+") as apikey:
             apikey.write("url: https://cds.climate.copernicus.eu/api/v2\n")
             apikey.write("key: " + os.environ['GALAXY_COPERNICUS_CDSAPIRC_KEY'])
             remove_apikey = True
-
-    # Add debug
-    file = open('.cdsapirc', 'r')
-    content_cdsapirc = file.read()
-    print(content_cdsapirc)
 
     parser.add_argument(
         'archive',
