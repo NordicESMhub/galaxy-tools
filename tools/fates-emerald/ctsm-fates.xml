@@ -65,7 +65,7 @@
          cat '../work/$casename/run/'cpl.log.* >> $cpl_log &&
          cat '../work/$casename/run/'lnd.log.* >> $lnd_log &&
          cat '../work/$casename/run/'rof.log.* >> $rof_log ) ||
-         (printf "Case failed" && sleep 1000 && tar cf $work \${HOME}/work)
+         (printf "Case failed" && tar cf $work \${HOME}/work)
     ]]></command>
     <configfiles>
         <configfile name="user_nl_clm_customization"><![CDATA[
