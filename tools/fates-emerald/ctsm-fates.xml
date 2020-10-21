@@ -245,7 +245,7 @@
             <output name="case_info" ftype="txt" file="case_info.txt">
               <assert_contents>
                   <has_text text="MODEL BUILD HAS FINISHED SUCCESSFULLY" />
-                  <has_line_matching expression="Submitted job" />
+                  <has_text text="Submitted job" />
               </assert_contents>
             </output>
             <output name="work" ftype="tar" file="workdir.tar">
