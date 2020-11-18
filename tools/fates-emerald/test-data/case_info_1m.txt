@@ -1,0 +1,148 @@
+Setting resource.RLIMIT_STACK to -1 from (8388608, -1)
+/opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/one_month/env_mach_specific.xml already exists, delete to replace
+/opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/one_month/env_mach_specific.xml already exists, delete to replace
+Creating batch scripts
+Writing case.run script from input template /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/config/cesm/machines/template.case.run
+Creating file .case.run
+Writing case.st_archive script from input template /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/config/cesm/machines/template.st_archive
+Creating file case.st_archive
+Creating user_nl_xxx files for components and cpl
+If an old case build already exists, might want to run 'case.build --clean' before building
+You can now run './preview_run' to get more info on how your case will be run
+Building case in directory /opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/one_month
+sharedlib_only is False
+model_only is False
+Setting resource.RLIMIT_STACK to -1 from (8388608, -1)
+Generating component namelists as part of build
+Creating component namelists
+  2020-11-18 13:28:47 atm 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/data_comps_mct/datm/cime_config/buildnml
+  2020-11-18 13:28:47 lnd 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime_config/buildnml
+  2020-11-18 13:28:48 ice 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/stub_comps_mct/sice/cime_config/buildnml
+  2020-11-18 13:28:48 ocn 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/stub_comps_mct/socn/cime_config/buildnml
+  2020-11-18 13:28:48 rof 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/components/mosart//cime_config/buildnml
+  2020-11-18 13:28:48 glc 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/stub_comps_mct/sglc/cime_config/buildnml
+  2020-11-18 13:28:48 wav 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/stub_comps_mct/swav/cime_config/buildnml
+  2020-11-18 13:28:48 iac 
+   Running /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/stub_comps_mct/siac/cime_config/buildnml 
+  2020-11-18 13:28:48 esp 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/stub_comps_mct/sesp/cime_config/buildnml
+  2020-11-18 13:28:48 cpl 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/drivers/mct/cime_config/buildnml
+Building gptl with output to file /opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/work/one_month/bld/gptl.bldlog.201118-132847
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/build_scripts/buildlib.gptl
+Component gptl build complete with 1 warnings
+Building mct with output to file /opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/work/one_month/bld/mct.bldlog.201118-132847
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/build_scripts/buildlib.mct
+Building pio with output to file /opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/work/one_month/bld/pio.bldlog.201118-132847
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/build_scripts/buildlib.pio
+Building csm_share with output to file /opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/work/one_month/bld/csm_share.bldlog.201118-132847
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/build_scripts/buildlib.csm_share
+Component csm_share build complete with 4 warnings
+         - Building clm library 
+Building lnd with output to /opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/work/one_month/bld/lnd.bldlog.201118-132847
+Component lnd build complete with 9 warnings
+clm built in 260.982065 seconds
+         - Building atm Library 
+Building atm with output to /opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/work/one_month/bld/atm.bldlog.201118-132847
+         - Building ice Library 
+Building ice with output to /opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/work/one_month/bld/ice.bldlog.201118-132847
+         - Building ocn Library 
+Building ocn with output to /opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/work/one_month/bld/ocn.bldlog.201118-132847
+         - Building rof Library 
+Building rof with output to /opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/work/one_month/bld/rof.bldlog.201118-132847
+         - Building glc Library 
+Building glc with output to /opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/work/one_month/bld/glc.bldlog.201118-132847
+         - Building wav Library 
+Building wav with output to /opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/work/one_month/bld/wav.bldlog.201118-132847
+         - Building iac Library 
+Building iac with output to /opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/work/one_month/bld/iac.bldlog.201118-132847
+         - Building esp Library 
+Building esp with output to /opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/work/one_month/bld/esp.bldlog.201118-132847
+sice built in 0.839631 seconds
+swav built in 0.937084 seconds
+sesp built in 0.918119 seconds
+siac built in 0.958068 seconds
+socn built in 1.007206 seconds
+sglc built in 1.080772 seconds
+datm built in 2.716542 seconds
+Component rof build complete with 1 warnings
+mosart built in 12.039954 seconds
+Building cesm with output to /opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/work/one_month/bld/cesm.bldlog.201118-132847 
+Component cesm exe build complete with 3 warnings
+Time spent not building: 1.257921 sec
+Time spent building: 413.187976 sec
+MODEL BUILD HAS FINISHED SUCCESSFULLY
+Setting resource.RLIMIT_STACK to -1 from (8388608, -1)
+Creating component namelists
+  2020-11-18 13:35:42 atm 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/data_comps_mct/datm/cime_config/buildnml
+  2020-11-18 13:35:42 lnd 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime_config/buildnml
+  2020-11-18 13:35:42 ice 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/stub_comps_mct/sice/cime_config/buildnml
+  2020-11-18 13:35:42 ocn 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/stub_comps_mct/socn/cime_config/buildnml
+  2020-11-18 13:35:42 rof 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/components/mosart//cime_config/buildnml
+  2020-11-18 13:35:42 glc 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/stub_comps_mct/sglc/cime_config/buildnml
+  2020-11-18 13:35:42 wav 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/stub_comps_mct/swav/cime_config/buildnml
+  2020-11-18 13:35:42 iac 
+   Running /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/stub_comps_mct/siac/cime_config/buildnml 
+  2020-11-18 13:35:42 esp 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/stub_comps_mct/sesp/cime_config/buildnml
+  2020-11-18 13:35:42 cpl 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/drivers/mct/cime_config/buildnml
+Checking that inputdata is available as part of case submission
+Setting resource.RLIMIT_STACK to -1 from (-1, -1)
+Loading input file list: 'Buildconf/mosart.input_data_list'
+Loading input file list: 'Buildconf/clm.input_data_list'
+Model clm no file specified for finidat
+Loading input file list: 'Buildconf/datm.input_data_list'
+Loading input file list: 'Buildconf/cpl.input_data_list'
+Check case OK
+submit_jobs case.run
+Submit job case.run
+Starting job script case.run
+Setting resource.RLIMIT_STACK to -1 from (-1, -1)
+Generating namelists for /opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/one_month
+Creating component namelists
+  2020-11-18 13:35:43 atm 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/data_comps_mct/datm/cime_config/buildnml
+  2020-11-18 13:35:43 lnd 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime_config/buildnml
+  2020-11-18 13:35:43 ice 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/stub_comps_mct/sice/cime_config/buildnml
+  2020-11-18 13:35:43 ocn 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/stub_comps_mct/socn/cime_config/buildnml
+  2020-11-18 13:35:43 rof 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/components/mosart//cime_config/buildnml
+  2020-11-18 13:35:44 glc 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/stub_comps_mct/sglc/cime_config/buildnml
+  2020-11-18 13:35:44 wav 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/stub_comps_mct/swav/cime_config/buildnml
+  2020-11-18 13:35:44 iac 
+   Running /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/stub_comps_mct/siac/cime_config/buildnml 
+  2020-11-18 13:35:44 esp 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/components/stub_comps_mct/sesp/cime_config/buildnml
+  2020-11-18 13:35:44 cpl 
+   Calling /home/centos/miniconda3/envs/mulled-v1-0285b4091aa4ee49905b1a1dfeb40821d9ef3ff372415bb4298e35e3b941f200/cime/src/drivers/mct/cime_config/buildnml
+-------------------------------------------------------------------------
+ - Prestage required restarts into /opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/work/one_month/run
+ - Case input data directory (DIN_LOC_ROOT) is /opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/inputdata 
+ - Checking for required input datasets in DIN_LOC_ROOT
+-------------------------------------------------------------------------
+run command is nohup mpiexec  -np 1 /opt/uio/tmp/tmpwa9yhtki/job_working_directory/000/4/working/work/one_month/bld/cesm.exe   >> cesm.log.$LID 2>&1  
+check for resubmit
+dout_s False 
+mach espresso 
+resubmit_num 0
+Submitted job case.run with id None
