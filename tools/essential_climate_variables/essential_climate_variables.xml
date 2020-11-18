@@ -32,7 +32,7 @@
     <configfiles>
         <configfile name="copernicus_cdsapirc_key_file"><![CDATA[
          url: https://cds.climate.copernicus.eu/api/v2
-         key: \$COPERNICUS_CDSAPIRC_KEY
+         key: \$GALAXY_COPERNICUS_CDSAPIRC_KEY
         ]]>
         </configfile>
     </configfiles>

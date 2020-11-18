@@ -61,7 +61,7 @@ jobs:
       if: steps.cache-pip.outputs.cache-hit != 'true' || steps.cache-planemo.outputs.cache-hit != 'true'
       run: |
         touch tool.xml
-        PIP_QUIET=1 planemo test --galaxy_python_version ${{ matrix.python-version }} --no_conda_auto_init --galaxy_source $GALAXY_REPO --galaxy_branch $GALAXY_RELEASE
+        GALAXY_COPERNICUS_CDSAPIRC_KEY=$GALAXY_COPERNICUS_CDSAPIRC_KEY PIP_QUIET=1 planemo test --galaxy_python_version ${{ matrix.python-version }} --no_conda_auto_init --galaxy_source $GALAXY_REPO --galaxy_branch $GALAXY_RELEASE
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
@@ -298,7 +298,7 @@ jobs:
                 PLANEMO_OPTIONS="--biocontainers --no_dependency_resolution --no_conda_auto_init"
         fi
         if [ -s changed_tools_chunk.list ]; then
-            PIP_QUIET=1 planemo test --database_connection postgresql://postgres:postgres@localhost:5432/galaxy $PLANEMO_OPTIONS --galaxy_source $GALAXY_REPO --galaxy_branch $GALAXY_RELEASE --galaxy_python_version ${{ matrix.python-version }} --test_output_json tool_test_output.json $(cat changed_tools_chunk.list) || true
+            GALAXY_COPERNICUS_CDSAPIRC_KEY=$GALAXY_COPERNICUS_CDSAPIRC_KEY PIP_QUIET=1 planemo test --database_connection postgresql://postgres:postgres@localhost:5432/galaxy $PLANEMO_OPTIONS --galaxy_source $GALAXY_REPO --galaxy_branch $GALAXY_RELEASE --galaxy_python_version ${{ matrix.python-version }} --test_output_json tool_test_output.json $(cat changed_tools_chunk.list) || true
             docker system prune --all --force --volumes || true
         elif [ -s changed_repositories_chunk.list ]; then
             while read -r DIR; do
@@ -307,7 +307,7 @@ jobs:
                 else
                     TESTPATH="$DIR"
                 fi
-                PIP_QUIET=1 planemo test --database_connection postgresql://postgres:postgres@localhost:5432/galaxy $PLANEMO_OPTIONS --galaxy_source $GALAXY_REPO --galaxy_branch $GALAXY_RELEASE --galaxy_python_version ${{ matrix.python-version }} --test_output_json "$DIR"/tool_test_output.json "$TESTPATH" || true
+                GALAXY_COPERNICUS_CDSAPIRC_KEY=$GALAXY_COPERNICUS_CDSAPIRC_KEY PIP_QUIET=1 planemo test --database_connection postgresql://postgres:postgres@localhost:5432/galaxy $PLANEMO_OPTIONS --galaxy_source $GALAXY_REPO --galaxy_branch $GALAXY_RELEASE --galaxy_python_version ${{ matrix.python-version }} --test_output_json "$DIR"/tool_test_output.json "$TESTPATH" || true
                 docker system prune --all --force --volumes || true
             done < changed_repositories_chunk.list
         else
