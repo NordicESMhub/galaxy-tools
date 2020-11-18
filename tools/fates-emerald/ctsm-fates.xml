@@ -297,7 +297,7 @@
             </output>
             <output name="restart" ftype="tar">
               <assert_contents>
-                  <has_size value="6348800" delta="500"/>
+                  <has_size value="6348800" delta="5000"/>
               </assert_contents>
             </output>
          
@@ -312,7 +312,7 @@
             <output_collection name="history_files" count="1">
                   <element name="one_month.clm2.h0.2000-02-01-00000.nc" ftype="netcdf">
                       <assert_contents>
-                          <has_size value="141232" delta="500"/>
+                          <has_size value="141232" delta="5000"/>
                       </assert_contents>
                   </element>
             </output_collection>
