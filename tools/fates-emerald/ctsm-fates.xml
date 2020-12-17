@@ -260,7 +260,7 @@
             <param name="resolution" value="1x1_ALP1" />
             <param name="stop_option" value="nmonths" />
             <param name="stopn" value="1" />
-            <output name="atm_log" ftype="txt" file="atm_1m.log">
+            <output name="atm_log" ftype="txt">
               <assert_contents>
                   <has_text text="end of main integration loop" />
               </assert_contents>
