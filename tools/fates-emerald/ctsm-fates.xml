@@ -260,9 +260,9 @@
             <param name="resolution" value="1x1_ALP1" />
             <param name="stop_option" value="nmonths" />
             <param name="stopn" value="1" />
-            <output name="atm_log" ftype="txt" file="atm_1m.log" compare="sim_size" delta="1000">
+            <output name="atm_log" ftype="txt" file="atm_1m.log">
               <assert_contents>
-                  <has_text text="(datm_comp_final) atm: end of main integration loop" />
+                  <has_text text="end of main integration loop" />
               </assert_contents>
             </output>
             <output name="cesm_log" ftype="txt" file="cesm_1m.log" compare="sim_size" delta="1000">
