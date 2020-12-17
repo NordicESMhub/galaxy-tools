@@ -217,33 +217,33 @@
             <param name="run_startdate" value="2000-01-01" />
             <param name="stop_option" value="nsteps" />
             <param name="stopn" value="1" />
-            <output name="atm_log" ftype="txt" file="atm.log" compare="sim_size" delta="1000">
+            <output name="atm_log" ftype="txt">
               <assert_contents>
                   <has_text text="(datm_comp_final) atm: end of main integration loop" />
               </assert_contents>
             </output>
-            <output name="cesm_log" ftype="txt" file="cesm.log" compare="sim_size" delta="1000">
+            <output name="cesm_log" ftype="txt">
               <assert_contents>
                   <has_text text="pes participating in computation for CLM" />
               </assert_contents>
             </output>
-            <output name="cpl_log" ftype="txt" file="cpl.log" compare="sim_size" delta="1000">
+            <output name="cpl_log" ftype="txt">
               <assert_contents>
                   <has_text text="SUCCESSFUL TERMINATION" />
               </assert_contents>
             </output>
-            <output name="lnd_log" ftype="txt" file="lnd.log" compare="sim_size" delta="1000">
+            <output name="lnd_log" ftype="txt">
               <assert_contents>
                   <has_text text="Successfully" />
               </assert_contents>
             </output>
-            <output name="rof_log" ftype="txt" file="rof.log" compare="sim_size" delta="1000">
+            <output name="rof_log" ftype="txt">
               <assert_contents>
                   <has_text text="MOSART model initialization" />
               </assert_contents>
             </output>
             <output name="restart" ftype="tar" file="restart.tar" compare="sim_size" delta="100" />
-            <output name="rinfo" ftype="txt" file="restart_info.txt" compare="sim_size" delta="1000">
+            <output name="rinfo" ftype="txt">
               <assert_contents>
                   <has_text text="datm.r.2000-01-01-01800.nc" />
                   <has_text text="datm.rs1.2000-01-01-01800.bin" />
@@ -262,25 +262,25 @@
             <param name="stopn" value="1" />
             <output name="atm_log" ftype="txt">
               <assert_contents>
-                  <has_text text="end of main integration loop" />
+                  <has_text text="(datm_comp_final) atm: end of main integration loop" />
               </assert_contents>
             </output>
-            <output name="cesm_log" ftype="txt" file="cesm_1m.log" compare="sim_size" delta="1000">
+            <output name="cesm_log" ftype="txt">
               <assert_contents>
                   <has_text text="pes participating in computation for CLM" />
               </assert_contents>
             </output>
-            <output name="cpl_log" ftype="txt" file="cpl_1m.log" compare="sim_size" delta="1000">
+            <output name="cpl_log" ftype="txt">
               <assert_contents>
                   <has_text text="SUCCESSFUL TERMINATION" />
               </assert_contents>
             </output>
-            <output name="lnd_log" ftype="txt" file="lnd_1m.log" compare="sim_size" delta="1000">
+            <output name="lnd_log" ftype="txt">
               <assert_contents>
                   <has_text text="Successfully" />
               </assert_contents>
             </output>
-            <output name="rof_log" ftype="txt" file="rof_1m.log" compare="sim_size" delta="1000">
+            <output name="rof_log" ftype="txt">
               <assert_contents>
                   <has_text text="MOSART model initialization" />
               </assert_contents>
@@ -291,7 +291,7 @@
               </assert_contents>
             </output>
          
-            <output name="rinfo" ftype="txt" file="restart_info_1m.txt" compare="sim_size" delta="1000">
+            <output name="rinfo" ftype="txt">
               <assert_contents>
                   <has_text text="datm.r.2000-02-01-00000.nc" />
                   <has_text text="datm.rs1.2000-02-01-00000.bin" />
