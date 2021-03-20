@@ -1,5 +1,6 @@
 import argparse
 import ast
+
 import cdsapi
 
 parser = argparse.ArgumentParser()
@@ -13,9 +14,9 @@ req = f.read()
 
 f.close()
 
-c3s_type=req.split('c.retrieve')[1].split('(')[1].split(',')[0].strip(' "\'\t\r\n')
+c3s_type = req.split('c.retrieve')[1].split('(')[1].split(',')[0].strip(' "\'\t\r\n')
 
-c3s_req = '{' + req.split('{')[1].split('}')[0].replace('\n','') + '}'
+c3s_req = '{' + req.split('{')[1].split('}')[0].replace('\n', '') + '}'
 c3s_req_dict = ast.literal_eval(c3s_req)
 
 c3s_output = req.split('}')[1].split(',')[1].split(')')[0].strip(' "\'\t\r\n')
