@@ -1,0 +1,62 @@
+<tool id="c3s" name="Copernicus Climate Data Store" version="0.1.0">
+    <description>for retrieveing climate data</description>
+    <requirements>
+        <requirement type="package" version="3">python</requirement>
+        <requirement type="package" version="0.5.1">cdsapi</requirement>
+        <requirement type="package" version="1.9.9">cdo</requirement>
+        <requirement type="package" version="1.34">tar</requirement>
+        <requirement type="package" version="6.0">unzip</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+       export HOME=`pwd`  &&
+       cp '$cds_key_file' .cdsapirc &&
+       python3 '$__tool_directory__/c3s_retrieve.py' 
+            --request '$api_request'                       &&
+           tar zxvf tmp.tgz                                &&
+           cat *.grib > tmpg.grib                          &&
+           cdo -setgridtype,regular tmp.grib tmpg.grib &&
+           cdo -f nc -t ecmwf copy tmpg.grib tmp.nc       
+    ]]></command>
+    <inputs>
+	<param name="api_request" type="text" label="API Request" area="true" />
+	<param name="cdsapi_key_file" type="data" format="txt" label="CDS API key file containing your API key for C3S"/>
+    </inputs>
+    <outputs>
+        <data name="ofilename" format="netcdf" from_work_dir="tmp.nc"/>
+    </outputs>
+    <tests>
+        <test>
+        </test>
+        <test>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+**Copernicus Climate Data Store (C3S)**
+=======================================================================================================
+
+This tool is a wrapper to retrieve data from the Copernicus Climate Data Store.
+
+.. class:: infomark
+
+	    It allows to retrieve data from the Copernicus climate Data Store.
+	    User needs to pass their CDS API KEY input file and their request.
+
+License:
+~~~~~~~~
+
+   Generated using Copernicus Climate Change Service information [2021]
+   Neither the European Commission nor ECMWF is responsible for any use 
+   that may be made of the Copernicus information or data it contains.
+
+    ]]></help>
+    <edam_topics>
+      <edam_topic>topic_3855</edam_topic>
+      <edam_topic>topic_3318</edam_topic>
+    </edam_topics>
+    <edam_operations>
+      <edam_operation>operation_2422</edam_operation>
+      <edam_operation>operation_3357</edam_operation>
+      <edam_operation>operation_0335</edam_operation>
+    </edam_operations>
+</tool>
