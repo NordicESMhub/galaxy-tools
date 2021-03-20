@@ -5,11 +5,21 @@ This tool allows you to retrieve [Copernicus Climate Data Store (C3S)](https://c
 
 - Any user willing to use this tool needs to [create a new account](https://cds.climate.copernicus.eu/user/register?destination=%2F%23!%2Fhome).
 - Compose your request directly on C3S and copy/paste it in the input field "Request"
-- Pass the corresponding [CDS API key](https://cds.climate.copernicus.eu/api-how-to) as an input filename to the tool. The content of the CDS API KEY input file must be similar to what is shown below:
+- Users need to add their CDS API Key to Galay (see below). Documentation on where to get the CDS API key can be found [here](https://cds.climate.copernicus.eu/api-how-to).
+- Be aware that for being able to download dataset from C3S, users also need to agree to their term of use (Licence to use Copernicus Products) on the C3S website.
+
+## Set up user credentials on Galaxy
+
+To enable users to set their credentials and provide their CDS API Key for this tool,
+make sure the file `config/user_preferences_extra.yml` has the following section:
 
 ```
-url: https://cds.climate.copernicus.eu/api/v2
-key: 111:8789787-qwerz4e47-888-not-real
-verify: 0
+    c3s_account:
+        description: Your CDS API Key (Copernicus Climate Change Service API Key)
+        inputs:
+            - name: cds_apikey
+              label: CDS API Key
+              type: text
+              required: True
 ```
-- Be aware that for being able to download dataset from C3S, you also need to agree to their term of use (Licence to use Copernicus Products) on the C3S website.
+

@@ -4,11 +4,14 @@ import cdsapi
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-i", "--request", type=str, help="input API request")
+parser.add_argument("-o", "--output", type=str, help="output API request")
 args = parser.parse_args()
 
 f = open(args.request, "r")
 
 req = f.read()
+
+f.close()
 
 c3s_type=req.split('c.retrieve')[1].split('(')[1].split(',')[0].strip(' "\'\t\r\n')
 
@@ -17,9 +20,11 @@ c3s_req_dict = ast.literal_eval(c3s_req)
 
 c3s_output = req.split('}')[1].split(',')[1].split(')')[0].strip(' "\'\t\r\n')
 
-print("type of data to retrieve: ", c3s_type)
-print("request: ", c3s_req_dict)
-print("output filename: ", c3s_output)
+f = open(args.output, "w")
+f.write("dataset to retrieve: " + c3s_type + "\n")
+f.write("request: " + c3s_req + "\n")
+f.write("output filename: " + c3s_output)
+f.close()
 
 print("start retrieving data...")
 c = cdsapi.Client()

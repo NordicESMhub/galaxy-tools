@@ -9,25 +9,84 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
        export HOME=`pwd`  &&
+       #set $cds_apikey = $__user__.extra_preferences.get('c3s_account|cds_apikey', "")
+       #if $cds_apikey == ""
+	    echo "Error. Set your credentials via: User -> Preferences -> Manage Information"  &&
+       #else
        cp '$cds_key_file' .cdsapirc &&
-       python3 '$__tool_directory__/c3s_retrieve.py' 
-            --request '$api_request'                       &&
-           tar zxvf tmp.tgz                                &&
-           cat *.grib > tmpg.grib                          &&
-           cdo -setgridtype,regular tmp.grib tmpg.grib &&
+           #if str($is_file).strip() == 'yes'
+             python3 '$__tool_directory__/c3s_retrieve.py' 
+	        --request '$api_req_file' > $request       &&
+	   #else
+	     cat '$api_req_text' > req_from_text.txt       &&
+             python3 '$__tool_directory__/c3s_retrieve.py' 
+	        --request req_from_text.txt > $request     &&
+           #endif
+       #end if
+       #if download.tar.gz
+           tar zxvf  download.tar.gz                       &&
+           cat *.grib > tmp.grib                           &&
+           cdo setgridtype,regular tmp.grib tmpg.grib      &&
            cdo -f nc -t ecmwf copy tmpg.grib tmp.nc       
+       #elif download.zip
+           unzip download.zip                              &&
+           cat *.grib > tmp.grib                           &&
+           cdo setgridtype,regular tmp.grib tmpg.grib      &&
+           cdo -f nc -t ecmwf copy tmpg.grib tmp.nc       
+       #elif download.grib
+           cdo -f nc -t ecmwf copy download.grib tmp.nc       
+       #elif download.nc
+	   mv download.nc tmp.nc
+       #else
+	    echo "No data found! Check your request and/or credentials." 
+       #endif
     ]]></command>
+    <configfiles>
+        <configfile name="cds_key_file"><![CDATA[
+#set $cds_apikey = $__user__.extra_preferences.get('c3s_account|cds_apikey', "")
+         url: https://cds.climate.copernicus.eu/api/v2
+         key: $cds_apikey
+        ]]></configfile>
+    </configfiles>
     <inputs>
-	<param name="api_request" type="text" label="API Request" area="true" />
-	<param name="cdsapi_key_file" type="data" format="txt" label="CDS API key file containing your API key for C3S"/>
+        <conditional name="is_file">
+            <param name="has_req" type="select" label="C3S request is a given as a filename">
+                <option value="yes" selected="true">yes</option>
+                <option value="no">no</option>
+            </param>
+	   <when value="yes">
+	        <param name="api_req_file" type="text" label="API Request filename" />
+           </when>
+            <when value="no">
+	        <param name="api_req_text" type="text" label="Paste API Request" area="true" />
+           </when>
+        </conditional>
     </inputs>
     <outputs>
+        <data name="request" format="txt" from_work_dir="request.txt"/>
         <data name="ofilename" format="netcdf" from_work_dir="tmp.nc"/>
     </outputs>
     <tests>
         <test>
-        </test>
-        <test>
+            <param name="api_req_file" value="input.txt" />
+            <output name="request" ftype="txt">
+              <assert_contents>
+                  <has_text text="dataset to retrieve: reanalysis-era5-single-levels-monthly-means" />
+                  <has_text text="'format': 'netcdf'" />
+                  <has_text text="'product_type': 'monthly_averaged_reanalysis'" />
+                  <has_text text="'variable': '2m_temperature'" />
+                  <has_text text="'year': '2020'" />
+                  <has_text text="'month': '12'" />
+                  <has_text text="'time': '00:00'" />
+		  <has_text text="'area': [" />
+	          <has_text text="60," />
+		  <has_text text="10," />
+		  <has_text text="59.5," />            
+		  <has_text text="10.5," />
+		  <has_text text="]" />
+		  <has_text text="output filename: download.nc" />
+              </assert_contents>
+            </output>
         </test>
     </tests>
     <help><![CDATA[
@@ -37,19 +96,23 @@
 
 This tool is a wrapper to retrieve data from the Copernicus Climate Data Store.
 
-.. class:: infomark
-
-	    It allows to retrieve data from the Copernicus climate Data Store.
-	    User needs to pass their CDS API KEY input file and their request.
+- It allows to retrieve data from the Copernicus climate Data Store.
+- Any user willing to use this tool needs to `create a new account <https://cds.climate.copernicus.eu/user/register?destination=%2F%23!%2Fhome>`_.
+- Set your CDS API Key via: User -> Preferences -> Manage Information"
+- Documentation on where to get the CDS API key can be found `here <https://cds.climate.copernicus.eu/api-how-to>`_.
+- Compose your request directly on C3S and copy/paste it in the input field "Request" or save it in a file.
+- Be aware that for being able to download dataset from C3S, users also need to agree to their term of use (Licence to use Copernicus Products) on the C3S website.
 
 License:
 ~~~~~~~~
 
-   Generated using Copernicus Climate Change Service information [2021]
-   Neither the European Commission nor ECMWF is responsible for any use 
-   that may be made of the Copernicus information or data it contains.
-
+Generated using Copernicus Climate Change Service information [2021]
+Neither the European Commission nor ECMWF is responsible for any use 
+that may be made of the Copernicus information or data it contains.
     ]]></help>
+    <citations>
+
+    </citations>
     <edam_topics>
       <edam_topic>topic_3855</edam_topic>
       <edam_topic>topic_3318</edam_topic>
