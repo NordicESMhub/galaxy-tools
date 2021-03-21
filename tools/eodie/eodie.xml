@@ -1,0 +1,49 @@
+<tool id="eodie" name="EODIE" version="0.1.0">
+    <description>Earth Observation Data Information Extractor</description>
+    <requirements>
+        <requirement type="package" version="3.7">python</requirement>
+        <requirement type="package" version="1.7">shapely</requirement>
+        <requirement type="package" version="1.2">rasterio</requirement>
+        <requirement type="package" version="1.20">numpy</requirement>
+        <requirement type="package" version="3.1.4">gdal</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+       echo "EODIE data extractor is done"
+    ]]></command>
+    <inputs>
+    </inputs>
+    <outputs>
+    </outputs>
+    <tests>
+        <test>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+**EODIE - Earth Observation Data Information Extractor**
+=======================================================================================================
+
+Toolkit to extract object based timeseries from Sentinel-2 data
+
+Example:
+
+python splitshp_world.py ...
+
+python splitshp_mp.py $dir/example_parcels.shp $dir/Fin_s2.shp $dir/shp
+
+python process.py --dir $dir/S2 --shp $dir/shp/example_parcels --out $dir/results --id PlotID
+
+    ]]></help>
+    <citations>
+
+    </citations>
+    <edam_topics>
+      <edam_topic>topic_3855</edam_topic>
+      <edam_topic>topic_3318</edam_topic>
+    </edam_topics>
+    <edam_operations>
+      <edam_operation>operation_2422</edam_operation>
+      <edam_operation>operation_3357</edam_operation>
+      <edam_operation>operation_0335</edam_operation>
+    </edam_operations>
+</tool>
