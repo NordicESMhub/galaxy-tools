@@ -17,10 +17,10 @@
        #end if
        #if str($is_file.has_req).strip() == 'yes'
             python3 '$__tool_directory__/c3s_retrieve.py' 
-	             --request '$api_req_file' --output request.txt       &&
+	             --request '$is_file.api_req_file' --output request.txt       &&
        #else
             python3 '$__tool_directory__/c3s_retrieve.py' 
-	             --request '$api_req_text' --output request.txt       &&
+	             --request $req_from_paste --output request.txt               &&
        #end if
        bash $__tool_directory__/c3s.sh                                    &&
        echo "C3S data retrieval is done"
@@ -30,6 +30,11 @@
 #set $cds_apikey = $__user__.extra_preferences.get('c3s_account|cds_apikey', "")
          url: https://cds.climate.copernicus.eu/api/v2
          key: $cds_apikey
+        ]]></configfile>
+        <configfile name="req_from_paste"><![CDATA[
+       #if str($is_file.has_req).strip() == 'no'
+$is_file.api_req_text
+       #end if
         ]]></configfile>
     </configfiles>
     <inputs>
