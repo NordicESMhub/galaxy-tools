@@ -19,9 +19,8 @@
             python3 '$__tool_directory__/c3s_retrieve.py' 
 	             --request '$api_req_file' --output request.txt       &&
        #else
-            cat '$api_req_text' > req_from_text.txt                       &&
             python3 '$__tool_directory__/c3s_retrieve.py' 
-	             --request req_from_text.txt --output request.txt     &&
+	             --request '$api_req_text' --output request.txt       &&
        #end if
        bash $__tool_directory__/c3s.sh                                    &&
        echo "C3S data retrieval is done"

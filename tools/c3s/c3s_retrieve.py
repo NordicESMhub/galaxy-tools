@@ -1,3 +1,4 @@
+from os import path
 import argparse
 import ast
 
@@ -8,11 +9,12 @@ parser.add_argument("-i", "--request", type=str, help="input API request")
 parser.add_argument("-o", "--output", type=str, help="output API request")
 args = parser.parse_args()
 
-f = open(args.request, "r")
-
-req = f.read()
-
-f.close()
+if path.isfile(args.request):
+   f = open(args.request, "r")
+   req = f.read()
+   f.close()
+else:
+   req = args.request
 
 c3s_type = req.split('c.retrieve')[1].split('(')[1].split(',')[0].strip(' "\'\t\r\n')
 
