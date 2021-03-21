@@ -13,33 +13,18 @@
        #if $cds_apikey == ""
 	    echo "Error. Set your credentials via: User -> Preferences -> Manage Information"  &&
        #else
-       cp '$cds_key_file' .cdsapirc &&
-           #if str($is_file).strip() == 'yes'
-             python3 '$__tool_directory__/c3s_retrieve.py' 
-	        --request '$api_req_file' > $request       &&
-	   #else
-	     cat '$api_req_text' > req_from_text.txt       &&
-             python3 '$__tool_directory__/c3s_retrieve.py' 
-	        --request req_from_text.txt > $request     &&
-           #end if
+            cp '$cds_key_file' .cdsapirc &&
        #end if
-       #if download.tar.gz
-           tar zxvf  download.tar.gz                       &&
-           cat *.grib > tmp.grib                           &&
-           cdo setgridtype,regular tmp.grib tmpg.grib      &&
-           cdo -f nc -t ecmwf copy tmpg.grib tmp.nc       
-       #else if download.zip
-           unzip download.zip                              &&
-           cat *.grib > tmp.grib                           &&
-           cdo setgridtype,regular tmp.grib tmpg.grib      &&
-           cdo -f nc -t ecmwf copy tmpg.grib tmp.nc       
-       #else if download.grib
-           cdo -f nc -t ecmwf copy download.grib tmp.nc       
-       #else if download.nc
-	   mv download.nc tmp.nc
+       #if str($is_file.has_req).strip() == 'yes'
+            python3 '$__tool_directory__/c3s_retrieve.py' 
+	             --request '$api_req_file' --output request.txt       &&
        #else
-	    echo "No data found! Check your request and/or credentials." 
+            cat '$api_req_text' > req_from_text.txt                       &&
+            python3 '$__tool_directory__/c3s_retrieve.py' 
+	             --request req_from_text.txt --output request.txt     &&
        #end if
+       bash $__tool_directory__/c3s.sh                                    &&
+       echo "C3S data retrieval is done"
     ]]></command>
     <configfiles>
         <configfile name="cds_key_file"><![CDATA[
@@ -55,7 +40,7 @@
                 <option value="no">no</option>
             </param>
 	   <when value="yes">
-	        <param name="api_req_file" type="text" label="API Request filename" />
+	        <param name="api_req_file" type="data" label="API Request filename" format="txt"/>
            </when>
             <when value="no">
 	        <param name="api_req_text" type="text" label="Paste API Request" area="true" />
