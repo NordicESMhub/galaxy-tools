@@ -1,6 +1,6 @@
-from os import path
 import argparse
 import ast
+from os import path
 
 import cdsapi
 
@@ -10,11 +10,11 @@ parser.add_argument("-o", "--output", type=str, help="output API request")
 args = parser.parse_args()
 
 if path.isfile(args.request):
-   f = open(args.request, "r")
-   req = f.read()
-   f.close()
+    f = open(args.request, "r")
+    req = f.read()
+    f.close()
 else:
-   req = args.request
+    req = args.request
 
 c3s_type = req.split('c.retrieve')[1].split('(')[1].split(',')[0].strip(' "\'\t\r\n')
 
