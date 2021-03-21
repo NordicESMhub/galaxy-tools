@@ -14,18 +14,18 @@ if path.isfile(args.request):
     req = f.read()
     f.close()
     mapped_chars = {
-            '>': '__gt__',
-            '<': '__lt__',
-            "'": '__sq__',
-            '"': '__dq__',
-            '[': '__ob__',
-            ']': '__cb__',
-            '{': '__oc__',
-            '}': '__cc__',
-            '@': '__at__',
-            '#': '__pd__',
-            "": '__cn__'
-        }
+        '>': '__gt__',
+        '<': '__lt__',
+        "'": '__sq__',
+        '"': '__dq__',
+        '[': '__ob__',
+        ']': '__cb__',
+        '{': '__oc__',
+        '}': '__cc__',
+        '@': '__at__',
+        '#': '__pd__',
+        "": '__cn__'
+    }
 
     # Unsanitize labels (element_identifiers are always sanitized by Galaxy)
     for key, value in mapped_chars.items():
