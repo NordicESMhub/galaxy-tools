@@ -11,6 +11,31 @@
        echo "EODIE data extractor is done"
     ]]></command>
     <inputs>
+        <repeat name="list_input_files" title="Input datasets" min="1">
+            <param name='input_file' format="binary" type="data_collection" collection_type="list" multiple="true" label="Individual input files list"/>
+        </repeat>
+        <param name="shapefile" type="data" format="shp" label="shapefile with polygons"/>
+        <param name="identifier" type="text" value="PlotID" label="Name of identifier" />
+        <section name="adv_period" title="Advanced options" expanded="false">
+            <param name="start_date" type="text" value="" label="Time frame start date (YYYY-MM-DD)" />
+            <param name="end_date" type="text" value="" label="Time frame end date (YYYY-MM-DD)" />
+	    <param name="stats" label="Statistics" type="select" multiple="true">
+                <option value="mean">Mean</option>
+                <option value="min">Minimum</option>
+                <option value="max">Maximum</option>
+            </param>
+            <conditional name="condi_type_run">
+	        <param name="indices" label="Indice to compute" type="select">
+                    <option value="ndvi">NDVI</option>
+                    <option value="custom">User defined</option>
+                </param>
+		<when value="ndvi" />
+		<when value="custom">
+                    <param name="custom_indice" type="text" value="" label="Custom indice" />
+                </when>
+            </conditional>
+        </section>
+
     </inputs>
     <outputs>
     </outputs>
