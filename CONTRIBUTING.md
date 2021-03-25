@@ -33,6 +33,28 @@ Best practices for developing new tools are [https://galaxy-iuc-standards.readth
                     <when input="format" value="csv" format="csv" />
 ~~~               
 
+- Add [EDAM](https://ifb-elixirfr.github.io/edam-browser) ontology in your tool, for both topics and operations. Most climate tools will have:
+
+~~~`bash`
+<edam_topics>
+  <edam_topic>topic_3855</edam_topic>
+  <edam_topic>topic_3318</edam_topic>
+</edam_topics>
+~~~               
+
+- [Environmental science](https://ifb-elixirfr.github.io/edam-browser/#topic_3855) (topic 3855)
+- [Physics](https://ifb-elixirfr.github.io/edam-browser/#topic_3318) (topic_3318)
+
+
+- If you are using [firefox](https://www.mozilla.org/en-GB/firefox/all/#product-desktop-release), you can install [EDAM Popovers plugin](https://addons.mozilla.org/en-US/firefox/addon/edam-popovers/) to get the detailed information to EDAM terms.
+
+![EDAM popovers](edam_popovers.png)
+
+We may need to update all the tools later when additional topics will be added for geosciences.
+ 
+
+- Do not forget to follow [Galaxy IUC coding style](https://galaxy-iuc-standards.readthedocs.io/en/latest/best_practices/tool_xml.html?highlight=order#coding-style).
+
 ## Test a tool with planemo
 
 ~~~`bash`

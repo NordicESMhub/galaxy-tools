@@ -1,5 +1,14 @@
 <tool id="shyft_longitudes" name="shift longitudes" version="0.1.0">
     <description>from netCDF data</description>
+    <edam_topics>
+      <edam_topic>topic_3855</edam_topic>
+      <edam_topic>topic_3318</edam_topic>
+    </edam_topics>
+    <edam_operations>
+      <edam_operation>operation_3096</edam_operation>
+      <edam_operation>operation_3438</edam_operation>
+      <edam_operation>operation_3434</edam_operation>
+    </edam_operations>
     <requirements>
         <requirement type="package" version="3.6.7">python</requirement>
         <requirement type="package" version="1.4.1">netcdf4</requirement>
