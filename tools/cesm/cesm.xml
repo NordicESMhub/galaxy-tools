@@ -100,6 +100,7 @@
                 <param name="resolution" type="select" label="Model resolution">
                     <option value="--res f09_f09_mg17">f09_f09_mg17</option>
                     <option value="--res f19_g17 --run-unsupported">f19_g17</option>
+                    <option value="--res f19_f19_mg17 --run-unsupported">f19_f19_mg17</option>
                 </param>
             </when>
             <when value="QPC6">
