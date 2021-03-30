@@ -9,8 +9,8 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
        export HOME=`pwd`  &&
-       #set $cds_apikey = $__user__.extra_preferences.get('c3s_account|cds_apikey', "")
-       #if $cds_apikey == ""
+       #set $c3s_cds_apikey = $__user__.extra_preferences.get('c3s_account|c3s_cds_apikey', "")
+       #if $c3s_cds_apikey == ""
 	    echo "Error. Set your credentials via: User -> Preferences -> Manage Information"  &&
        #else
             cp '$cds_key_file' .cdsapirc &&
@@ -27,9 +27,9 @@
     ]]></command>
     <configfiles>
         <configfile name="cds_key_file"><![CDATA[
-#set $cds_apikey = $__user__.extra_preferences.get('c3s_account|cds_apikey', "")
+#set $c3s_cds_apikey = $__user__.extra_preferences.get('c3s_account|c3s_cds_apikey', "")
          url: https://cds.climate.copernicus.eu/api/v2
-         key: $cds_apikey
+         key: $c3s_cds_apikey
         ]]></configfile>
         <configfile name="req_from_paste"><![CDATA[
        #if str($is_file.has_req).strip() == 'no'

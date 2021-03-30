@@ -17,8 +17,8 @@ make sure the file `config/user_preferences_extra.yml` has the following section
     c3s_account:
         description: Your CDS API Key (Copernicus Climate Change Service API Key)
         inputs:
-            - name: cds_apikey
-              label: CDS API Key
+            - name: c3s_cds_apikey
+              label: C3S CDS API Key
               type: text
               required: True
 ```
