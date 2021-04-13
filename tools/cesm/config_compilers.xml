@@ -2,16 +2,15 @@
 
 <config_compilers version="2.0">
 
-  <compiler COMPILER="gnu" MACH="espresso">
+  <compiler COMPILER="gnu" MACH="galaxy">
     <LD>mpifort</LD>
-    <AR>ar</AR>
     <SFC>x86_64-conda_cos6-linux-gnu-gfortran</SFC>
     <SCC>x86_64-conda_cos6-linux-gnu-cc</SCC>
     <SCXX>x86_64-conda_cos6-linux-gnu-c++</SCXX>
     <MPIFC>mpifort</MPIFC>
     <MPICC>mpicc</MPICC>
     <MPICXX>mpicxx</MPICXX>
-    <NETCDF_PATH>/usr/local</NETCDF_PATH>
+    <NETCDF_PATH>$ENV{CONDA_PREFIX}</NETCDF_PATH>
     <FFLAGS>
       <append DEBUG="FALSE"> -O2 </append>
       <append MODEL="micom"> -fdefault-real-8 </append>

@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <config_machines>
-  <machine MACH="espresso">
+  <machine MACH="galaxy">
     <DESC>
-          VM 
+          VM
           x4 CPUs
-          Gold Centos 7 
+          Gold Centos 7
     </DESC>
     <NODENAME_REGEX>UNSET</NODENAME_REGEX>
     <OS>LINUX</OS>

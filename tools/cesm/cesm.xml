@@ -9,12 +9,13 @@
     <command detect_errors="exit_code"><![CDATA[
           ( export HOME=`pwd` &&
           export USER='jovyan' &&
+          export AR=x86_64-conda_cos6-linux-gnu-ar &&
           mkdir -p .cime &&
           cp '$__tool_directory__/config' .cime/config &&
           cp '$__tool_directory__/config_compilers.xml' '.cime/config_compilers.xml' &&
           cp '$__tool_directory__/config_machines.xml' '.cime/config_machines.xml' &&
           mkdir inputdata &&
-          tar -xf '$inputdata' -C 'inputdata/' && 
+          tar -xf '$inputdata' -C 'inputdata' && 
           mkdir output_dir &&
           mkdir usermods_dirs &&
           #if str($adv.condi_user_mods).strip() == 'yes'
@@ -40,9 +41,50 @@
           #end if
           ./xmlchange STOP_N=$adv_period.stopn &&
           ./xmlchange STOP_OPTION=$adv_period.stop_option &&
-          ./xmlchange CCSM_CO2_PPMV=$adv.co2 &&
           ./xmlchange DOUT_S=FALSE &&
-          cp '$user_nl_clm_customization' user_nl_clm &&
+          #if (str($adv_restart.restart_option) != 'unset')
+             ./xmlchange REST_N=$adv_restart.restn &&
+             ./xmlchange REST_OPTION=$adv_restart.restart_option &&
+          #end if
+          #if ($adv_restart.interim_files)
+             ./xmlchange DOUT_S_SAVE_INTERIM_RESTART_FILES=TRUE
+          #end if
+          #if (str($adv_lnd.user_nl_lnd_customization) != 'None')
+              cp '$adv_lnd.user_nl_lnd_customization' user_nl_lnd &&
+          #end if
+          #if (str($adv_atm.user_nl_atm_customization) != 'None')
+              cp '$adv_atm.user_nl_atm_customization' user_nl_atm &&
+          #end if
+          #if (str($adv_rof.user_nl_rof_customization) != 'None')
+              cp '$adv_rof.user_nl_rof_customization' user_nl_rof &&
+          #end if
+          #if (str($adv_glc.user_nl_glc_customization) != 'None')
+              cp '$adv_glc.user_nl_glc_customization' user_nl_cism &&
+          #end if
+          #if (str($adv_ocn.user_nl_ocn_customization) != 'None')
+              cp '$adv_ocn.user_nl_ocn_customization' user_nl_ocn &&
+          #end if
+          #if (str($adv_ice.user_nl_ice_customization) != 'None')
+              cp '$adv_ice.user_nl_ice_customization' user_nl_ice &&
+          #end if
+          #for $i in $adv_lnd.inputs
+             ln -s '${i.input}' str(${i.input.element_identifier})
+          #end for
+          #for $i in $adv_atm.inputs
+             ln -s '${i.input}' str(${i.input.element_identifier})
+          #end for
+          #for $i in $adv_rof.inputs
+             ln -s '${i.input}' str(${i.input.element_identifier})
+          #end for
+          #for $i in $adv_glc.inputs
+             ln -s '${i.input}' str(${i.input.element_identifier})
+          #end for
+          #for $i in $adv_ocn.inputs
+             ln -s '${i.input}' str(${i.input.element_identifier})
+          #end for
+          #for $i in $adv_ice.inputs
+             cp '${i.input}' str(${i.input.element_identifier})
+          #end for
          ./case.build >> $case_info  2>&1 &&
           #if (str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch')
              tar -xf '$adv_period.condi_type_run.restart' -C '../work/$casename/run/' && 
@@ -66,14 +108,6 @@
          cat '../work/$casename/run/'rof.log.* >> $rof_log ) ||
          (printf "Case failed" && tar cf $work \${HOME}/work)
     ]]></command>
-    <configfiles>
-        <configfile name="user_nl_clm_customization"><![CDATA[
-&clm_inparm
-            hist_mfilt = 120,
-/
-        ]]>
-        </configfile>
-    </configfiles>
     <inputs>
         <param name="inputdata" type="data" format='tar' label="inputdata for running CESM"></param>
         <param name="casename" type="text" value="usecase" label="Name of your case">
@@ -92,48 +126,48 @@
             </param>
             <when value="FKESSLER">
                 <param name="resolution" type="select" label="Model resolution">
-                    <option value="--res f09_f09_mg17">f09_f09_mg17</option>
-                    <option value="--res f19_f19_mg17">f19_f19_mg17</option>
+                    <option value="f09_f09_mg17">f09_f09_mg17</option>
+                    <option value="f19_f19_mg17">f19_f19_mg17</option>
                 </param>
             </when>
             <when value="F2000climo">
                 <param name="resolution" type="select" label="Model resolution">
-                    <option value="--res f09_f09_mg17">f09_f09_mg17</option>
-                    <option value="--res f19_g17 --run-unsupported">f19_g17</option>
-                    <option value="--res f19_f19_mg17 --run-unsupported">f19_f19_mg17</option>
+                    <option value="f09_f09_mg17">f09_f09_mg17</option>
+                    <option value="f19_g17 --run-unsupported">f19_g17</option>
+                    <option value="f19_f19_mg17 --run-unsupported">f19_f19_mg17</option>
                 </param>
             </when>
             <when value="QPC6">
                 <param name="resolution" type="select" label="Model resolution">
-                    <option value="--res f09_f09_mg17">f09_f09_mg17</option>
-                    <option value="--res f19_f19_mg17">f19_f19_mg17</option>
+                    <option value="f09_f09_mg17">f09_f09_mg17</option>
+                    <option value="f19_f19_mg17">f19_f19_mg17</option>
                 </param>
             </when>
             <when value="QSC6">
                 <param name="resolution" type="select" label="Model resolution">
-                    <option value="--res f09_f09_mg17">f09_f09_mg17</option>
-                    <option value="--res f19_f19_mg17">f19_f19_mg17</option>
+                    <option value="f09_f09_mg17">f09_f09_mg17</option>
+                    <option value="f19_f19_mg17">f19_f19_mg17</option>
                 </param>
             </when>
             <when value="F1850">
                 <param name="resolution" type="select" label="Model resolution">
-                    <option value="--res f19_f19_mg17 --run-unsupported"></option>
+                    <option value="f19_f19_mg17 --run-unsupported"></option>
                 </param>
             </when>
             <when value="B1850">
                 <param name="resolution" type="select" label="Model resolution">
-                    <option value="--res f09_g17_gl4">f09_g17_gl4</option>
-                    <option value="--res f09_g17">f09_g17</option>
-                    <option value="--res f19_g17_gl4">f19_g17_gl4</option>
-                    <option value="--res">f19_g17</option>
+                    <option value="f09_g17_gl4">f09_g17_gl4</option>
+                    <option value="f09_g17">f09_g17</option>
+                    <option value="f19_g17_gl4">f19_g17_gl4</option>
+                    <option value="f19_g17">f19_g17</option>
                 </param>
             </when>
             <when value="BHIST">
                 <param name="resolution" type="select" label="Model resolution">
-                    <option value="--res f09_g17_gl4">f09_g17_gl4</option>
-                    <option value="--res f09_g17">f09_g17</option>
-                    <option value="--res f19_g17_gl4">f19_g17_gl4</option>
-                    <option value="--res f19_g17">f19_g17</option>
+                    <option value="f09_g17_gl4">f09_g17_gl4</option>
+                    <option value="f09_g17">f09_g17</option>
+                    <option value="f19_g17_gl4">f19_g17_gl4</option>
+                    <option value="f19_g17">f19_g17</option>
                 </param>
             </when>
 	</conditional>
@@ -185,10 +219,64 @@
                 <option value="end">end</option>
             </param>
         </section>
-        <section name="adv_clm" title="CLM namelist customization" expanded="false">
-            <param name="co2" type="float" value="367.0" label="Atmospheric CO2 molar ratio (by volume) only used when co2_type==constant (umol/mol)"></param>
+        <section name="adv_restart" title="Customize the model restart period" expanded="false">
+            <param name="restn" type="integer" value="12" label="Provides a numerical count for RESTART_OPTION (only if REST_N is different from 'unset')."></param>
+            <param name="restart_option" type="select" label="Sets frequency of model restart writes in conjuction with REST_N (default is 'unset' e.g. STOP_N and STOP_OPTION)">
+                <option value="unset" selected="true">unset</option>
+                <option value="ndays">ndays</option>
+                <option value="none">none</option>
+                <option value="never">never</option>
+                <option value="nsteps">nsteps</option>
+                <option value="nseconds">nseconds</option>
+                <option value="nminutes">nminutes</option>
+                <option value="nhours">nhours</option>
+                <option value="nday">ndays</option>
+                <option value="nmonths">nmonths</option>
+                <option value="nyears">nyears</option>
+                <option value="date">date</option>
+                <option value="ifdays0">ifday0</option>
+                <option value="end">end</option>
+            </param>
+            <param name="interim_files" type="boolean" value="false" label=""></param>
         </section>
-        <section name="adv" title="Advanced customization" expanded="false">
+        
+        <section name="adv_lnd" title="Land namelist user customization" expanded="false">
+            <param name="user_nl_lnd_customization" type="data" format="txt" optional="true" label="LAND User namelist (lnd_in)"></param>
+            <repeat name="inputs" title="Land Customized Input Files">
+               <param name="input" type="data" format="netcdf" label="Input for LND component"/>
+            </repeat>
+        </section>
+        <section name="adv_rof" title="River-runoff namelist user customization" expanded="false">
+            <param name="user_nl_rof_customization" type="data" format="txt" optional="true" label="ROF User namelist (rof_in)"></param>
+            <repeat name="inputs" title="River-runoff Customized Input Files">
+               <param name="input" type="data" format="netcdf" label="Input for ROF component"/>
+            </repeat>
+        </section>
+        <section name="adv_atm" title="Atmopshere namelist user customization" expanded="false">
+            <param name="user_nl_atm_customization" type="data" format="txt" optional="true" label="ATM User namelist (atm_in)"></param>
+            <repeat name="inputs" title="River-runoff Customized Input Files">
+               <param name="input" type="data" format="netcdf" label="Input for ATM component"/>
+            </repeat>
+        </section>
+        <section name="adv_glc" title="Land-ice namelist user customization" expanded="false">
+            <param name="user_nl_glc_customization" type="data" format="txt" optional="true" label="CISM User namelist (cism_in)"></param>
+            <repeat name="inputs" title="Land-ice Customized Input Files">
+               <param name="input" type="data" format="netcdf" label="Input for GLC component"/>
+            </repeat>
+        </section>
+        <section name="adv_ice" title="Sea-ice namelist user customization" expanded="false">
+            <param name="user_nl_ice_customization" type="data" format="txt" optional="true" label="ICE User namelist (ice_in)"></param>
+            <repeat name="inputs" title="Sea-ice Customized Input Files">
+               <param name="input" type="data" format="netcdf" label="Input for ICE component"/>
+            </repeat>
+        </section>
+        <section name="adv_ocn" title="Ocean namelist user customization" expanded="false">
+            <param name="user_nl_ocn_customization" type="data" format="txt" optional="true" label="OCN User namelist (ocn_in)"></param>
+            <repeat name="inputs" title="Ocean Customized Input Files">
+               <param name="input" type="data" format="netcdf" label="Input for OCN component"/>
+            </repeat>
+        </section>
+        <section name="adv" title="Advanced User customization" expanded="false">
             <conditional name="condi_user_mods">
                 <param name="add_changes" type="select" label="user-modified source code">
                     <option value="no" selected="true">no</option>
