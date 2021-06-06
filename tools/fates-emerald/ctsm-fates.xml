@@ -1,4 +1,4 @@
-<tool id="ctsm_fates" name="CTSM/FATES-EMERALD" version="2.0.1">
+<tool id="ctsm_fates" name="CTSM/FATES-EMERALD" version="2.0.1.1">
     <description>Functionally Assembled Terrestrial Ecosystem Simulator</description>
     <requirements>
         <requirement type="package" version="2.0.1">fates-emerald</requirement>
@@ -196,7 +196,7 @@
     </inputs>
     <outputs>
         <collection name="history_files" type="list" label="${tool.name} on ${inputdata.name} (history file)">
-            <discover_datasets pattern="__designation_and_ext__" directory="output_dir" visible="true" format="netcdf"/>
+            <discover_datasets pattern="__name__" directory="output_dir" visible="true" format="netcdf"/>
         </collection>
         <data name="atm_log" format="txt" label="${tool.name} on ${inputdata.name} (atm.log)"/>
         <data name="cesm_log" format="txt" label="${tool.name} on ${inputdata.name} (cesm.log)"/>
@@ -217,38 +217,33 @@
             <param name="run_startdate" value="2000-01-01" />
             <param name="stop_option" value="nsteps" />
             <param name="stopn" value="1" />
-            <output name="atm_log" ftype="txt" file="atm.log" compare="sim_size" delta="1000">
+            <output name="atm_log" ftype="txt">
               <assert_contents>
                   <has_text text="(datm_comp_final) atm: end of main integration loop" />
               </assert_contents>
             </output>
-            <output name="cesm_log" ftype="txt" file="cesm.log" compare="sim_size" delta="1000">
+            <output name="cesm_log" ftype="txt">
               <assert_contents>
                   <has_text text="pes participating in computation for CLM" />
               </assert_contents>
             </output>
-            <output name="cpl_log" ftype="txt" file="cpl.log" compare="sim_size" delta="1000">
+            <output name="cpl_log" ftype="txt">
               <assert_contents>
                   <has_text text="SUCCESSFUL TERMINATION" />
               </assert_contents>
             </output>
-            <output name="lnd_log" ftype="txt" file="lnd.log" compare="sim_size" delta="1000">
+            <output name="lnd_log" ftype="txt">
               <assert_contents>
                   <has_text text="Successfully" />
               </assert_contents>
             </output>
-            <output name="rof_log" ftype="txt" file="rof.log" compare="sim_size" delta="1000">
+            <output name="rof_log" ftype="txt">
               <assert_contents>
                   <has_text text="MOSART model initialization" />
               </assert_contents>
             </output>
-            <output name="work" ftype="tar" file="workdir.tar" compare="sim_size" delta="1000">
-               <assert_contents>
-                    <has_size value="0"/>
-                </assert_contents>
-            </output>
             <output name="restart" ftype="tar" file="restart.tar" compare="sim_size" delta="100" />
-            <output name="rinfo" ftype="txt" file="restart_info.txt" compare="sim_size" delta="1000">
+            <output name="rinfo" ftype="txt">
               <assert_contents>
                   <has_text text="datm.r.2000-01-01-01800.nc" />
                   <has_text text="datm.rs1.2000-01-01-01800.bin" />
@@ -259,6 +254,55 @@
             <output_collection name="history_files" count="0">
             </output_collection>
         </test>
+        <test>
+            <param name="inputdata" value="inputdata_test.tar" />
+            <param name="casename" value="one_month" />
+            <param name="resolution" value="1x1_ALP1" />
+            <param name="stop_option" value="nmonths" />
+            <param name="stopn" value="1" />
+            <output name="atm_log" ftype="txt">
+              <assert_contents>
+                  <has_text text="(datm_comp_final) atm: end of main integration loop" />
+              </assert_contents>
+            </output>
+            <output name="cesm_log" ftype="txt">
+              <assert_contents>
+                  <has_text text="pes participating in computation for CLM" />
+              </assert_contents>
+            </output>
+            <output name="cpl_log" ftype="txt">
+              <assert_contents>
+                  <has_text text="SUCCESSFUL TERMINATION" />
+              </assert_contents>
+            </output>
+            <output name="lnd_log" ftype="txt">
+              <assert_contents>
+                  <has_text text="Successfully" />
+              </assert_contents>
+            </output>
+            <output name="rof_log" ftype="txt">
+              <assert_contents>
+                  <has_text text="MOSART model initialization" />
+              </assert_contents>
+            </output>
+            <output name="restart" ftype="tar">
+              <assert_contents>
+                  <has_size value="6348800" delta="5000"/>
+              </assert_contents>
+            </output>
+         
+            <output name="rinfo" ftype="txt">
+              <assert_contents>
+                  <has_text text="datm.r.2000-02-01-00000.nc" />
+                  <has_text text="datm.rs1.2000-02-01-00000.bin" />
+                  <has_text text="cpl.r.2000-02-01-00000.nc" />
+                  <has_text text="clm2.r.2000-02-01-00000.nc" />
+              </assert_contents>
+            </output>
+            <output_collection name="history_files" count="1">
+            </output_collection>
+        </test>
+
     </tests>
     <help><![CDATA[
 

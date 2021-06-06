@@ -3,6 +3,7 @@ on: [push, pull_request]
 env:
   GALAXY_FORK: galaxyproject
   GALAXY_BRANCH: release_21.01
+  GALAXY_COPERNICUS_CDSAPIRC_KEY: ${{ secrets.GALAXY_COPERNICUS_CDSAPIRC_KEY }}
   MAX_CHUNKS: 4
 jobs:
   # the setup job does two things:
@@ -306,7 +307,7 @@ jobs:
       matrix:
         python-version: ['3.7']
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master' && github.repository_owner == 'galaxyproject'
+    if: github.ref == 'refs/heads/master' && github.repository_owner == 'NordicESMHub'
     steps:
     - uses: actions/checkout@v2
       with:
