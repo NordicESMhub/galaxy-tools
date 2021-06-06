@@ -115,8 +115,8 @@ jobs:
       uses: jwsi/secret-parser@v1
       with:
         filename: .github/workflows/cdsapirc.cfg
-        secret-name: key
-        secret-value: ${{ secrets.COPERNICUS_CDSAPIRC_KEY }}
+        secret-name: GALAXY_COPERNICUS_CDSAPIRC_KEY
+        secret-value: ${{ secrets.GALAXY_COPERNICUS_CDSAPIRC_KEY }}
     - name: Planemo test
       uses: galaxyproject/planemo-ci-action@v1
       id: test
