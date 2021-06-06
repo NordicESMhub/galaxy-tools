@@ -88,8 +88,8 @@ class ECV ():
             self.cdsapi.retrieve(
                 self.archive, {
                     'variable': self.variable,
-                    'climate_reference_period': \
-                     self.climate_reference_period,
+                    'climate_reference_period':
+                    self.climate_reference_period,
                     'month': self.month,
                     'origin': 'era5',
                     'format': self.format,
@@ -101,8 +101,8 @@ class ECV ():
             self.cdsapi.retrieve(
                 self.archive, {
                     'variable': self.variable,
-                    'climate_reference_period': \
-                     self.climate_reference_period,
+                    'climate_reference_period':
+                    self.climate_reference_period,
                     'year': self.year,
                     'month': self.month,
                     'origin': 'era5',
