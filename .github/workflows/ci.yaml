@@ -9,6 +9,7 @@ env:
   GALAXY_FORK: galaxyproject
   GALAXY_BRANCH: release_21.01
   GALAXY_COPERNICUS_CDSAPIRC_KEY: ${{ secrets.GALAXY_COPERNICUS_CDSAPIRC_KEY }}
+  COPERNICUS_CDSAPIRC_KEY_FILE: ${{ secrets.COPERNICUS_CDSAPIRC_KEY_FILE }}
   MAX_CHUNKS: 40
 jobs:
   setup:
@@ -110,6 +111,12 @@ jobs:
       with:
         path: ~/.cache/pip
         key: pip_cache_py_${{ matrix.python-version }}_gxy_${{ needs.setup.outputs.galaxy-head-sha }}
+    - name: Create Copernicus Config file
+      uses: jwsi/secret-parser@v1
+      with:
+        filename: .github/workflows/cdsapirc.cfg
+        secret-name: key
+        secret-value: ${{ secrets.COPERNICUS_CDSAPIRC_KEY }}
     - name: Planemo test
       uses: galaxyproject/planemo-ci-action@v1
       id: test

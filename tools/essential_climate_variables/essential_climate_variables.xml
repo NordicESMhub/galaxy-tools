@@ -1,25 +1,26 @@
-<tool id="cds_essential_variability" name="Copernicus Essential Climate Variables" version="0.2.0">
+<tool id="cds_essential_variability" name="Copernicus Essential Climate Variables" version="0.2.0" profile="20.05">
     <description>for assessing climate variability</description>
     <requirements>
         <requirement type="package" version="3">python</requirement>
         <requirement type="package" version="0.5.1">cdsapi</requirement>
-        <requirement type="package" version="1.9.9">cdo</requirement>
+        <requirement type="package" version="1.9.10">cdo</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-       export HOME=`pwd`  &&
-       cp '$copernicus_cdsapirc_key_file' .cdsapirc &&
+       export HOME=`pwd` &&
+       cp \$COPERNICUS_CDSAPIRC_KEY_FILE .cdsapirc | true &&
        python3 '$__tool_directory__/ecv_retrieve.py'
             'ecv-for-climate-change' '$variable'
             --month '$month'
         #if str($product_type.product) == 'monthly_mean'
             --year '$product_type.year'
-            --time_aggregation '1_month'
+            --time_aggregation '1_month_mean'
         #else if str($product_type.product) == 'anomaly'
+            --climate_reference_period $product_type.climate_reference_period
             --time_aggregation '$product_type.selector'
             --year '$product_type.year'
         #else
-            --year '2018'
-           --time_aggregation '1_month'
+            --climate_reference_period $product_type.climate_reference_period
+           --time_aggregation '1_month_mean'
         #end if
            --product_type '$product_type.product'
            --format 'tgz' --output 'tmp.tgz'
@@ -29,13 +30,6 @@
            cdo remapcon,$adv.resol -setgridtype,regular tmpg.grib tmp.grib &&
            cdo -f nc -t ecmwf copy tmp.grib tmp.nc       
     ]]></command>
-    <configfiles>
-        <configfile name="copernicus_cdsapirc_key_file"><![CDATA[
-         url: https://cds.climate.copernicus.eu/api/v2
-         key: \$GALAXY_COPERNICUS_CDSAPIRC_KEY
-        ]]>
-        </configfile>
-    </configfiles>
     <inputs>
         <param name="variable" type="select" multiple="true" label="Variable(s)">
             <option value="surface_air_temperature" selected="true">Surface air temperature</option>
@@ -50,6 +44,12 @@
                 <option value="climatology">Climatology</option>
                 <option value="anomaly">Anomaly</option>
             </param>
+            <when value="climatology">
+                <param name="climate_reference_period" type="select" multiple="false"  label="Select Climate reference period">
+                    <option value="1981_2010" selected="true">1981-2010</option>
+                    <option value="1991_2020">1991-2020</option>
+                </param>
+            </when>
             <when value="monthly_mean">
                 <param name="year" type="select" multiple="true"  label="Select year(s)">
                     <option value="1979">1979</option>
@@ -97,6 +97,10 @@
                 </param>
             </when>
             <when value="anomaly">
+                <param name="climate_reference_period" type="select" multiple="false"  label="Select Climate reference period">
+                    <option value="1981_2010" selected="true">1981-2010</option>
+                    <option value="1991_2020">1991-2020</option>
+                </param>
                 <param name="year" type="select" multiple="true"  label="Select year(s)">
                     <option value="1979">1979</option>
                     <option value="1980">1980</option>
@@ -142,8 +146,8 @@
                     <option value="2020" selected="true">2020</option>
                 </param>
                 <param name="selector" type="select" label="Time aggregation">
-                    <option value="12_month" selected="true">yearly</option>
-                    <option value="1_month">monthly</option>
+                    <option value="12_month_running_mean" selected="true">yearly</option>
+                    <option value="1_month_mean">monthly</option>
                 </param>
             </when>
         </conditional>

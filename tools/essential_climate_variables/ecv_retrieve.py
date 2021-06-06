@@ -14,27 +14,28 @@ import cdsapi
 class ECV ():
     def __init__(self, archive, variable, product_type, year,
                  month, time_aggregation, area, format, output,
-                 verbose=False
+                 climate_reference_period=None, verbose=False
                  ):
         self.archive = archive
         self.variable = variable.split(',')
+        self.climate_reference_period = climate_reference_period
         if product_type == '':
             self.product_type = 'climatology'
         else:
             self.product_type = product_type
-        if year == '':
-            self.year = '2019'
-        else:
+        if year != '' and year is not None:
             self.year = year.split(',')
-        if month == '':
+        else:
+            self.year = None
+        if month == '' or month is None:
             self.month = '01'
         else:
             self.month = month.split(',')
         if time_aggregation == '':
-            self.time_aggregation = '1_month'
+            self.time_aggregation = '1_month_mean'
         else:
             self.time_aggregation = time_aggregation
-        if area == '':
+        if area == '' or area is None:
             self.area = 'global'
         else:
             self.area = area
@@ -47,6 +48,7 @@ class ECV ():
             self.outputfile = "donwload." + self.format
         else:
             self.outputfile = output
+        self.verbose = verbose
         if verbose:
             print("archive: ", self.archive)
             print("variable: ", self.variable)
@@ -56,18 +58,59 @@ class ECV ():
 
     def retrieve(self):
 
-        self.cdsapi.retrieve(
-            self.archive, {
-                'variable': self.variable,
-                'year': self.year,
-                'month': self.month,
-                'origin': 'era5',
-                'area': self.area,
-                'format': self.format,
-                'product_type': self.product_type,
-                'time_aggregation': self.time_aggregation,
-            },
-            self.outputfile)
+        if self.verbose:
+            print(self.archive)
+            print('variable', self.variable)
+            print('year', self.year)
+            print('month', self.month)
+            print('origin', 'era5')
+            print('area', self.area)
+            print('format', self.format)
+            print('product_type', self.product_type)
+            print('time_aggregation', self.time_aggregation)
+            print('climate_reference_period',
+                  self.climate_reference_period)
+            print(self.outputfile)
+        if self.climate_reference_period is None:
+            self.cdsapi.retrieve(
+                self.archive, {
+                    'variable': self.variable,
+                    'year': self.year,
+                    'month': self.month,
+                    'origin': 'era5',
+                    'area': self.area,
+                    'format': self.format,
+                    'product_type': self.product_type,
+                    'time_aggregation': self.time_aggregation,
+                },
+                self.outputfile)
+        elif self.year is None:
+            self.cdsapi.retrieve(
+                self.archive, {
+                    'variable': self.variable,
+                    'climate_reference_period': \
+                     self.climate_reference_period,
+                    'month': self.month,
+                    'origin': 'era5',
+                    'format': self.format,
+                    'product_type': self.product_type,
+                    'time_aggregation': self.time_aggregation,
+                },
+                self.outputfile)
+        else:
+            self.cdsapi.retrieve(
+                self.archive, {
+                    'variable': self.variable,
+                    'climate_reference_period': \
+                     self.climate_reference_period,
+                    'year': self.year,
+                    'month': self.month,
+                    'origin': 'era5',
+                    'format': self.format,
+                    'product_type': self.product_type,
+                    'time_aggregation': self.time_aggregation,
+                },
+                self.outputfile)
 
     def checktar(self):
         is_grib = False
@@ -127,6 +170,10 @@ if __name__ == '__main__':
         help='Desired sub-area to extract (North/West/South/East)'
     )
     parser.add_argument(
+        '--climate_reference_period',
+        help='Climate reference period (default is 1981-2010)'
+    )
+    parser.add_argument(
         '--format',
         help='Output file format (GRIB or netCDF or tgz)'
     )
@@ -142,7 +189,7 @@ if __name__ == '__main__':
 
     p = ECV(args.archive, args.variable, args.product_type,
             args.year, args.month, args.time_aggregation, args.area,
-            args.format, args.output, args.verbose)
+            args.format, args.output, args.climate_reference_period, args.verbose)
     p.retrieve()
     p.checktar()
     # remove api key file if it was created
