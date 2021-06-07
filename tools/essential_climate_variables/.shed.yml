@@ -19,3 +19,5 @@ name: cds_essential_variability
 owner: climate
 remote_repository_url: https://github.com/NordicESMhub/galaxy-tools/tree/master/tools/essential_climate_variables
 type: unrestricted
+exclude:
+  - cdsapirc.cfg
