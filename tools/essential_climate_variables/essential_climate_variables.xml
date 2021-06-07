@@ -13,7 +13,7 @@
            cp $cdsapirc_file .cdsapirc &&
        #else
            echo 'use tool cdsapirc file' &&
-           cp $__tool_directory__/cdsapirc.cfg .cdsapirc &&
+           cp '$__tool_directory__/cdsapirc.cfg' .cdsapirc &&
        #end if
        python3 '$__tool_directory__/ecv_retrieve.py'
             'ecv-for-climate-change' '$variable'
