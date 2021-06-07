@@ -7,109 +7,129 @@
         <requirement type="package" version="3">python</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-          ( export HOME=`pwd` &&
-          export USER='jovyan' &&
-          export AR=x86_64-conda_cos6-linux-gnu-ar &&
-          mkdir -p .cime &&
-          cp '$__tool_directory__/config' .cime/config &&
-          cp '$__tool_directory__/config_compilers.xml' '.cime/config_compilers.xml' &&
-          cp '$__tool_directory__/config_machines.xml' '.cime/config_machines.xml' &&
-          mkdir inputdata &&
-          tar -xf '$inputdata' -C 'inputdata' && 
-          mkdir output_dir &&
-          mkdir usermods_dirs &&
-          #if str($adv.condi_user_mods).strip() == 'yes'
-              # should create a new type user_mods.tar
-              cd usermods_dirs &&
-              tar xf '$user_mods' &&
-              cd .. &&
-          #end if
-	    create_newcase --case '$casename' --compset '$condi_type_run.compset' --machine galaxy
-          #if str($adv.condi_user_mods).strip() == 'yes'
-              --user-mods-dir usermods_dirs
-          #end if
-              --res '$condi_type_run.resolution'  && 
-          cd '$casename' &&
-          ./case.setup  > $case_info  2>&1   &&
-          #if (str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch')
-              ./xmlchange RUN_TYPE=$adv_period.condi_type_run.run_type &&
-              ./xmlchange RUN_REFDATE=$adv_period.condi_type_run.run_refdate &&
-              ./xmlchange RUN_REFCASE=$adv_period.condi_type_run.run_refcase &&
-          #end if
-          #if ((str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'startup') and ($adv_period.condi_type_run.run_startdate != ''))
-              ./xmlchange RUN_STARTDATE=$adv_period.condi_type_run.run_startdate &&
-          #end if
-          ./xmlchange STOP_N=$adv_period.stopn &&
-          ./xmlchange STOP_OPTION=$adv_period.stop_option &&
-          ./xmlchange DOUT_S=FALSE &&
-          #if (str($adv_restart.restart_option) != 'unset')
-             ./xmlchange REST_N=$adv_restart.restn &&
-             ./xmlchange REST_OPTION=$adv_restart.restart_option &&
-          #end if
-          #if ($adv_restart.interim_files)
-             ./xmlchange DOUT_S_SAVE_INTERIM_RESTART_FILES=TRUE
-          #end if
-          #if (str($adv_lnd.user_nl_lnd_customization) != 'None')
-              cp '$adv_lnd.user_nl_lnd_customization' user_nl_lnd &&
-          #end if
-          #if (str($adv_atm.user_nl_atm_customization) != 'None')
-              cp '$adv_atm.user_nl_atm_customization' user_nl_atm &&
-          #end if
-          #if (str($adv_rof.user_nl_rof_customization) != 'None')
-              cp '$adv_rof.user_nl_rof_customization' user_nl_rof &&
-          #end if
-          #if (str($adv_glc.user_nl_glc_customization) != 'None')
-              cp '$adv_glc.user_nl_glc_customization' user_nl_cism &&
-          #end if
-          #if (str($adv_ocn.user_nl_ocn_customization) != 'None')
-              cp '$adv_ocn.user_nl_ocn_customization' user_nl_ocn &&
-          #end if
-          #if (str($adv_ice.user_nl_ice_customization) != 'None')
-              cp '$adv_ice.user_nl_ice_customization' user_nl_ice &&
-          #end if
-          #for $i in $adv_lnd.inputs
-             ln -s '${i.input}' str(${i.input.element_identifier})
-          #end for
-          #for $i in $adv_atm.inputs
-             ln -s '${i.input}' str(${i.input.element_identifier})
-          #end for
-          #for $i in $adv_rof.inputs
-             ln -s '${i.input}' str(${i.input.element_identifier})
-          #end for
-          #for $i in $adv_glc.inputs
-             ln -s '${i.input}' str(${i.input.element_identifier})
-          #end for
-          #for $i in $adv_ocn.inputs
-             ln -s '${i.input}' str(${i.input.element_identifier})
-          #end for
-          #for $i in $adv_ice.inputs
-             cp '${i.input}' str(${i.input.element_identifier})
-          #end for
-         ./case.build >> $case_info  2>&1 &&
-          #if (str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch')
-             tar -xf '$adv_period.condi_type_run.restart' -C '../work/$casename/run/' && 
-             
-          #end if
-         ./case.submit >> $case_info  2>&1 &&
-         mkdir -p restart                              &&
-         (cat '../work/$casename/run/rpointer'.* > $rinfo || printf "No restarts\n") &&
-         (cp '../work/$casename/run/$casename'.*.r*.*.nc restart/ || printf "No netCDF restarts\n") &&
-         (cp '../work/$casename/run/$casename'.*.r*.*.bin restart/ || printf "No bin restarts\n") &&
-         (cp '../work/$casename/run/rpointer'.* restart/ || printf "no rpointer\n") &&
-         cd restart && 
-         tar cvf $restart . &&
-         cd .. && 
-         (cp '../work/$casename/run/$casename'.*.h*.*.nc ../output_dir/ || printf "no netCDF outputs\n") &&
-         (gunzip '../work/$casename/run/'*.log.* || printf "no compressed logs") && 
-         cat '../work/$casename/run/'atm.log.* >> $atm_log &&
-         cat '../work/$casename/run/'cesm.log.* >> $cesm_log &&
-         cat '../work/$casename/run/'cpl.log.* >> $cpl_log &&
-         cat '../work/$casename/run/'lnd.log.* >> $lnd_log &&
-         cat '../work/$casename/run/'rof.log.* >> $rof_log ) ||
-         (printf "Case failed" && tar cf $work \${HOME}/work)
+        export HOME=`pwd` &&
+        export USER='jovyan' &&
+        export AR=x86_64-conda_cos6-linux-gnu-ar &&
+        mkdir -p .cime &&
+        cp '$__tool_directory__/config' .cime/config &&
+        cp '$__tool_directory__/config_compilers.xml' '.cime/config_compilers.xml' &&
+        cp '$__tool_directory__/config_machines.xml' '.cime/config_machines.xml' &&
+        mkdir inputdata &&
+        mkdir output_dir &&
+        mkdir logs_dir &&
+        mkdir usermods_dirs &&
+        #if $input_type.tarball
+            tar -xf '$input_type.inputdata' -C 'inputdata/' &&
+        #else
+            #for $input_file in $input_type.input_data_collection
+                bash $__tool_directory__/create_mapping.sh ${input_file} ${input_file.name} '$mapping' &&
+            #end for
+        #end if
+        #if str($adv.condi_user_mods).strip() == 'yes'
+            # should create a new type user_mods.tar
+            cd usermods_dirs &&
+            tar xf '$user_mods' &&
+            cd .. &&
+        #end if
+        create_newcase --case '$casename' --compset '$condi_type_run.compset' --machine galaxy 
+        #if str($adv.condi_user_mods).strip() == 'yes'
+            --user-mods-dir usermods_dirs
+        #end if
+            --res '$condi_type_run.resolution'  > $case_info  2>&1 && 
+        cd '$casename' &&
+        ./case.setup  >> $case_info  2>&1   &&
+        #if (str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch')
+            ./xmlchange RUN_TYPE=$adv_period.condi_type_run.run_type &&
+            ./xmlchange RUN_REFDATE=$adv_period.condi_type_run.run_refdate &&
+            ./xmlchange RUN_REFCASE=$adv_period.condi_type_run.run_refcase &&
+        #end if
+        #if ((str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'startup') and ($adv_period.condi_type_run.run_startdate != ''))
+            ./xmlchange RUN_STARTDATE=$adv_period.condi_type_run.run_startdate &&
+        #end if
+        ./xmlchange STOP_N=$adv_period.stopn &&
+        ./xmlchange STOP_OPTION=$adv_period.stop_option &&
+        ./xmlchange DOUT_S=FALSE &&
+        #if (str($adv_restart.restart_option) != 'unset')
+            ./xmlchange REST_N=$adv_restart.restn &&
+            ./xmlchange REST_OPTION=$adv_restart.restart_option &&
+        #end if
+        #if ($adv_restart.interim_files)
+            ./xmlchange DOUT_S_SAVE_INTERIM_RESTART_FILES=TRUE
+        #end if
+        #if (str($adv_lnd.user_nl_lnd_customization) != 'None')
+            cp '$adv_lnd.user_nl_lnd_customization' user_nl_lnd &&
+        #end if
+        #if (str($adv_atm.user_nl_atm_customization) != 'None')
+            cp '$adv_atm.user_nl_atm_customization' user_nl_atm &&
+        #end if
+        #if (str($adv_rof.user_nl_rof_customization) != 'None')
+            cp '$adv_rof.user_nl_rof_customization' user_nl_rof &&
+        #end if
+        #if (str($adv_glc.user_nl_glc_customization) != 'None')
+            cp '$adv_glc.user_nl_glc_customization' user_nl_cism &&
+        #end if
+        #if (str($adv_ocn.user_nl_ocn_customization) != 'None')
+            cp '$adv_ocn.user_nl_ocn_customization' user_nl_ocn &&
+        #end if
+        #if (str($adv_ice.user_nl_ice_customization) != 'None')
+            cp '$adv_ice.user_nl_ice_customization' user_nl_ice &&
+        #end if
+        #for $i in $adv_lnd.inputs
+            ln -s '${i.input}' str(${i.input.element_identifier})
+        #end for
+        #for $i in $adv_atm.inputs
+            ln -s '${i.input}' str(${i.input.element_identifier})
+        #end for
+        #for $i in $adv_rof.inputs
+            ln -s '${i.input}' str(${i.input.element_identifier})
+        #end for
+        #for $i in $adv_glc.inputs
+            ln -s '${i.input}' str(${i.input.element_identifier})
+        #end for
+        #for $i in $adv_ocn.inputs
+            ln -s '${i.input}' str(${i.input.element_identifier})
+        #end for
+        #for $i in $adv_ice.inputs
+            ln -s '${i.input}' str(${i.input.element_identifier})
+        #end for
+        ./case.build >> $case_info  2>&1 &&
+        #if (str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch')
+            tar -xf '$adv_period.condi_type_run.restart' -C '../work/$casename/run/' && 
+        #end if
+        ( ./case.submit >> $case_info  2>&1 || true ) &&
+        (grep "MODEL EXECUTION HAS FINISHED" $case_info || ( echo "Case failed" && cd .. && tar cf $work work && exit 1 )) &&
+        echo "CURRENT PATH" &&
+        echo "\$HOME"       &&
+        cd "\$HOME"         && 
+        mkdir -p restart                              &&
+        ( cat 'work/$casename/run/rpointer'.* > $rinfo || echo "No restarts\n" ) &&
+        ( cp 'work/$casename/run/$casename'.*.r*.*.nc restart/ || echo "No netCDF restarts\n" ) &&
+        ( cp 'work/$casename/run/$casename'.*.r*.*.bin restart/ || echo "No bin restarts\n" )   &&
+        ( cp 'work/$casename/run/rpointer'.* restart/ || echo "no rpointer\n" ) &&
+        cd restart && 
+        tar cvf $restart . &&
+        cd "\$HOME"        && 
+        ( cp 'work/$casename/run/$casename'.*.h*.*.nc output_dir/ || echo "no netCDF outputs\n" ) &&
+        ( gunzip 'work/$casename/run/'*.log.* || echo "no compressed logs" ) && 
+        ( cat 'work/$casename/run/'atm.log.* > logs_dir/atm_log.txt || echo "No atm logfile" )  &&
+        ( cat 'work/$casename/run/'cesm.log.* > logs_dir/cesm_log.txt || echo "No cesm logfile" ) &&
+        ( cat 'work/$casename/run/'cpl.log.* > logs_dir/cpl_log.txt || echo "No cpl logfile" )  &&
+        ( cat 'work/$casename/run/'lnd.log.* > logs_dir/lnd_log.txt || echo "No lnd logfile" )  &&
+        ( cat 'work/$casename/run/'rof.log.* > logs_dir/rof_log.txt || echo "No rof logfile" )  &&
+        tar cf $work work  &&
+        echo "MODEL RUN COMPLETED"
     ]]></command>
     <inputs>
-        <param name="inputdata" type="data" format='tar' label="inputdata for running CESM"></param>
+        <conditional name="input_type">
+            <param name="tarball" type="boolean" value="false" label="Provide inputdata as a tarball"/>
+            <when value="true">
+                <param name="inputdata" type="data" format='tar' label="inputdata for running CESM (tarball)"></param>
+            </when>
+            <when value="false">
+                <param name="input_data_collection" format="netcdf" type="data_collection" collection_type="list" label="Select input data" help="Select all the netCDF files you would need for running the chosen compset and resolution"/>
+                <param name="mapping" type="data" format='txt' label="Text file for mapping files in inputdata collection to physical files"/>
+            </when> 
+        </conditional>
         <param name="casename" type="text" value="usecase" label="Name of your case">
             <validator type="regex" message="start with a letter and no blanks">^[A-Za-z][A-Za-z0-9]*</validator>
         </param>
@@ -185,24 +205,24 @@
                     </param>
                 </when>
                 <when value="branch">
-                    <param name="run_refcase" type="text" value="" label="Reference case for hybrid or branch runs"></param>
+                    <param name="run_refcase" type="text" value="" label="Reference case for hybrid or branch runs"/>
                     <param name="run_refdate" type="text" value="" label="Reference date for hybrid or branch runs (yyyy-mm-dd)">
                        <validator type="regex" message="YYYY-MM-DD">(^$|(\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])))</validator>
                     </param>
-                    <param name="restart" type="data" format='tar' label="restart for running CESM"></param>
+                    <param name="restart" type="data" format='tar' label="restart for running CESM"/>
                 </when>
                 <when value="hybrid">
-                    <param name="run_refcase" type="text" value="" label="Reference case for hybrid or branch runs"></param>
+                    <param name="run_refcase" type="text" value="" label="Reference case for hybrid or branch runs"/>
                     <param name="run_refdate" type="text" value="" label="Reference date for hybrid or branch runs (yyyy-mm-dd)">
                        <validator type="regex" message="YYYY-MM-DD">(^$|(\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])))</validator>
                     </param>
                     <param name="run_startdate" type="text" value="" label="Run start date (yyyy-mm-dd). Only used for startup or hybrid runs.">
                        <validator type="regex" message="YYYY-MM-DD">(^$|(\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])))</validator>
                     </param>
-                    <param name="restart" type="data" format='tar' label="restart for running CESM"></param>
+                    <param name="restart" type="data" format='tar' label="restart for running CESM"/>
                 </when>
             </conditional>
-            <param name="stopn" type="integer" value="5" label="Provides a numerical count for STOP_OPTION."></param>
+            <param name="stopn" type="integer" value="5" label="Provides a numerical count for STOP_OPTION."/>
             <param name="stop_option" type="select" label=" Sets the run length along with STOP_N and STOP_DATE">
                 <option value="ndays" selected="true">ndays</option>
                 <option value="none">none</option>
@@ -220,7 +240,7 @@
             </param>
         </section>
         <section name="adv_restart" title="Customize the model restart period" expanded="false">
-            <param name="restn" type="integer" value="12" label="Provides a numerical count for RESTART_OPTION (only if REST_N is different from 'unset')."></param>
+            <param name="restn" type="integer" value="12" label="Provides a numerical count for RESTART_OPTION (only if REST_N is different from 'unset')."/>
             <param name="restart_option" type="select" label="Sets frequency of model restart writes in conjuction with REST_N (default is 'unset' e.g. STOP_N and STOP_OPTION)">
                 <option value="unset" selected="true">unset</option>
                 <option value="ndays">ndays</option>
@@ -237,72 +257,66 @@
                 <option value="ifdays0">ifday0</option>
                 <option value="end">end</option>
             </param>
-            <param name="interim_files" type="boolean" value="false" label=""></param>
+            <param name="interim_files" type="boolean" value="false" label=""/>
         </section>
         
         <section name="adv_lnd" title="Land namelist user customization" expanded="false">
-            <param name="user_nl_lnd_customization" type="data" format="txt" optional="true" label="LAND User namelist (lnd_in)"></param>
+            <param name="user_nl_lnd_customization" type="data" format="txt" optional="true" label="LAND User namelist (lnd_in)"/>
             <repeat name="inputs" title="Land Customized Input Files">
                <param name="input" type="data" format="netcdf" label="Input for LND component"/>
             </repeat>
         </section>
         <section name="adv_rof" title="River-runoff namelist user customization" expanded="false">
-            <param name="user_nl_rof_customization" type="data" format="txt" optional="true" label="ROF User namelist (rof_in)"></param>
+            <param name="user_nl_rof_customization" type="data" format="txt" optional="true" label="ROF User namelist (rof_in)"/>
             <repeat name="inputs" title="River-runoff Customized Input Files">
                <param name="input" type="data" format="netcdf" label="Input for ROF component"/>
             </repeat>
         </section>
         <section name="adv_atm" title="Atmopshere namelist user customization" expanded="false">
-            <param name="user_nl_atm_customization" type="data" format="txt" optional="true" label="ATM User namelist (atm_in)"></param>
+            <param name="user_nl_atm_customization" type="data" format="txt" optional="true" label="ATM User namelist (atm_in)"/>
             <repeat name="inputs" title="River-runoff Customized Input Files">
                <param name="input" type="data" format="netcdf" label="Input for ATM component"/>
             </repeat>
         </section>
         <section name="adv_glc" title="Land-ice namelist user customization" expanded="false">
-            <param name="user_nl_glc_customization" type="data" format="txt" optional="true" label="CISM User namelist (cism_in)"></param>
+            <param name="user_nl_glc_customization" type="data" format="txt" optional="true" label="CISM User namelist (cism_in)"/>
             <repeat name="inputs" title="Land-ice Customized Input Files">
                <param name="input" type="data" format="netcdf" label="Input for GLC component"/>
             </repeat>
         </section>
         <section name="adv_ice" title="Sea-ice namelist user customization" expanded="false">
-            <param name="user_nl_ice_customization" type="data" format="txt" optional="true" label="ICE User namelist (ice_in)"></param>
+            <param name="user_nl_ice_customization" type="data" format="txt" optional="true" label="ICE User namelist (ice_in)"/>
             <repeat name="inputs" title="Sea-ice Customized Input Files">
                <param name="input" type="data" format="netcdf" label="Input for ICE component"/>
             </repeat>
         </section>
         <section name="adv_ocn" title="Ocean namelist user customization" expanded="false">
-            <param name="user_nl_ocn_customization" type="data" format="txt" optional="true" label="OCN User namelist (ocn_in)"></param>
+            <param name="user_nl_ocn_customization" type="data" format="txt" optional="true" label="OCN User namelist (ocn_in)"/>
             <repeat name="inputs" title="Ocean Customized Input Files">
                <param name="input" type="data" format="netcdf" label="Input for OCN component"/>
             </repeat>
         </section>
         <section name="adv" title="Advanced User customization" expanded="false">
             <conditional name="condi_user_mods">
-                <param name="add_changes" type="select" label="user-modified source code">
-                    <option value="no" selected="true">no</option>
-                    <option value="yes">yes</option>
-                </param>
-                <when value="yes">
-                    <param name="usermods" type="data" format="tar" label="SourceMods"></param>
+                <param name="add_changes" type="boolean" value="false" label="user-modified source code"/> 
+                <when value="true">
+                    <param name="usermods" type="data" format="tar" label="SourceMods"/>
                </when>
-               <when value="no"/>
-        </conditional>
+               <when value="false"/>
+            </conditional>
         </section>
     </inputs>
     <outputs>
-        <collection name="history_files" type="list" label="${tool.name} on ${inputdata.name} (history file)">
+        <data name="work" format="tar" label="${tool.name} on ${casename} (workdir)"/>
+        <data name="restart" format="tar" label="${tool.name} on ${casename} (restart)"/>
+        <data name="rinfo" format="txt" label="${tool.name} on ${casename} (restart info)"/>
+        <data name="case_info" format="txt" label="${tool.name} on ${casename} (case info)"/>
+        <collection name="logs_files" type="list" label="${tool.name} on ${casename} (logfiles)">
+            <discover_datasets pattern="__name__" directory="logs_dir" visible="false" format="txt"/>
+        </collection>
+        <collection name="history_files" type="list" label="${tool.name} on ${casename} (history file)">
             <discover_datasets pattern="__name__" directory="output_dir" visible="true" format="netcdf"/>
         </collection>
-        <data name="atm_log" format="txt" label="${tool.name} on ${inputdata.name} (atm.log)"/>
-        <data name="cesm_log" format="txt" label="${tool.name} on ${inputdata.name} (cesm.log)"/>
-        <data name="cpl_log" format="txt" label="${tool.name} on ${inputdata.name} (cpl.log)"/>
-        <data name="lnd_log" format="txt" label="${tool.name} on ${inputdata.name} (lnd.log)"/>
-        <data name="rof_log" format="txt" label="${tool.name} on ${inputdata.name} (rof.log)"/>
-        <data name="restart" format="tar" label="${tool.name} on ${inputdata.name} (restart)"></data>
-        <data name="case_info" format="txt" label="${tool.name} on ${inputdata.name} (case info)"></data>
-        <data name="rinfo" format="txt" label="${tool.name} on ${inputdata.name} (restart info)"></data>
-        <data name="work" format="tar" label="${tool.name} on ${inputdata.name} (workdir)">
-        </data>
     </outputs>
     <tests>
         <test>
