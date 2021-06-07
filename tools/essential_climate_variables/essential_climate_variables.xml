@@ -7,8 +7,14 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
        export HOME=`pwd` &&
-       echo "xx \$COPERNICUS_CDSAPIRC_KEY_FILE xx" &&
-       cp \$COPERNICUS_CDSAPIRC_KEY_FILE .cdsapirc | true &&
+       #set $cdsapirc_file = os.environ.get('COPERNICUS_CDSAPIRC_KEY_FILE', '')
+       #if os.path.isfile(str($cdsapirc_file))
+           echo "xx $cdsapirc_file xx" &&
+           cp $cdsapirc_file .cdsapirc &&
+       #else
+           echo 'use tool cdsapirc file' &&
+           cp $__tool_directory__/cdsapirc.cfg .cdsapirc &&
+       #end if
        python3 '$__tool_directory__/ecv_retrieve.py'
             'ecv-for-climate-change' '$variable'
             --month '$month'
