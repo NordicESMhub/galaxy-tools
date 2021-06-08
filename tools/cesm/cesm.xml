@@ -1,5 +1,9 @@
-<tool id="cesm" name="CESM" version="2.1.3">
+<tool id="cesm" name="CESM" profile="20.05" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
     <description>Community Earth System Model</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="edam_ontology"/>
     <requirements>
         <requirement type="package" version="2.1.3">cesm</requirement>
         <requirement type="package" version="1.32">tar</requirement>
@@ -7,17 +11,19 @@
         <requirement type="package" version="3">python</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
+        #set galaxy_slots = os.getenv("GALAXY_SLOTS", 4)
         export HOME=`pwd` &&
         export USER='jovyan' &&
         export AR=x86_64-conda_cos6-linux-gnu-ar &&
         mkdir -p .cime &&
         cp '$__tool_directory__/config' .cime/config &&
         cp '$__tool_directory__/config_compilers.xml' '.cime/config_compilers.xml' &&
-        cp '$__tool_directory__/config_machines.xml' '.cime/config_machines.xml' &&
+        bash $__tool_directory__/create_config_machines.sh $galaxy_slots &&
+        mv 'config_machines_galaxy.xml' '.cime/config_machines.xml' &&
         mkdir inputdata &&
         mkdir output_dir &&
         mkdir logs_dir &&
-        mkdir usermods_dirs &&
+        mkdir -p usermods_dirs/SourceMods &&
         #if $input_type.tarball
             tar -xf '$input_type.inputdata' -C 'inputdata/' &&
         #else
@@ -25,17 +31,18 @@
                 bash $__tool_directory__/create_mapping.sh ${input_file} ${input_file.name} '$mapping' &&
             #end for
         #end if
-        #if str($adv.condi_user_mods).strip() == 'yes'
-            # should create a new type user_mods.tar
-            cd usermods_dirs &&
-            tar xf '$user_mods' &&
-            cd .. &&
+        #if $condi_user_mods.add_changes
+            #for $s in $condi_user_mods.usermods
+                echo "User mod ${s.srcmod} ${s.srcmod.element_identifier}" &&
+                ln -s '${s.srcmod}' usermods_dirs/SourceMods/${s.srcmod.element_identifier} &&
+            #end for
         #end if
-        create_newcase --case '$casename' --compset '$condi_type_run.compset' --machine galaxy 
-        #if str($adv.condi_user_mods).strip() == 'yes'
-            --user-mods-dir usermods_dirs
+        create_newcase --case '$casename' --compset '$condi_compset.compset' --machine galaxy 
+            --pesfile '$__tool_directory__/config_pes.xml'
+        #if $condi_user_mods.add_changes
+            --user-mods-dir \$HOME/usermods_dirs
         #end if
-            --res '$condi_type_run.resolution'  > $case_info  2>&1 && 
+            --res '$condi_compset.resolution'  > $case_info  2>&1 && 
         cd '$casename' &&
         ./case.setup  >> $case_info  2>&1   &&
         #if (str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch')
@@ -49,6 +56,9 @@
         ./xmlchange STOP_N=$adv_period.stopn &&
         ./xmlchange STOP_OPTION=$adv_period.stop_option &&
         ./xmlchange DOUT_S=FALSE &&
+        #if (str($adv_period.hist_option) != 'unset')
+            ./xmlchange HIST_OPTION=$adv_period.hist_option &&
+        #end if
         #if (str($adv_restart.restart_option) != 'unset')
             ./xmlchange REST_N=$adv_restart.restn &&
             ./xmlchange REST_OPTION=$adv_restart.restart_option &&
@@ -75,48 +85,60 @@
             cp '$adv_ice.user_nl_ice_customization' user_nl_ice &&
         #end if
         #for $i in $adv_lnd.inputs
-            ln -s '${i.input}' str(${i.input.element_identifier})
+            ln -s '${i.input}' ${i.input.element_identifier} &&
         #end for
         #for $i in $adv_atm.inputs
-            ln -s '${i.input}' str(${i.input.element_identifier})
+            ln -s '${i.input}' ${i.input.element_identifier} &&
         #end for
         #for $i in $adv_rof.inputs
-            ln -s '${i.input}' str(${i.input.element_identifier})
+            ln -s '${i.input}' ${i.input.element_identifier} &&
         #end for
         #for $i in $adv_glc.inputs
-            ln -s '${i.input}' str(${i.input.element_identifier})
+            ln -s '${i.input}' ${i.input.element_identifier} &&
         #end for
         #for $i in $adv_ocn.inputs
-            ln -s '${i.input}' str(${i.input.element_identifier})
+            ln -s '${i.input}' ${i.input.element_identifier} &&
         #end for
         #for $i in $adv_ice.inputs
-            ln -s '${i.input}' str(${i.input.element_identifier})
+            ln -s '${i.input}' ${i.input.element_identifier} &&
         #end for
         ./case.build >> $case_info  2>&1 &&
         #if (str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch')
             tar -xf '$adv_period.condi_type_run.restart' -C '../work/$casename/run/' && 
         #end if
         ( ./case.submit >> $case_info  2>&1 || true ) &&
-        (grep "MODEL EXECUTION HAS FINISHED" $case_info || ( echo "Case failed" && cd .. && tar cf $work work && exit 1 )) &&
+        ( grep "MODEL EXECUTION HAS FINISHED" $case_info || 
+           ( echo "Case failed" && cd .. && tar cf $work work && 
+             ( cat 'work/$casename/run/'atm.log.* > logs_dir/atm_log.txt 2>$case_info || echo "No atm logfile" )  &&
+             ( cat 'work/$casename/run/'cesm.log.* > logs_dir/cesm_log.txt 2>$case_info || echo "No cesm logfile" ) &&
+             ( cat 'work/$casename/run/'cpl.log.* > logs_dir/cpl_log.txt 2>$case_info || echo "No cpl logfile" )  &&
+             ( cat 'work/$casename/run/'lnd.log.* > logs_dir/lnd_log.txt 2>$case_info || echo "No lnd logfile" )  &&
+             ( cat 'work/$casename/run/'rof.log.* > logs_dir/rof_log.txt 2>$case_info || echo "No rof logfile" )  &&
+             exit 1 )
+        ) &&
         echo "CURRENT PATH" &&
         echo "\$HOME"       &&
         cd "\$HOME"         && 
         mkdir -p restart                              &&
-        ( cat 'work/$casename/run/rpointer'.* > $rinfo || echo "No restarts\n" ) &&
-        ( cp 'work/$casename/run/$casename'.*.r*.*.nc restart/ || echo "No netCDF restarts\n" ) &&
-        ( cp 'work/$casename/run/$casename'.*.r*.*.bin restart/ || echo "No bin restarts\n" )   &&
-        ( cp 'work/$casename/run/rpointer'.* restart/ || echo "no rpointer\n" ) &&
+        ( cat 'work/$casename/run/rpointer'.* > $rinfo 2>$case_info || echo "No restarts\n" ) &&
+        ( cp 'work/$casename/run/$casename'.*.r*.*.nc restart/ 2>$case_info || echo "No netCDF restarts\n" ) &&
+        ( cp 'work/$casename/run/$casename'.*.r*.*.bin restart/ 2>$case_info || echo "No bin restarts\n" )   &&
+        ( cp 'work/$casename/run/rpointer'.* restart/ 2>$case_info || echo "no rpointer\n" ) &&
         cd restart && 
         tar cvf $restart . &&
         cd "\$HOME"        && 
-        ( cp 'work/$casename/run/$casename'.*.h*.*.nc output_dir/ || echo "no netCDF outputs\n" ) &&
-        ( gunzip 'work/$casename/run/'*.log.* || echo "no compressed logs" ) && 
-        ( cat 'work/$casename/run/'atm.log.* > logs_dir/atm_log.txt || echo "No atm logfile" )  &&
-        ( cat 'work/$casename/run/'cesm.log.* > logs_dir/cesm_log.txt || echo "No cesm logfile" ) &&
-        ( cat 'work/$casename/run/'cpl.log.* > logs_dir/cpl_log.txt || echo "No cpl logfile" )  &&
-        ( cat 'work/$casename/run/'lnd.log.* > logs_dir/lnd_log.txt || echo "No lnd logfile" )  &&
-        ( cat 'work/$casename/run/'rof.log.* > logs_dir/rof_log.txt || echo "No rof logfile" )  &&
-        tar cf $work work  &&
+        ( cp 'work/$casename/run/$casename'.*.h*.*.nc output_dir/ 2>$case_info || echo "no netCDF outputs\n" ) &&
+        ( gunzip 'work/$casename/run/'*.log.* 2>$case_info || echo "no compressed logs" ) && 
+        ( cat 'work/$casename/run/'atm.log.* > logs_dir/atm_log.txt 2>$case_info || echo "No atm logfile" )  &&
+        ( cat 'work/$casename/run/'cesm.log.* > logs_dir/cesm_log.txt 2>$case_info || echo "No cesm logfile" ) &&
+        ( cat 'work/$casename/run/'cpl.log.* > logs_dir/cpl_log.txt 2>$case_info || echo "No cpl logfile" )  &&
+        ( cat 'work/$casename/run/'lnd.log.* > logs_dir/lnd_log.txt 2>$case_info || echo "No lnd logfile" )  &&
+        ( cat 'work/$casename/run/'rof.log.* > logs_dir/rof_log.txt 2>$case_info || echo "No rof logfile" )  &&
+        #if $save_workdir
+            tar cf $work work  &&
+        #else
+            touch $work &&
+        #end if
         echo "MODEL RUN COMPLETED"
     ]]></command>
     <inputs>
@@ -133,7 +155,7 @@
         <param name="casename" type="text" value="usecase" label="Name of your case">
             <validator type="regex" message="start with a letter and no blanks">^[A-Za-z][A-Za-z0-9]*</validator>
         </param>
-        <conditional name="condi_type_run">
+        <conditional name="condi_compset">
             <param name="compset" type="select" label="Model compset">
                 <option value="FKESSLER">FKESSLER</option>
                 <option value="F2000climo">F2000climo</option>
@@ -191,6 +213,7 @@
                 </param>
             </when>
 	</conditional>
+        <param name="save_workdir" type="boolean" optional="true" value="false" label="Save workdir as a tarball when successful run"/>
         <section name="adv_period" title="Customize the model run period" expanded="false">
 
             <conditional name="condi_type_run">
@@ -225,6 +248,22 @@
             <param name="stopn" type="integer" value="5" label="Provides a numerical count for STOP_OPTION."/>
             <param name="stop_option" type="select" label=" Sets the run length along with STOP_N and STOP_DATE">
                 <option value="ndays" selected="true">ndays</option>
+                <option value="none">none</option>
+                <option value="never">never</option>
+                <option value="nsteps">nsteps</option>
+                <option value="nseconds">nseconds</option>
+                <option value="nminutes">nminutes</option>
+                <option value="nhours">nhours</option>
+                <option value="nday">ndays</option>
+                <option value="nmonths">nmonths</option>
+                <option value="nyears">nyears</option>
+                <option value="date">date</option>
+                <option value="ifdays0">ifday0</option>
+                <option value="end">end</option>
+            </param>
+            <param name="hist_option" type="select" label=" Sets driver snapshot history file frequency (like REST_OPTION">
+                <option value="unset" selected="true">unset</option>
+                <option value="ndays">ndays</option>
                 <option value="none">none</option>
                 <option value="never">never</option>
                 <option value="nsteps">nsteps</option>
@@ -296,15 +335,15 @@
                <param name="input" type="data" format="netcdf" label="Input for OCN component"/>
             </repeat>
         </section>
-        <section name="adv" title="Advanced User customization" expanded="false">
-            <conditional name="condi_user_mods">
-                <param name="add_changes" type="boolean" value="false" label="user-modified source code"/> 
-                <when value="true">
-                    <param name="usermods" type="data" format="tar" label="SourceMods"/>
-               </when>
-               <when value="false"/>
-            </conditional>
-        </section>
+        <conditional name="condi_user_mods">
+            <param name="add_changes" type="boolean" value="false" label="user-modified source code"/> 
+            <when value="true">
+                <repeat name="usermods" title="SourceMods files">
+                    <param name="srcmod" type="data" format="txt" label="Modified source file"/>
+                </repeat>
+            </when>
+            <when value="false"/>
+        </conditional>
     </inputs>
     <outputs>
         <data name="work" format="tar" label="${tool.name} on ${casename} (workdir)"/>
@@ -320,98 +359,56 @@
     </outputs>
     <tests>
         <test>
-            <param name="inputdata" value="inputdata_test.tar" />
-            <param name="casename" value="test" />
-            <param name="resolution" value="1x1_ALP1" />
-            <param name="run_startdate" value="2000-01-01" />
-            <param name="stop_option" value="nsteps" />
-            <param name="stopn" value="1" />
-            <output name="atm_log" ftype="txt">
-              <assert_contents>
-                  <has_text text="(datm_comp_final) atm: end of main integration loop" />
-              </assert_contents>
-            </output>
-            <output name="cesm_log" ftype="txt">
-              <assert_contents>
-                  <has_text text="pes participating in computation for CLM" />
-              </assert_contents>
-            </output>
-            <output name="cpl_log" ftype="txt">
-              <assert_contents>
-                  <has_text text="SUCCESSFUL TERMINATION" />
-              </assert_contents>
-            </output>
-            <output name="lnd_log" ftype="txt">
-              <assert_contents>
-                  <has_text text="Successfully" />
-              </assert_contents>
-            </output>
-            <output name="rof_log" ftype="txt">
-              <assert_contents>
-                  <has_text text="MOSART model initialization" />
-              </assert_contents>
-            </output>
-            <output name="restart" ftype="tar" file="restart.tar" compare="sim_size" delta="100" />
-            <output name="rinfo" ftype="txt">
-              <assert_contents>
-                  <has_text text="datm.r.2000-01-01-01800.nc" />
-                  <has_text text="datm.rs1.2000-01-01-01800.bin" />
-                  <has_text text="cpl.r.2000-01-01-01800.nc" />
-                  <has_text text="clm2.r.2000-01-01-01800.nc" />
-              </assert_contents>
-            </output>
-            <output_collection name="history_files" count="0">
-            </output_collection>
+            <conditional name="input_type">
+                <param name="tarball" value="true" />
+                <param name="inputdata" value="inputdata_FKESSLER-2.1.3.tar" />
+            </conditional>
+            <param name="casename" value="FKESSLER" />
+            <conditional name="condi_compset">
+                <param name="compset" value="FKESSLER" />
+                <param name="resolution" value="f19_f19_mg17" />
+            </conditional>
+            <param name="save_workdir" value="false"/>
+            <section name="adv_period">
+                <conditional name="condi_type_run">
+                    <param name="run_type" value="startup"/>
+                </conditional>
+                <param name="stop_option" value="nsteps" />
+                <param name="stopn" value="1" />
+                <param name="hist_option" value="never" />
+            </section>
+            <section name="adv_restart">
+                <param name="restart_option" value="never"/>
+            </section>
+            <output name="case_info" ftype="txt" file="case_info.txt" compare="sim_size" delta="1000"/>
+            <collection name="logs_files">
+                <output name="atm_log" ftype="txt">
+                    <assert_contents>
+                        <has_text text="(datm_comp_final) atm: end of main integration loop" />
+                    </assert_contents>
+                </output>
+                <output name="cesm_log" ftype="txt">
+                    <assert_contents>
+                        <has_text text="pes participating in computation for CLM" />
+                    </assert_contents>
+                </output>
+                <output name="cpl_log" ftype="txt">
+                    <assert_contents>
+                        <has_text text="SUCCESSFUL TERMINATION" />
+                    </assert_contents>
+                </output>
+                <output name="lnd_log" ftype="txt">
+                    <assert_contents>
+                        <has_text text="Successfully" />
+                    </assert_contents>
+                </output>
+                <output name="rof_log" ftype="txt">
+                    <assert_contents>
+                        <has_text text="MOSART model initialization" />
+                    </assert_contents>
+                </output>
+            </collection>
         </test>
-        <test>
-            <param name="inputdata" value="inputdata_test.tar" />
-            <param name="casename" value="one_month" />
-            <param name="resolution" value="1x1_ALP1" />
-            <param name="stop_option" value="nmonths" />
-            <param name="stopn" value="1" />
-            <output name="atm_log" ftype="txt">
-              <assert_contents>
-                  <has_text text="(datm_comp_final) atm: end of main integration loop" />
-              </assert_contents>
-            </output>
-            <output name="cesm_log" ftype="txt">
-              <assert_contents>
-                  <has_text text="pes participating in computation for CLM" />
-              </assert_contents>
-            </output>
-            <output name="cpl_log" ftype="txt">
-              <assert_contents>
-                  <has_text text="SUCCESSFUL TERMINATION" />
-              </assert_contents>
-            </output>
-            <output name="lnd_log" ftype="txt">
-              <assert_contents>
-                  <has_text text="Successfully" />
-              </assert_contents>
-            </output>
-            <output name="rof_log" ftype="txt">
-              <assert_contents>
-                  <has_text text="MOSART model initialization" />
-              </assert_contents>
-            </output>
-            <output name="restart" ftype="tar">
-              <assert_contents>
-                  <has_size value="6348800" delta="5000"/>
-              </assert_contents>
-            </output>
-         
-            <output name="rinfo" ftype="txt">
-              <assert_contents>
-                  <has_text text="datm.r.2000-02-01-00000.nc" />
-                  <has_text text="datm.rs1.2000-02-01-00000.bin" />
-                  <has_text text="cpl.r.2000-02-01-00000.nc" />
-                  <has_text text="clm2.r.2000-02-01-00000.nc" />
-              </assert_contents>
-            </output>
-            <output_collection name="history_files" count="1">
-            </output_collection>
-        </test>
-
     </tests>
     <help><![CDATA[
 
@@ -427,17 +424,5 @@ Available component configurations and grids:
 	    - `Component Sets <https://www.cesm.ucar.edu/models/cesm2/config/2.1.3/compsets.html>`_
 	    - `Component Configuration Settings <https://www.cesm.ucar.edu/models/cesm2/settings/2.1.3/>`_
     ]]></help>
-    <citations>
-
-    </citations>
-    <edam_topics>
-      <edam_topic>topic_3855</edam_topic>
-      <edam_topic>topic_3318</edam_topic>
-      <edam_topic>topic_3050</edam_topic>
-      <edam_topic>topic_0610</edam_topic>
-    </edam_topics>
-    <edam_operations>
-      <edam_operation>operation_3946</edam_operation>
-      <edam_operation>operation_2426</edam_operation>
-    </edam_operations>
+    <expand macro="citations"/>
 </tool>
