@@ -13,6 +13,7 @@
     <command detect_errors="exit_code"><![CDATA[
         #set galaxy_slots = os.getenv("GALAXY_SLOTS", 4)
         export HOME=`pwd` &&
+        export USER='FAKEUSER' &&
         export AR=x86_64-conda_cos6-linux-gnu-ar &&
         mkdir -p .cime &&
         cp '$__tool_directory__/config' .cime/config &&
@@ -112,31 +113,26 @@
         ( ./case.submit >> $case_info  2>&1 || true ) &&
         ( grep "MODEL EXECUTION HAS FINISHED" $case_info || 
            ( echo "Case failed" && cd .. && tar cf $work work && 
-             ( cat 'work/$casename/run/'atm.log.* > logs_dir/atm_log.txt 2>$case_info || echo "No atm logfile" )  &&
-             ( cat 'work/$casename/run/'cesm.log.* > logs_dir/cesm_log.txt 2>$case_info || echo "No cesm logfile" ) &&
-             ( cat 'work/$casename/run/'cpl.log.* > logs_dir/cpl_log.txt 2>$case_info || echo "No cpl logfile" )  &&
-             ( cat 'work/$casename/run/'lnd.log.* > logs_dir/lnd_log.txt 2>$case_info || echo "No lnd logfile" )  &&
-             ( cat 'work/$casename/run/'rof.log.* > logs_dir/rof_log.txt 2>$case_info || echo "No rof logfile" )  &&
+             bash $__tool_directory__/save_logs.sh 'work/$casename/run/' logs_dir $case_info &&
              exit 1 )
         ) &&
         echo "CURRENT PATH" &&
         echo "\$HOME"       &&
         cd "\$HOME"         && 
         mkdir -p restart                              &&
-        ( cat 'work/$casename/run/rpointer'.* > $rinfo 2>$case_info || echo "No restarts\n" ) &&
-        ( cp 'work/$casename/run/$casename'.*.r*.*.nc restart/ 2>$case_info || echo "No netCDF restarts\n" ) &&
-        ( cp 'work/$casename/run/$casename'.*.r*.*.bin restart/ 2>$case_info || echo "No bin restarts\n" )   &&
-        ( cp 'work/$casename/run/rpointer'.* restart/ 2>$case_info || echo "no rpointer\n" ) &&
+        #if (str($adv_restart.restart_option) != 'never')
+            cat 'work/$casename/run/rpointer'.* > $rinfo 2>>$case_info  &&
+            cp 'work/$casename/run/$casename'.*.r*.*.nc restart/ 2>>$case_info &&
+            cp 'work/$casename/run/$casename'.*.r*.*.bin restart/ 2>>$case_info &&
+            cp 'work/$casename/run/rpointer'.* restart/ 2>>$case_info  &&
+        #end if
         cd restart && 
         tar cvf $restart . &&
         cd "\$HOME"        && 
-        ( cp 'work/$casename/run/$casename'.*.h*.*.nc output_dir/ 2>$case_info || echo "no netCDF outputs\n" ) &&
-        ( gunzip 'work/$casename/run/'*.log.* 2>$case_info || echo "no compressed logs" ) && 
-        ( cat 'work/$casename/run/'atm.log.* > logs_dir/atm_log.txt 2>$case_info || echo "No atm logfile" )  &&
-        ( cat 'work/$casename/run/'cesm.log.* > logs_dir/cesm_log.txt 2>$case_info || echo "No cesm logfile" ) &&
-        ( cat 'work/$casename/run/'cpl.log.* > logs_dir/cpl_log.txt 2>$case_info || echo "No cpl logfile" )  &&
-        ( cat 'work/$casename/run/'lnd.log.* > logs_dir/lnd_log.txt 2>$case_info || echo "No lnd logfile" )  &&
-        ( cat 'work/$casename/run/'rof.log.* > logs_dir/rof_log.txt 2>$case_info || echo "No rof logfile" )  &&
+        #if (str($adv_period.hist_option) != 'never')
+            cp 'work/$casename/run/$casename'.*.h*.*.nc output_dir/ 2>>$case_info &&
+        #end if
+        bash $__tool_directory__/save_logs.sh 'work/$casename/run/' logs_dir $case_info &&
         #if $save_workdir
             tar cf $work work  &&
         #else
@@ -148,7 +144,7 @@
         <conditional name="input_type">
             <param name="tarball" type="boolean" value="false" label="Provide inputdata as a tarball"/>
             <when value="true">
-                <param name="inputdata" type="data" format='tar' label="inputdata for running CESM (tarball)"></param>
+                <param name="inputdata" type="data" format='tar' label="inputdata for running CESM (tarball)" />
             </when>
             <when value="false">
                 <param name="input_data_collection" format="netcdf" type="data_collection" collection_type="list" label="Select input data" help="Select all the netCDF files you would need for running the chosen compset and resolution"/>
@@ -181,6 +177,11 @@
                     <option value="f09_f09_mg17">f09_f09_mg17</option>
                     <option value="f19_g17 --run-unsupported">f19_g17</option>
                     <option value="f19_f19_mg17 --run-unsupported">f19_f19_mg17</option>
+                </param>
+            </when>
+            <when value="FHIST">
+                <param name="resolution" type="select" label="Model resolution">
+                    <option value="f09_f09_mg17">f09_f09_mg17</option>
                 </param>
             </when>
             <when value="QPC6">
@@ -385,33 +386,14 @@
                 <param name="restart_option" value="never"/>
             </section>
             <output name="case_info" ftype="txt" file="case_info.txt" compare="sim_size" delta="10"/>
-            <collection name="logs_files">
-                <output name="atm_log" ftype="txt">
-                    <assert_contents>
-                        <has_text text="(datm_comp_final) atm: end of main integration loop" />
-                    </assert_contents>
-                </output>
-                <output name="cesm_log" ftype="txt">
-                    <assert_contents>
-                        <has_text text="pes participating in computation for CLM" />
-                    </assert_contents>
-                </output>
-                <output name="cpl_log" ftype="txt">
-                    <assert_contents>
-                        <has_text text="SUCCESSFUL TERMINATION" />
-                    </assert_contents>
-                </output>
-                <output name="lnd_log" ftype="txt">
-                    <assert_contents>
-                        <has_text text="Successfully" />
-                    </assert_contents>
-                </output>
-                <output name="rof_log" ftype="txt">
-                    <assert_contents>
-                        <has_text text="MOSART model initialization" />
-                    </assert_contents>
-                </output>
-            </collection>
+            <output_collection name="logs_files" type="list">
+                <element name="atm.txt" ftype="txt" file="atm_log.txt" compare="sim_size" delta="10">
+                </element>
+                <element name="cesm.txt" ftype="txt" file="cesm_log.txt" compare="sim_size" delta="10">
+                </element>
+                <element name="cpl.txt" ftype="txt" file="cpl_log.txt" compare="sim_size" delta="10">
+                </element>
+            </output_collection>
         </test>
     </tests>
     <help><![CDATA[
