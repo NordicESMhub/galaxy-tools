@@ -13,7 +13,6 @@
     <command detect_errors="exit_code"><![CDATA[
         #set galaxy_slots = os.getenv("GALAXY_SLOTS", 4)
         export HOME=`pwd` &&
-        export USER='jovyan' &&
         export AR=x86_64-conda_cos6-linux-gnu-ar &&
         mkdir -p .cime &&
         cp '$__tool_directory__/config' .cime/config &&
@@ -385,7 +384,7 @@
             <section name="adv_restart">
                 <param name="restart_option" value="never"/>
             </section>
-            <output name="case_info" ftype="txt" file="case_info.txt" compare="sim_size" delta="1000"/>
+            <output name="case_info" ftype="txt" file="case_info.txt" compare="sim_size" delta="10"/>
             <collection name="logs_files">
                 <output name="atm_log" ftype="txt">
                     <assert_contents>
