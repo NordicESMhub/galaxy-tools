@@ -1,0 +1,10 @@
+categories:
+- Climate Analysis
+description: Copernicus Climate Change Service (C3S)
+homepage_url: https://cds.climate.copernicus.eu/cdsapp#!/search?type=dataset
+long_description: |
+  This tool is a wrapper for retrieving data from the Copernicus Climate change Service (C3S). User can create correct API request by using the C3S data search service where the request can be shown and copy/paste (use "Show API request").
+name: c3s
+owner: climate
+remote_repository_url: https://github.com/NordicESMhub/galaxy-tools/tree/master/tools/c3s
+type: unrestricted
