@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
+GALAXY_SLOTS=$1
+
 echo "===================================================================="
 echo "     Create Config machine for CESM                                 "
 echo "     Tool will be running with $GALAXY_SLOTS processors (MPI tasks) "
 echo "===================================================================="
 
-GALAXY_SLOTS=$1
 
 cat > config_machines_galaxy.xml << EOF
 <?xml version="1.0"?>
@@ -51,3 +52,5 @@ cat > config_machines_galaxy.xml << EOF
   </machine>
 </config_machines>
 EOF
+
+echo "Configuration machine created."
