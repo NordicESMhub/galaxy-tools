@@ -385,20 +385,20 @@
             <section name="adv_restart">
                 <param name="restart_option" value="never"/>
             </section>
-            <output name="case_info" ftype="txt" file="case_info.txt" compare="sim_size" delta="50">
+            <output name="case_info" ftype="txt" file="case_info.txt">
                     <assert_contents>
                         <has_text text="MODEL EXECUTION HAS FINISHED" />
                     </assert_contents>
             </output>
             <output_collection name="logs_files" type="list">
-                <element name="atm_log.txt" ftype="txt" file="atm_log.txt" compare="sim_size" delta="10">
+                <element name="atm_log.txt" ftype="txt" file="atm_log.txt">
                     <assert_contents>
                         <has_text text="END OF MODEL RUN" />
                     </assert_contents>
                 </element>
                 <element name="cesm_log.txt" ftype="txt" file="cesm_log.txt" compare="sim_size" delta="50">
                 </element>
-                <element name="cpl_log.txt" ftype="txt" file="cpl_log.txt" compare="sim_size" delta="10">
+                <element name="cpl_log.txt" ftype="txt" file="cpl_log.txt">
                     <assert_contents>
                         <has_text text="SUCCESSFUL TERMINATION" />
                     </assert_contents>
