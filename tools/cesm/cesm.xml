@@ -385,7 +385,11 @@
             <section name="adv_restart">
                 <param name="restart_option" value="never"/>
             </section>
-            <output name="case_info" ftype="txt" file="case_info.txt" compare="sim_size" delta="10"/>
+            <output name="case_info" ftype="txt" file="case_info.txt" compare="sim_size" delta="50">
+                    <assert_contents>
+                        <has_text text="MODEL EXECUTION HAS FINISHED" />
+                    </assert_contents>
+            </output>
             <output_collection name="logs_files" type="list">
                 <element name="atm_log.txt" ftype="txt" file="atm_log.txt" compare="sim_size" delta="10">
                     <assert_contents>
