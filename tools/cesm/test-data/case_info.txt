@@ -10,7 +10,7 @@ GLC component is Stub glacier (land ice) component
 WAV component is Stub wave component
 ESP component is 
 Compset specific settings: name is SSTICE_DATA_FILENAME and value is $DIN_LOC_ROOT/atm/cam/sst/sst_HadOIBl_bc_1x1_2000climo_c180511.nc
-Could not find machine match for 'ae0d143736e3' or 'ae0d143736e3'
+Could not find machine match for '8d9a28f7d4de' or '8d9a28f7d4de'
 Machine is galaxy
 Pes setting: grid          is a%ne30np4_l%null_oi%null_r%null_g%null_w%null_m%gx1v6 
 Pes setting: compset       is 2000_CAM%KESSLER_SLND_SICE_SOCN_SROF_SGLC_SWAV 
@@ -28,9 +28,9 @@ No charge_account info available, using value from PROJECT
 No project info available
 WARNING: No cesm Model version found.
 Batch_system_type is none
- Creating Case directory /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/FKESSLER
+ Creating Case directory /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/FKESSLER
 Setting resource.RLIMIT_STACK to -1 from (8388608, -1)
-/opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/FKESSLER/env_mach_specific.xml already exists, delete to replace
+/opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/FKESSLER/env_mach_specific.xml already exists, delete to replace
 Creating batch scripts
 Writing case.run script from input template /usr/local/cime/config/cesm/machines/template.case.run
 Creating file .case.run
@@ -39,7 +39,7 @@ Creating file case.st_archive
 Creating user_nl_xxx files for components and cpl
 If an old case build already exists, might want to run 'case.build --clean' before building
 You can now run './preview_run' to get more info on how your case will be run
-Building case in directory /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/FKESSLER
+Building case in directory /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/FKESSLER
 sharedlib_only is False
 model_only is False
 Setting resource.RLIMIT_STACK to -1 from (8388608, -1)
@@ -47,7 +47,7 @@ Generating component namelists as part of build
 Creating component namelists
    Calling /usr/local/components/cam//cime_config/buildnml
      ...calling cam buildcpp to set build time options
-CAM namelist copy: file1 /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/FKESSLER/Buildconf/camconf/atm_in file2 /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/work/FKESSLER/run/atm_in 
+CAM namelist copy: file1 /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/FKESSLER/Buildconf/camconf/atm_in file2 /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/work/FKESSLER/run/atm_in 
    Calling /usr/local/cime/src/components/stub_comps/slnd/cime_config/buildnml
    Calling /usr/local/cime/src/components/stub_comps/sice/cime_config/buildnml
    Calling /usr/local/cime/src/components/stub_comps/socn/cime_config/buildnml
@@ -57,42 +57,42 @@ CAM namelist copy: file1 /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/wo
    Calling /usr/local/cime/src/components/stub_comps/sesp/cime_config/buildnml
    Calling /usr/local/cime/src/drivers/mct/cime_config/buildnml
 Finished creating component namelists
-Building gptl with output to file /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/work/FKESSLER/bld/gptl.bldlog.210609-221739
+Building gptl with output to file /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/work/FKESSLER/bld/gptl.bldlog.210610-090728
    Calling /usr/local/cime/src/build_scripts/buildlib.gptl
 Component gptl build complete with 2 warnings
-Building mct with output to file /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/work/FKESSLER/bld/mct.bldlog.210609-221739
+Building mct with output to file /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/work/FKESSLER/bld/mct.bldlog.210610-090728
    Calling /usr/local/cime/src/build_scripts/buildlib.mct
-Building pio with output to file /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/work/FKESSLER/bld/pio.bldlog.210609-221739
+Building pio with output to file /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/work/FKESSLER/bld/pio.bldlog.210610-090728
    Calling /usr/local/cime/src/build_scripts/buildlib.pio
-Building csm_share with output to file /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/work/FKESSLER/bld/csm_share.bldlog.210609-221739
+Building csm_share with output to file /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/work/FKESSLER/bld/csm_share.bldlog.210610-090728
    Calling /usr/local/cime/src/build_scripts/buildlib.csm_share
 Component csm_share build complete with 3 warnings
-Building atm with output to /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/work/FKESSLER/bld/atm.bldlog.210609-221739
-Building lnd with output to /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/work/FKESSLER/bld/lnd.bldlog.210609-221739
-Building ice with output to /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/work/FKESSLER/bld/ice.bldlog.210609-221739
-Building ocn with output to /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/work/FKESSLER/bld/ocn.bldlog.210609-221739
-Building rof with output to /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/work/FKESSLER/bld/rof.bldlog.210609-221739
-Building glc with output to /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/work/FKESSLER/bld/glc.bldlog.210609-221739
-Building wav with output to /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/work/FKESSLER/bld/wav.bldlog.210609-221739
-Building esp with output to /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/work/FKESSLER/bld/esp.bldlog.210609-221739
-slnd built in 18.850753 seconds
-swav built in 18.709762 seconds
-sice built in 18.949760 seconds
-sglc built in 19.199708 seconds
-socn built in 19.451799 seconds
-srof built in 19.461236 seconds
-sesp built in 19.494736 seconds
+Building atm with output to /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/work/FKESSLER/bld/atm.bldlog.210610-090728
+Building lnd with output to /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/work/FKESSLER/bld/lnd.bldlog.210610-090728
+Building ice with output to /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/work/FKESSLER/bld/ice.bldlog.210610-090728
+Building ocn with output to /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/work/FKESSLER/bld/ocn.bldlog.210610-090728
+Building rof with output to /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/work/FKESSLER/bld/rof.bldlog.210610-090728
+Building glc with output to /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/work/FKESSLER/bld/glc.bldlog.210610-090728
+Building wav with output to /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/work/FKESSLER/bld/wav.bldlog.210610-090728
+Building esp with output to /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/work/FKESSLER/bld/esp.bldlog.210610-090728
+socn built in 19.047444 seconds
+srof built in 19.346783 seconds
+slnd built in 19.459242 seconds
+sesp built in 19.410775 seconds
+sice built in 19.949074 seconds
+sglc built in 19.996156 seconds
+swav built in 19.901150 seconds
 Component atm build complete with 5 warnings
-cam built in 397.423783 seconds
-Building cesm with output to /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/work/FKESSLER/bld/cesm.bldlog.210609-221739 
+cam built in 399.094755 seconds
+Building cesm with output to /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/work/FKESSLER/bld/cesm.bldlog.210610-090728 
 Component cesm exe build complete with 3 warnings
-Time spent not building: 0.700603 sec
-Time spent building: 519.179208 sec
+Time spent not building: 0.552427 sec
+Time spent building: 522.195230 sec
 MODEL BUILD HAS FINISHED SUCCESSFULLY
 Setting resource.RLIMIT_STACK to -1 from (8388608, -1)
 Creating component namelists
    Calling /usr/local/components/cam//cime_config/buildnml
-CAM namelist copy: file1 /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/FKESSLER/Buildconf/camconf/atm_in file2 /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/work/FKESSLER/run/atm_in 
+CAM namelist copy: file1 /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/FKESSLER/Buildconf/camconf/atm_in file2 /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/work/FKESSLER/run/atm_in 
    Calling /usr/local/cime/src/components/stub_comps/slnd/cime_config/buildnml
    Calling /usr/local/cime/src/components/stub_comps/sice/cime_config/buildnml
    Calling /usr/local/cime/src/components/stub_comps/socn/cime_config/buildnml
@@ -111,10 +111,10 @@ submit_jobs case.run
 Submit job case.run
 Starting job script case.run
 Setting resource.RLIMIT_STACK to -1 from (-1, -1)
-Generating namelists for /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/FKESSLER
+Generating namelists for /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/FKESSLER
 Creating component namelists
    Calling /usr/local/components/cam//cime_config/buildnml
-CAM namelist copy: file1 /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/FKESSLER/Buildconf/camconf/atm_in file2 /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/work/FKESSLER/run/atm_in 
+CAM namelist copy: file1 /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/FKESSLER/Buildconf/camconf/atm_in file2 /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/work/FKESSLER/run/atm_in 
    Calling /usr/local/cime/src/components/stub_comps/slnd/cime_config/buildnml
    Calling /usr/local/cime/src/components/stub_comps/sice/cime_config/buildnml
    Calling /usr/local/cime/src/components/stub_comps/socn/cime_config/buildnml
@@ -125,13 +125,13 @@ CAM namelist copy: file1 /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/wo
    Calling /usr/local/cime/src/drivers/mct/cime_config/buildnml
 Finished creating component namelists
 -------------------------------------------------------------------------
- - Prestage required restarts into /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/work/FKESSLER/run
- - Case input data directory (DIN_LOC_ROOT) is /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/inputdata 
+ - Prestage required restarts into /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/work/FKESSLER/run
+ - Case input data directory (DIN_LOC_ROOT) is /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/inputdata 
  - Checking for required input datasets in DIN_LOC_ROOT
 -------------------------------------------------------------------------
-2021-06-09 22:26:20 MODEL EXECUTION BEGINS HERE
-run command is mpiexec  -np 4 /opt/uio/tmp/tmpwx5ma4c_/job_working_directory/000/2/working/work/FKESSLER/bld/cesm.exe  >> cesm.log.$LID 2>&1  
-2021-06-09 22:35:14 MODEL EXECUTION HAS FINISHED
+2021-06-10 09:16:12 MODEL EXECUTION BEGINS HERE
+run command is mpiexec  -np 4 /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/work/FKESSLER/bld/cesm.exe  >> cesm.log.$LID 2>&1  
+2021-06-10 09:25:10 MODEL EXECUTION HAS FINISHED
 check for resubmit
 dout_s False 
 mach galaxy 

@@ -387,11 +387,17 @@
             </section>
             <output name="case_info" ftype="txt" file="case_info.txt" compare="sim_size" delta="10"/>
             <output_collection name="logs_files" type="list">
-                <element name="atm.txt" ftype="txt" file="atm_log.txt" compare="sim_size" delta="10">
+                <element name="atm_log.txt" ftype="txt" file="atm_log.txt">
+                    <assert_contents>
+                        <has_text text="END OF MODEL RUN" />
+                    </assert_contents>
                 </element>
-                <element name="cesm.txt" ftype="txt" file="cesm_log.txt" compare="sim_size" delta="10">
+                <element name="cesm_log.txt" ftype="txt" file="cesm_log.txt" compare="sim_size" delta="50">
                 </element>
-                <element name="cpl.txt" ftype="txt" file="cpl_log.txt" compare="sim_size" delta="10">
+                <element name="cpl_log.txt" ftype="txt" file="cpl_log.txt">
+                    <assert_contents>
+                        <has_text text="SUCCESSFUL TERMINATION" />
+                    </assert_contents>
                 </element>
             </output_collection>
         </test>

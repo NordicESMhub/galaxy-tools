@@ -16,7 +16,7 @@ for log_type in atm cesm cpl lnd rof; do
         if [[ $nb -gt 0 ]]; then 
             gunzip $1/${log_type}.log.*.gz
         fi
-        cat $1/${log_type}.* > $2/${log_type}.txt 2>>$INFO_FILE
+        cat $1/${log_type}.* > $2/${log_type}_log.txt 2>>$INFO_FILE
     fi
 done
 
