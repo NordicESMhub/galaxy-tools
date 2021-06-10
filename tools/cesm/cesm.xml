@@ -121,10 +121,8 @@
         cd "\$HOME"         && 
         mkdir -p restart                              &&
         #if (str($adv_restart.restart_option) != 'never')
+            bash $__tool_directory__/save_restart.sh 'work/$casename/run/' $casename restart $case_info &&
             cat 'work/$casename/run/rpointer'.* > $rinfo 2>>$case_info  &&
-            cp 'work/$casename/run/$casename'.*.r*.*.nc restart/ 2>>$case_info &&
-            cp 'work/$casename/run/$casename'.*.r*.*.bin restart/ 2>>$case_info &&
-            cp 'work/$casename/run/rpointer'.* restart/ 2>>$case_info  &&
         #end if
         cd restart && 
         tar cvf $restart . &&
@@ -266,7 +264,7 @@
                 <option value="ifdays0">ifday0</option>
                 <option value="end">end</option>
             </param>
-            <param name="hist_option" type="select" label=" Sets driver snapshot history file frequency (like REST_OPTION">
+            <param name="hist_option" type="select" label="Sets driver snapshot history file frequency">
                 <option value="unset" selected="true">unset</option>
                 <option value="ndays">ndays</option>
                 <option value="none">none</option>
@@ -385,20 +383,20 @@
             <section name="adv_restart">
                 <param name="restart_option" value="never"/>
             </section>
-            <output name="case_info" ftype="txt" file="case_info.txt">
+            <output name="case_info" ftype="txt" file="case_info.txt" compare="sim_size" delta="1000">
                     <assert_contents>
                         <has_text text="MODEL EXECUTION HAS FINISHED" />
                     </assert_contents>
             </output>
             <output_collection name="logs_files" type="list">
-                <element name="atm_log.txt" ftype="txt" file="atm_log.txt">
+                <element name="atm_log.txt" ftype="txt" file="atm_log.txt" compare="sim_size" delta="1000">
                     <assert_contents>
                         <has_text text="END OF MODEL RUN" />
                     </assert_contents>
                 </element>
-                <element name="cesm_log.txt" ftype="txt" file="cesm_log.txt" compare="sim_size" delta="50">
+                <element name="cesm_log.txt" ftype="txt" file="cesm_log.txt" compare="sim_size" delta="1000">
                 </element>
-                <element name="cpl_log.txt" ftype="txt" file="cpl_log.txt">
+                <element name="cpl_log.txt" ftype="txt" file="cpl_log.txt" compare="sim_size" delta="1000">
                     <assert_contents>
                         <has_text text="SUCCESSFUL TERMINATION" />
                     </assert_contents>
