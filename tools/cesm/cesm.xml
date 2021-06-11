@@ -48,7 +48,6 @@
             --res $condi_compset.resolution  > $case_info  2>&1 && 
         echo "create done" &&
         cd '$casename' &&
-        ./case.setup  >> $case_info  2>&1   &&
         #if (str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch')
             ./xmlchange RUN_TYPE=$adv_period.condi_type_run.run_type &&
             ./xmlchange RUN_REFDATE=$adv_period.condi_type_run.run_refdate &&
@@ -68,13 +67,13 @@
             ./xmlchange REST_OPTION=$adv_restart.restart_option &&
         #end if
         #if ($adv_restart.interim_files)
-            ./xmlchange DOUT_S_SAVE_INTERIM_RESTART_FILES=TRUE
+            ./xmlchange DOUT_S_SAVE_INTERIM_RESTART_FILES=TRUE &&
         #end if
         #if (str($adv_lnd.user_nl_lnd_customization) != 'None')
-            cp '$adv_lnd.user_nl_lnd_customization' user_nl_lnd &&
+            cp '$adv_lnd.user_nl_lnd_customization' user_nl_clm &&
         #end if
         #if (str($adv_atm.user_nl_atm_customization) != 'None')
-            cp '$adv_atm.user_nl_atm_customization' user_nl_atm &&
+            cp '$adv_atm.user_nl_atm_customization' user_nl_cam &&
         #end if
         #if (str($adv_rof.user_nl_rof_customization) != 'None')
             cp '$adv_rof.user_nl_rof_customization' user_nl_rof &&
@@ -86,7 +85,7 @@
             cp '$adv_ocn.user_nl_ocn_customization' user_nl_ocn &&
         #end if
         #if (str($adv_ice.user_nl_ice_customization) != 'None')
-            cp '$adv_ice.user_nl_ice_customization' user_nl_ice &&
+            cp '$adv_ice.user_nl_ice_customization' user_nl_cice &&
         #end if
         #for $i in $adv_lnd.inputs
             ln -s '${i.input}' ${i.input.element_identifier} &&
@@ -106,6 +105,7 @@
         #for $i in $adv_ice.inputs
             ln -s '${i.input}' ${i.input.element_identifier} &&
         #end for
+        ./case.setup  >> $case_info  2>&1   &&
         ./case.build >> $case_info  2>&1 &&
         #if (str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch')
             tar -xf '$adv_period.condi_type_run.restart' -C '../work/$casename/run/' && 
@@ -316,7 +316,7 @@
         </section>
         <section name="adv_atm" title="Atmopshere namelist user customization" expanded="false">
             <param name="user_nl_atm_customization" type="data" format="txt" optional="true" label="ATM User namelist (atm_in)"/>
-            <repeat name="inputs" title="River-runoff Customized Input Files">
+            <repeat name="inputs" title="Atmosphere Customized Input Files">
                <param name="input" type="data" format="netcdf" label="Input for ATM component"/>
             </repeat>
         </section>
