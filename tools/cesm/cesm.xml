@@ -403,6 +403,51 @@
                 </element>
             </output_collection>
         </test>
+        <test>
+            <conditional name="input_type">
+                <param name="tarball" value="true" />
+                <param name="inputdata" ftype="tar" value="inputdata_FKESSLER_ne30_g16_cesm2.1.3.tar" />
+            </conditional>
+            <param name="casename" value="FKESSLER" />
+            <conditional name="condi_compset">
+                <param name="compset" value="FKESSLER" />
+                <param name="resolution" value="ne30_g16 --run-unsupported" />
+            </conditional>
+            <param name="save_workdir" value="false"/>
+            <section name="adv_period">
+                <conditional name="condi_type_run">
+                    <param name="run_type" value="startup"/>
+                </conditional>
+                <param name="stop_option" value="nsteps" />
+                <param name="stopn" value="1" />
+                <param name="hist_option" value="never" />
+            </section>
+            <section name="adv_restart">
+                <param name="restart_option" value="never"/>
+            </section>
+            <section name="adv_atm">
+                <param name="user_nl_atm_customization" ftype="txt" value="user_nl_cam" />
+            </section>
+            <output name="case_info" ftype="txt" file="case_info.txt" compare="sim_size" delta="1000">
+                    <assert_contents>
+                        <has_text text="MODEL EXECUTION HAS FINISHED" />
+                    </assert_contents>
+            </output>
+            <output_collection name="logs_files" type="list">
+                <element name="atm_log.txt" ftype="txt" file="atm_log.txt" compare="sim_size" delta="1000">
+                    <assert_contents>
+                        <has_text text="END OF MODEL RUN" />
+                    </assert_contents>
+                </element>
+                <element name="cesm_log.txt" ftype="txt" file="cesm_log.txt" compare="sim_size" delta="1000">
+                </element>
+                <element name="cpl_log.txt" ftype="txt" file="cpl_log.txt" compare="sim_size" delta="1000">
+                    <assert_contents>
+                        <has_text text="SUCCESSFUL TERMINATION" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
     </tests>
     <help><![CDATA[
 
