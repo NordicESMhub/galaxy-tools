@@ -11,14 +11,13 @@
         <requirement type="package" version="3">python</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        #set galaxy_slots = os.getenv("GALAXY_SLOTS", 4)
         export HOME=`pwd` &&
         export USER='FAKEUSER' &&
         export AR=x86_64-conda_cos6-linux-gnu-ar &&
         mkdir -p .cime &&
         cp '$__tool_directory__/config' .cime/config &&
         cp '$__tool_directory__/config_compilers.xml' '.cime/config_compilers.xml' &&
-        bash $__tool_directory__/create_config_machines.sh $galaxy_slots &&
+        bash '$__tool_directory__/create_config_machines.sh' \${GALAXY_SLOTS:-4} &&
         mv 'config_machines_galaxy.xml' '.cime/config_machines.xml' &&
         mkdir inputdata &&
         mkdir output_dir &&
@@ -30,13 +29,13 @@
         #else
             echo "Getting inputdata from collection" &&
             #for $input_file in $input_type.input_data_collection
-                bash $__tool_directory__/create_mapping.sh ${input_file} ${input_file.name} '$mapping' &&
+                bash '$__tool_directory__/create_mapping.sh' '${input_file}' '${input_file.element_identifier}' '$mapping' &&
             #end for
         #end if
         #if $condi_user_mods.add_changes
             #for $s in $condi_user_mods.usermods
                 echo "User mod ${s.srcmod} ${s.srcmod.element_identifier}" &&
-                ln -s '${s.srcmod}' usermods_dirs/SourceMods/${s.srcmod.element_identifier} &&
+                ln -s '${s.srcmod}' 'usermods_dirs/SourceMods/${s.srcmod.element_identifier}' &&
             #end for
         #end if
         echo "create case" &&
@@ -48,43 +47,43 @@
             --res $condi_compset.resolution  > $case_info  2>&1 && 
         echo "create done" &&
         cd '$casename' &&
-        #if (str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch')
+        #if str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch':
             ./xmlchange RUN_TYPE=$adv_period.condi_type_run.run_type &&
             ./xmlchange RUN_REFDATE=$adv_period.condi_type_run.run_refdate &&
             ./xmlchange RUN_REFCASE=$adv_period.condi_type_run.run_refcase &&
         #end if
-        #if ((str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'startup') and ($adv_period.condi_type_run.run_startdate != ''))
+        #if ((str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'startup') and $adv_period.condi_type_run.run_startdate != '')
             ./xmlchange RUN_STARTDATE=$adv_period.condi_type_run.run_startdate &&
         #end if
         ./xmlchange STOP_N=$adv_period.stopn &&
         ./xmlchange STOP_OPTION=$adv_period.stop_option &&
         ./xmlchange DOUT_S=FALSE &&
-        #if (str($adv_period.hist_option) != 'unset')
+        #if str($adv_period.hist_option) != 'unset'
             ./xmlchange HIST_OPTION=$adv_period.hist_option &&
         #end if
-        #if (str($adv_restart.restart_option) != 'unset')
+        #if str($adv_restart.restart_option) != 'unset'
             ./xmlchange REST_N=$adv_restart.restn &&
             ./xmlchange REST_OPTION=$adv_restart.restart_option &&
         #end if
-        #if ($adv_restart.interim_files)
+        #if $adv_restart.interim_files
             ./xmlchange DOUT_S_SAVE_INTERIM_RESTART_FILES=TRUE &&
         #end if
-        #if (str($adv_lnd.user_nl_lnd_customization) != 'None')
+        #if str($adv_lnd.user_nl_lnd_customization) != 'None'
             cp '$adv_lnd.user_nl_lnd_customization' user_nl_clm &&
         #end if
-        #if (str($adv_atm.user_nl_atm_customization) != 'None')
+        #if str($adv_atm.user_nl_atm_customization) != 'None'
             cp '$adv_atm.user_nl_atm_customization' user_nl_cam &&
         #end if
-        #if (str($adv_rof.user_nl_rof_customization) != 'None')
+        #if str($adv_rof.user_nl_rof_customization) != 'None'
             cp '$adv_rof.user_nl_rof_customization' user_nl_rof &&
         #end if
-        #if (str($adv_glc.user_nl_glc_customization) != 'None')
+        #if str($adv_glc.user_nl_glc_customization) != 'None'
             cp '$adv_glc.user_nl_glc_customization' user_nl_cism &&
         #end if
-        #if (str($adv_ocn.user_nl_ocn_customization) != 'None')
+        #if str($adv_ocn.user_nl_ocn_customization) != 'None'
             cp '$adv_ocn.user_nl_ocn_customization' user_nl_ocn &&
         #end if
-        #if (str($adv_ice.user_nl_ice_customization) != 'None')
+        #if str($adv_ice.user_nl_ice_customization) != 'None'
             cp '$adv_ice.user_nl_ice_customization' user_nl_cice &&
         #end if
         #for $i in $adv_lnd.inputs
@@ -105,15 +104,15 @@
         #for $i in $adv_ice.inputs
             ln -s '${i.input}' ${i.input.element_identifier} &&
         #end for
-        ./case.setup  >> $case_info  2>&1   &&
-        ./case.build >> $case_info  2>&1 &&
-        #if (str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch')
+        ./case.setup >> '$case_info'  2>&1 &&
+        ./case.build >> '$case_info'  2>&1 &&
+        #if str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch':
             tar -xf '$adv_period.condi_type_run.restart' -C '../work/$casename/run/' && 
         #end if
-        ( ./case.submit >> $case_info  2>&1 || true ) &&
-        ( grep "MODEL EXECUTION HAS FINISHED" $case_info || 
+        ( ./case.submit >> '$case_info'  2>&1 || true ) &&
+        ( grep "MODEL EXECUTION HAS FINISHED" '$case_info' || 
            ( echo "Case failed" && cd .. && tar cf $work work && 
-             bash $__tool_directory__/save_logs.sh 'work/$casename/run/' logs_dir $case_info &&
+             bash '$__tool_directory__/save_logs.sh' 'work/$casename/run/' logs_dir '$case_info' &&
              exit 1 )
         ) &&
         echo "CURRENT PATH" &&
@@ -121,20 +120,20 @@
         cd "\$HOME"         && 
         mkdir -p restart                              &&
         #if (str($adv_restart.restart_option) != 'never')
-            bash $__tool_directory__/save_restart.sh 'work/$casename/run/' $casename restart $case_info &&
-            cat 'work/$casename/run/rpointer'.* > $rinfo 2>>$case_info  &&
+            bash '$__tool_directory__/save_restart.sh' 'work/$casename/run/' $casename restart '$case_info' &&
+            cat 'work/$casename/run/rpointer'.* > $rinfo 2>> '$case_info'  &&
         #end if
         cd restart && 
         tar cvf $restart . &&
         cd "\$HOME"        && 
         #if (str($adv_period.hist_option) != 'never')
-            cp 'work/$casename/run/$casename'.*.h*.*.nc output_dir/ 2>>$case_info &&
+            cp 'work/$casename/run/$casename'.*.h*.*.nc output_dir/ 2>> '$case_info' &&
         #end if
-        bash $__tool_directory__/save_logs.sh 'work/$casename/run/' logs_dir $case_info &&
+        bash '$__tool_directory__/save_logs.sh' 'work/$casename/run/' logs_dir '$case_info' &&
         #if $save_workdir
-            tar cf $work work  &&
+            tar cf '$work' work  &&
         #else
-            touch $work &&
+            touch '$work' &&
         #end if
         echo "MODEL RUN COMPLETED"
     ]]></command>
@@ -216,9 +215,8 @@
                 </param>
             </when>
 	</conditional>
-        <param name="save_workdir" type="boolean" optional="true" value="false" label="Save workdir as a tarball when successful run"/>
+        <param name="save_workdir" type="boolean" value="false" label="Save workdir as a tarball when successful"/>
         <section name="adv_period" title="Customize the model run period" expanded="false">
-
             <conditional name="condi_type_run">
                 <param name="run_type" type="select" label="Determines the model run initialization type.">
                     <option value="startup" selected="true">startup</option>
