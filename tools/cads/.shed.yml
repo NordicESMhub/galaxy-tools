@@ -1,0 +1,10 @@
+categories:
+- Climate Analysis
+description: Copernicus Atmosphere Data Store (ADS)
+homepage_url: https://ads.atmosphere.copernicus.eu/#!/home
+long_description: |
+  This tool is a wrapper for retrieving data from the Copernicus Atmosphere Data Store. User can create correct API request by using the Copernicus ADS data search service where the request can be shown and copy/paste (use "Show API request").
+name: cads
+owner: climate
+remote_repository_url: https://github.com/NordicESMhub/galaxy-tools/tree/master/tools/cads
+type: unrestricted
