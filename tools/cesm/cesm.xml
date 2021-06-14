@@ -415,6 +415,49 @@
         </test>
         <test>
             <conditional name="input_type">
+                <param name="tarball" value="no" />
+                <param name="input_data_collection" ftype="netcdf" value="cam_vcoords_L30_c180105.nc" />
+                <param name="mapping" ftype='txt' value="inputdata_mapping.txt" />
+            </conditional>
+            <param name="casename" value="FKESSLER" />
+            <conditional name="condi_compset">
+                <param name="compset" value="FKESSLER" />
+                <param name="resolution" value="ne30_g16 --run-unsupported" />
+            </conditional>
+            <param name="save_workdir" value="false"/>
+            <section name="adv_period">
+                <conditional name="condi_type_run">
+                    <param name="run_type" value="startup"/>
+                </conditional>
+                <param name="stop_option" value="nsteps" />
+                <param name="stopn" value="1" />
+                <param name="hist_option" value="never" />
+            </section>
+            <section name="adv_restart">
+                <param name="restart_option" value="never"/>
+            </section>
+            <output name="case_info" ftype="txt" file="case_info.txt" compare="sim_size" delta="1000">
+                    <assert_contents>
+                        <has_text text="MODEL EXECUTION HAS FINISHED" />
+                    </assert_contents>
+            </output>
+            <output_collection name="logs_files" type="list">
+                <element name="atm_log.txt" ftype="txt" file="atm_log.txt" compare="sim_size" delta="1000">
+                    <assert_contents>
+                        <has_text text="END OF MODEL RUN" />
+                    </assert_contents>
+                </element>
+                <element name="cesm_log.txt" ftype="txt" file="cesm_log.txt" compare="sim_size" delta="1000">
+                </element>
+                <element name="cpl_log.txt" ftype="txt" file="cpl_log.txt" compare="sim_size" delta="1000">
+                    <assert_contents>
+                        <has_text text="SUCCESSFUL TERMINATION" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+        <test>
+            <conditional name="input_type">
                 <param name="tarball" value="yes" />
                 <param name="inputdata" ftype="tar" value="inputdata_FKESSLER_ne30_g16_cesm2.1.3.tar" />
             </conditional>
