@@ -1,0 +1,111 @@
+<tool id="cads" name="Copernicus Atmosphere Data Store" version="0.1.0" profile="20.05">
+    <description>for retrieving data from the Atmosphere Monitoring Service</description>
+    <requirements>
+        <requirement type="package" version="3">python</requirement>
+        <requirement type="package" version="0.5.1">cdsapi</requirement>
+        <requirement type="package" version="1.9.9">cdo</requirement>
+        <requirement type="package" version="1.34">tar</requirement>
+        <requirement type="package" version="6.0">unzip</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+       export HOME=`pwd`  &&
+       #set $cads_apikey = $__user__.extra_preferences.get('cads_account|cads_apikey', "")
+       #if $cads_apikey == ""
+	    echo "Error. Set your CADS credentials via: User -> Preferences -> Manage Information"  &&
+       #else
+            cp '$cds_key_file' .cdsapirc &&
+       #end if
+       #if str($is_file.has_req).strip() == 'yes'
+            python3 '$__tool_directory__/cads_retrieve.py' 
+	             --request '$is_file.api_req_file' --output request.txt       &&
+       #else
+            python3 '$__tool_directory__/cads_retrieve.py' 
+	             --request $req_from_paste --output request.txt               &&
+       #end if
+       bash $__tool_directory__/cads.sh                                           &&
+       echo "Data retrieval from Copernicus Atmosphere Data Store is done"
+    ]]></command>
+    <configfiles>
+        <configfile name="cads_key_file"><![CDATA[
+#set $cads_apikey = $__user__.extra_preferences.get('cads_account|cads_apikey', "")
+         url: https://ads.atmosphere.copernicus.eu/api/v2
+         key: $cads_apikey
+        ]]></configfile>
+        <configfile name="req_from_paste"><![CDATA[
+       #if str($is_file.has_req).strip() == 'no'
+$is_file.api_req_text
+       #end if
+        ]]></configfile>
+    </configfiles>
+    <inputs>
+        <conditional name="is_file">
+            <param name="has_req" type="boolean" value="false" label="Paste CADS request as text"/>
+	   <when value="false">
+	        <param name="api_req_file" type="data" label="API Request filename" format="txt"/>
+           </when>
+            <when value="true">
+	        <param name="api_req_text" type="text" label="Paste API Request" area="true" />
+           </when>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data name="request" format="txt" from_work_dir="request.txt"/>
+        <data name="ofilename" format="netcdf" from_work_dir="tmp.nc"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="api_req_file" value="input.txt" />
+            <output name="request" ftype="txt">
+              <assert_contents>
+                  <has_text text="dataset to retrieve: reanalysis-era5-single-levels-monthly-means" />
+                  <has_text text="'format': 'netcdf'" />
+                  <has_text text="'product_type': 'monthly_averaged_reanalysis'" />
+                  <has_text text="'variable': '2m_temperature'" />
+                  <has_text text="'year': '2020'" />
+                  <has_text text="'month': '12'" />
+                  <has_text text="'time': '00:00'" />
+		  <has_text text="'area': [" />
+	          <has_text text="60," />
+		  <has_text text="10," />
+		  <has_text text="59.5," />            
+		  <has_text text="10.5," />
+		  <has_text text="]" />
+		  <has_text text="output filename: download.nc" />
+              </assert_contents>
+            </output>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+**Copernicus Atmosphere Data Store (ADS)**
+=======================================================================================================
+
+This tool is a wrapper to retrieve data from the Copernicus Atmosphere Data Store.
+
+- It allows to retrieve data from the Copernicus Atmosphere Monitoring Service.
+- Any user willing to use this tool needs to `create a new account <https://ads.atmosphere.copernicus.eu/user/register?destination=/api-how-to|>`_.
+- Set your CADS API Key via: User -> Preferences -> Manage Information"
+- Documentation on where to get the CDS API key can be found `here <https://cds.climate.copernicus.eu/api-how-to>`_.
+- Compose your request directly on Copernicus Atmosphere Data Store and copy/paste it in the input field "Request" or save it in a file.
+- Be aware that for being able to download dataset from ADS, users also need to agree to their term of use (Licence to use Copernicus Products) on the ADS website.
+
+License:
+~~~~~~~~
+
+Generated using Copernicus Atmosphere Monitoring Service information [2021]
+Neither the European Commission nor ECMWF is responsible for any use 
+that may be made of the Copernicus information or data it contains.
+    ]]></help>
+    <citations>
+
+    </citations>
+    <edam_topics>
+      <edam_topic>topic_3855</edam_topic>
+      <edam_topic>topic_3318</edam_topic>
+    </edam_topics>
+    <edam_operations>
+      <edam_operation>operation_2422</edam_operation>
+      <edam_operation>operation_3357</edam_operation>
+      <edam_operation>operation_0335</edam_operation>
+    </edam_operations>
+</tool>
