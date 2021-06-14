@@ -23,7 +23,7 @@
         mkdir output_dir &&
         mkdir logs_dir &&
         mkdir -p usermods_dirs/SourceMods &&
-        #if $input_type.tarball
+        #if $input_type.tarball == 'yes'
             echo "Getting inputdata from tarball" && 
             tar -xf '$input_type.inputdata' -C 'inputdata/' &&
         #else
@@ -32,7 +32,7 @@
                 bash '$__tool_directory__/create_mapping.sh' '${input_file}' '${input_file.element_identifier}' '$mapping' &&
             #end for
         #end if
-        #if $condi_user_mods.add_changes
+        #if $condi_user_mods.add_changes == 'yes'
             #for $s in $condi_user_mods.usermods
                 echo "User mod ${s.srcmod} ${s.srcmod.element_identifier}" &&
                 ln -s '${s.srcmod}' 'usermods_dirs/SourceMods/${s.srcmod.element_identifier}' &&
@@ -42,9 +42,9 @@
         create_newcase --case '$casename' --compset '$condi_compset.compset' --machine galaxy 
             --pesfile '$__tool_directory__/config_pes.xml'
         #if $condi_user_mods.add_changes
-            --user-mods-dir \$HOME/usermods_dirs
+            --user-mods-dir ./usermods_dirs
         #end if
-            --res $condi_compset.resolution  > $case_info  2>&1 && 
+            --res $condi_compset.resolution  > '$case_info'  2>&1 && 
         echo "create done" &&
         cd '$casename' &&
         #if str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch':
@@ -86,24 +86,42 @@
         #if str($adv_ice.user_nl_ice_customization) != 'None'
             cp '$adv_ice.user_nl_ice_customization' user_nl_cice &&
         #end if
-        #for $i in $adv_lnd.inputs
-            ln -s '${i.input}' ${i.input.element_identifier} &&
-        #end for
-        #for $i in $adv_atm.inputs
-            ln -s '${i.input}' ${i.input.element_identifier} &&
-        #end for
-        #for $i in $adv_rof.inputs
-            ln -s '${i.input}' ${i.input.element_identifier} &&
-        #end for
-        #for $i in $adv_glc.inputs
-            ln -s '${i.input}' ${i.input.element_identifier} &&
-        #end for
-        #for $i in $adv_ocn.inputs
-            ln -s '${i.input}' ${i.input.element_identifier} &&
-        #end for
-        #for $i in $adv_ice.inputs
-            ln -s '${i.input}' ${i.input.element_identifier} &&
-        #end for
+        #if str($adv_lnd.inputs) != 'None'
+            echo "LAND customized inputs" &&
+            #for $i in $adv_lnd.inputs
+                ln -s '${i}' ${i.element_identifier} &&
+            #end for
+        #end if
+        #if str($adv_atm.inputs) != 'None'
+            echo "ATM customized inputs" &&
+            #for $i in $adv_atm.inputs
+                ln -s '${i}' ${i.element_identifier} &&
+            #end for
+        #end if
+        #if str($adv_rof.inputs) != 'None'
+            echo "ROF customized inputs" &&
+            #for $i in $adv_rof.inputs
+                ln -s '${i}' ${i.element_identifier} &&
+            #end for
+        #end if
+        #if str($adv_glc.inputs) != 'None'
+            echo "GLC customized inputs" &&
+            #for $i in $adv_glc.inputs
+                ln -s '${i}' ${i.element_identifier} &&
+            #end for
+        #end if
+        #if str($adv_ocn.inputs) != 'None'
+            echo "OCN customized inputs" &&
+            #for $i in $adv_ocn.inputs
+                ln -s '${i}' ${i.element_identifier} &&
+            #end for
+        #end if
+        #if str($adv_ice.inputs) != 'None'
+            echo "ICE customized inputs" &&
+            #for $i in $adv_ice.inputs
+                ln -s '${i}' ${i.element_identifier} &&
+            #end for
+        #end if
         ./case.setup >> '$case_info'  2>&1 &&
         ./case.build >> '$case_info'  2>&1 &&
         #if str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch':
@@ -120,7 +138,7 @@
         cd "\$HOME"         && 
         mkdir -p restart                              &&
         #if (str($adv_restart.restart_option) != 'never')
-            bash '$__tool_directory__/save_restart.sh' 'work/$casename/run/' $casename restart '$case_info' &&
+            bash '$__tool_directory__/save_restart.sh' 'work/$casename/run/' '$casename' restart '$case_info' &&
             cat 'work/$casename/run/rpointer'.* > $rinfo 2>> '$case_info'  &&
         #end if
         cd restart && 
@@ -132,19 +150,20 @@
         bash '$__tool_directory__/save_logs.sh' 'work/$casename/run/' logs_dir '$case_info' &&
         #if $save_workdir
             tar cf '$work' work  &&
-        #else
-            touch '$work' &&
         #end if
         echo "MODEL RUN COMPLETED"
     ]]></command>
     <inputs>
         <conditional name="input_type">
-            <param name="tarball" type="boolean" value="false" label="Provide inputdata as a tarball"/>
-            <when value="true">
+            <param name="tarball" type="select" label="Provide inputdata as a tarball">
+                <option value="yes">Tarball</option>
+                <option value="no" selected="true">List of netCDF input files</option>
+            </param>
+            <when value="yes">
                 <param name="inputdata" type="data" format='tar' label="inputdata for running CESM (tarball)" />
             </when>
-            <when value="false">
-                <param name="input_data_collection" format="netcdf" type="data_collection" collection_type="list" label="Select input data" help="Select all the netCDF files you would need for running the chosen compset and resolution"/>
+            <when value="no">
+                <param name="input_data_collection" type="data" format="netcdf" multiple="true" label="Select input data" help="Select all the netCDF files you would need for running the chosen compset and resolution"/>
                 <param name="mapping" type="data" format='txt' label="Text file for mapping files in inputdata collection to physical files"/>
             </when> 
         </conditional>
@@ -302,52 +321,45 @@
         
         <section name="adv_lnd" title="Land namelist user customization" expanded="false">
             <param name="user_nl_lnd_customization" type="data" format="txt" optional="true" label="LAND User namelist (lnd_in)"/>
-            <repeat name="inputs" title="Land Customized Input Files">
-               <param name="input" type="data" format="netcdf" label="Input for LND component"/>
-            </repeat>
+            <param name="inputs" type="data" format="netcdf" multiple="true" optional="true" label="Customized Input files for LAND component"/>
         </section>
         <section name="adv_rof" title="River-runoff namelist user customization" expanded="false">
             <param name="user_nl_rof_customization" type="data" format="txt" optional="true" label="ROF User namelist (rof_in)"/>
-            <repeat name="inputs" title="River-runoff Customized Input Files">
-               <param name="input" type="data" format="netcdf" label="Input for ROF component"/>
-            </repeat>
+            <param name="inputs" type="data" format="netcdf" multiple="true" optional="true" label="Customized Input files for River-runoff component"/>
         </section>
         <section name="adv_atm" title="Atmopshere namelist user customization" expanded="false">
             <param name="user_nl_atm_customization" type="data" format="txt" optional="true" label="ATM User namelist (atm_in)"/>
-            <repeat name="inputs" title="Atmosphere Customized Input Files">
-               <param name="input" type="data" format="netcdf" label="Input for ATM component"/>
-            </repeat>
+            <param name="inputs" type="data" format="netcdf" multiple="true" optional="true" label="Customized Input files for Atmosphere component"/>
         </section>
         <section name="adv_glc" title="Land-ice namelist user customization" expanded="false">
             <param name="user_nl_glc_customization" type="data" format="txt" optional="true" label="CISM User namelist (cism_in)"/>
-            <repeat name="inputs" title="Land-ice Customized Input Files">
-               <param name="input" type="data" format="netcdf" label="Input for GLC component"/>
-            </repeat>
+            <param name="inputs" type="data" format="netcdf" multiple="true" optional="true" label="Customized Input files for Land-Ice component"/>
         </section>
         <section name="adv_ice" title="Sea-ice namelist user customization" expanded="false">
             <param name="user_nl_ice_customization" type="data" format="txt" optional="true" label="ICE User namelist (ice_in)"/>
-            <repeat name="inputs" title="Sea-ice Customized Input Files">
-               <param name="input" type="data" format="netcdf" label="Input for ICE component"/>
-            </repeat>
+            <param name="inputs" type="data" format="netcdf" multiple="true" optional="true" label="Customized Input files for Sea-Ice component"/>
         </section>
         <section name="adv_ocn" title="Ocean namelist user customization" expanded="false">
             <param name="user_nl_ocn_customization" type="data" format="txt" optional="true" label="OCN User namelist (ocn_in)"/>
-            <repeat name="inputs" title="Ocean Customized Input Files">
-               <param name="input" type="data" format="netcdf" label="Input for OCN component"/>
-            </repeat>
+            <param name="inputs" type="data" format="netcdf" multiple="true" optional="true" label="Customized Input files for Ocean component"/>
         </section>
         <conditional name="condi_user_mods">
-            <param name="add_changes" type="boolean" value="false" label="user-modified source code"/> 
-            <when value="true">
+            <param name="add_changes" type="select" label="user-modified source code"> 
+                <option value="yes">Yes</option>
+                <option value="no" selected="true">No</option>
+            </param>
+            <when value="yes">
                 <repeat name="usermods" title="SourceMods files">
                     <param name="srcmod" type="data" format="txt" label="Modified source file"/>
                 </repeat>
             </when>
-            <when value="false"/>
+            <when value="no"/>
         </conditional>
     </inputs>
     <outputs>
-        <data name="work" format="tar" label="${tool.name} on ${casename} (workdir)"/>
+        <data name="work" format="tar" label="${tool.name} on ${casename} (workdir)">
+            <filter> save_workdir == True</filter>
+        </data>
         <data name="restart" format="tar" label="${tool.name} on ${casename} (restart)"/>
         <data name="rinfo" format="txt" label="${tool.name} on ${casename} (restart info)"/>
         <data name="case_info" format="txt" label="${tool.name} on ${casename} (case info)"/>
@@ -361,7 +373,7 @@
     <tests>
         <test>
             <conditional name="input_type">
-                <param name="tarball" value="true" />
+                <param name="tarball" value="yes" />
                 <param name="inputdata" ftype="tar" value="inputdata_FKESSLER_ne30_g16_cesm2.1.3.tar" />
             </conditional>
             <param name="casename" value="FKESSLER" />
@@ -403,7 +415,7 @@
         </test>
         <test>
             <conditional name="input_type">
-                <param name="tarball" value="true" />
+                <param name="tarball" value="yes" />
                 <param name="inputdata" ftype="tar" value="inputdata_FKESSLER_ne30_g16_cesm2.1.3.tar" />
             </conditional>
             <param name="casename" value="FKESSLER" />
