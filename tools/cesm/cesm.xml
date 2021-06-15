@@ -1,0 +1,520 @@
+<tool id="cesm" name="CESM" profile="20.05" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
+    <description>Community Earth System Model</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="edam_ontology"/>
+    <requirements>
+        <requirement type="package" version="2.1.3">cesm</requirement>
+        <requirement type="package" version="1.32">tar</requirement>
+        <requirement type="package" version="2.35">binutils</requirement>
+        <requirement type="package" version="3">python</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        export HOME=`pwd` &&
+        export USER='FAKEUSER' &&
+        export AR=x86_64-conda_cos6-linux-gnu-ar &&
+        mkdir -p .cime &&
+        cp '$__tool_directory__/config' .cime/config &&
+        cp '$__tool_directory__/config_compilers.xml' '.cime/config_compilers.xml' &&
+        bash '$__tool_directory__/create_config_machines.sh' \${GALAXY_SLOTS:-4} &&
+        mv 'config_machines_galaxy.xml' '.cime/config_machines.xml' &&
+        mkdir inputdata &&
+        mkdir output_dir &&
+        mkdir logs_dir &&
+        mkdir -p usermods_dirs/SourceMods &&
+        #if $input_type.tarball == 'yes'
+            echo "Getting inputdata from tarball" && 
+            tar -xf '$input_type.inputdata' -C 'inputdata/' &&
+        #else
+            echo "Getting inputdata from collection" &&
+            #for $input_file in $input_type.input_data_collection
+                bash '$__tool_directory__/create_mapping.sh' '${input_file}' '${input_file.element_identifier}' '$mapping' &&
+            #end for
+        #end if
+        #if $condi_user_mods.add_changes == 'yes'
+            #for $s in $condi_user_mods.usermods
+                echo "User mod ${s.srcmod} ${s.srcmod.element_identifier}" &&
+                ln -s '${s.srcmod}' 'usermods_dirs/SourceMods/${s.srcmod.element_identifier}' &&
+            #end for
+        #end if
+        echo "create case" &&
+        create_newcase --case '$casename' --compset '$condi_compset.compset' --machine galaxy 
+            --pesfile '$__tool_directory__/config_pes.xml'
+        #if $condi_user_mods.add_changes
+            --user-mods-dir ./usermods_dirs
+        #end if
+            --res $condi_compset.resolution  > '$case_info'  2>&1 && 
+        echo "create done" &&
+        cd '$casename' &&
+        #if str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch':
+            ./xmlchange RUN_TYPE=$adv_period.condi_type_run.run_type &&
+            ./xmlchange RUN_REFDATE=$adv_period.condi_type_run.run_refdate &&
+            ./xmlchange RUN_REFCASE=$adv_period.condi_type_run.run_refcase &&
+        #end if
+        #if ((str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'startup') and $adv_period.condi_type_run.run_startdate != '')
+            ./xmlchange RUN_STARTDATE=$adv_period.condi_type_run.run_startdate &&
+        #end if
+        ./xmlchange STOP_N=$adv_period.stopn &&
+        ./xmlchange STOP_OPTION=$adv_period.stop_option &&
+        ./xmlchange DOUT_S=FALSE &&
+        #if str($adv_period.hist_option) != 'unset'
+            ./xmlchange HIST_OPTION=$adv_period.hist_option &&
+        #end if
+        #if str($adv_restart.restart_option) != 'unset'
+            ./xmlchange REST_N=$adv_restart.restn &&
+            ./xmlchange REST_OPTION=$adv_restart.restart_option &&
+        #end if
+        #if $adv_restart.interim_files
+            ./xmlchange DOUT_S_SAVE_INTERIM_RESTART_FILES=TRUE &&
+        #end if
+        #if str($adv_lnd.user_nl_lnd_customization) != 'None'
+            cp '$adv_lnd.user_nl_lnd_customization' user_nl_clm &&
+        #end if
+        #if str($adv_atm.user_nl_atm_customization) != 'None'
+            cp '$adv_atm.user_nl_atm_customization' user_nl_cam &&
+        #end if
+        #if str($adv_rof.user_nl_rof_customization) != 'None'
+            cp '$adv_rof.user_nl_rof_customization' user_nl_rof &&
+        #end if
+        #if str($adv_glc.user_nl_glc_customization) != 'None'
+            cp '$adv_glc.user_nl_glc_customization' user_nl_cism &&
+        #end if
+        #if str($adv_ocn.user_nl_ocn_customization) != 'None'
+            cp '$adv_ocn.user_nl_ocn_customization' user_nl_ocn &&
+        #end if
+        #if str($adv_ice.user_nl_ice_customization) != 'None'
+            cp '$adv_ice.user_nl_ice_customization' user_nl_cice &&
+        #end if
+        #if str($adv_lnd.inputs) != 'None'
+            echo "LAND customized inputs" &&
+            #for $i in $adv_lnd.inputs
+                ln -s '${i}' ${i.element_identifier} &&
+            #end for
+        #end if
+        #if str($adv_atm.inputs) != 'None'
+            echo "ATM customized inputs" &&
+            #for $i in $adv_atm.inputs
+                ln -s '${i}' ${i.element_identifier} &&
+            #end for
+        #end if
+        #if str($adv_rof.inputs) != 'None'
+            echo "ROF customized inputs" &&
+            #for $i in $adv_rof.inputs
+                ln -s '${i}' ${i.element_identifier} &&
+            #end for
+        #end if
+        #if str($adv_glc.inputs) != 'None'
+            echo "GLC customized inputs" &&
+            #for $i in $adv_glc.inputs
+                ln -s '${i}' ${i.element_identifier} &&
+            #end for
+        #end if
+        #if str($adv_ocn.inputs) != 'None'
+            echo "OCN customized inputs" &&
+            #for $i in $adv_ocn.inputs
+                ln -s '${i}' ${i.element_identifier} &&
+            #end for
+        #end if
+        #if str($adv_ice.inputs) != 'None'
+            echo "ICE customized inputs" &&
+            #for $i in $adv_ice.inputs
+                ln -s '${i}' ${i.element_identifier} &&
+            #end for
+        #end if
+        ./case.setup >> '$case_info'  2>&1 &&
+        ./case.build >> '$case_info'  2>&1 &&
+        #if str($adv_period.condi_type_run.run_type) == 'hybrid' or str($adv_period.condi_type_run.run_type) == 'branch':
+            tar -xf '$adv_period.condi_type_run.restart' -C '../work/$casename/run/' && 
+        #end if
+        ( ./case.submit >> '$case_info'  2>&1 || true ) &&
+        ( grep "MODEL EXECUTION HAS FINISHED" '$case_info' || 
+           ( echo "Case failed" && cd .. && tar cf $work work && 
+             bash '$__tool_directory__/save_logs.sh' 'work/$casename/run/' logs_dir '$case_info' &&
+             exit 1 )
+        ) &&
+        echo "CURRENT PATH" &&
+        echo "\$HOME"       &&
+        cd "\$HOME"         && 
+        mkdir -p restart                              &&
+        #if (str($adv_restart.restart_option) != 'never')
+            bash '$__tool_directory__/save_restart.sh' 'work/$casename/run/' '$casename' restart '$case_info' &&
+            cat 'work/$casename/run/rpointer'.* > $rinfo 2>> '$case_info'  &&
+        #end if
+        cd restart && 
+        tar cvf $restart . &&
+        cd "\$HOME"        && 
+        #if (str($adv_period.hist_option) != 'never')
+            cp 'work/$casename/run/$casename'.*.h*.*.nc output_dir/ 2>> '$case_info' &&
+        #end if
+        bash '$__tool_directory__/save_logs.sh' 'work/$casename/run/' logs_dir '$case_info' &&
+        #if $save_workdir
+            tar cf '$work' work  &&
+        #end if
+        echo "MODEL RUN COMPLETED"
+    ]]></command>
+    <inputs>
+        <conditional name="input_type">
+            <param name="tarball" type="select" label="Provide inputdata as a tarball">
+                <option value="yes">Tarball</option>
+                <option value="no" selected="true">List of netCDF input files</option>
+            </param>
+            <when value="yes">
+                <param name="inputdata" type="data" format='tar' label="inputdata for running CESM (tarball)" />
+            </when>
+            <when value="no">
+                <param name="input_data_collection" type="data" format="netcdf" multiple="true" label="Select input data" help="Select all the netCDF files you would need for running the chosen compset and resolution"/>
+                <param name="mapping" type="data" format='txt' label="Text file for mapping files in inputdata collection to physical files"/>
+            </when> 
+        </conditional>
+        <param name="casename" type="text" value="usecase" label="Name of your case">
+            <validator type="regex" message="start with a letter and no blanks">^[A-Za-z][A-Za-z0-9]*</validator>
+        </param>
+        <conditional name="condi_compset">
+            <param name="compset" type="select" label="Model compset">
+                <option value="FKESSLER">FKESSLER</option>
+                <option value="F2000climo">F2000climo</option>
+                <option value="QPC6">QPC6</option>
+                <option value="QSC6">QSC6</option>
+                <option value="F1850">F1850</option>
+                <option value="FHIST">FHIST</option>
+                <option value="B1850">B1850</option>
+                <option value="BHIST">BHIST</option>
+            </param>
+            <when value="FKESSLER">
+                <param name="resolution" type="select" label="Model resolution">
+                    <option value="ne30_g16 --run-unsupported">ne30_g16</option>
+                    <option value="f09_f09_mg17">f09_f09_mg17</option>
+                    <option value="f19_f19_mg17">f19_f19_mg17</option>
+                </param>
+            </when>
+            <when value="F2000climo">
+                <param name="resolution" type="select" label="Model resolution">
+                    <option value="f09_f09_mg17">f09_f09_mg17</option>
+                    <option value="f19_g17 --run-unsupported">f19_g17</option>
+                    <option value="f19_f19_mg17 --run-unsupported">f19_f19_mg17</option>
+                </param>
+            </when>
+            <when value="FHIST">
+                <param name="resolution" type="select" label="Model resolution">
+                    <option value="f09_f09_mg17">f09_f09_mg17</option>
+                </param>
+            </when>
+            <when value="QPC6">
+                <param name="resolution" type="select" label="Model resolution">
+                    <option value="f09_f09_mg17">f09_f09_mg17</option>
+                    <option value="f19_f19_mg17">f19_f19_mg17</option>
+                </param>
+            </when>
+            <when value="QSC6">
+                <param name="resolution" type="select" label="Model resolution">
+                    <option value="f09_f09_mg17">f09_f09_mg17</option>
+                    <option value="f19_f19_mg17">f19_f19_mg17</option>
+                </param>
+            </when>
+            <when value="F1850">
+                <param name="resolution" type="select" label="Model resolution">
+                    <option value="f19_f19_mg17 --run-unsupported"></option>
+                </param>
+            </when>
+            <when value="B1850">
+                <param name="resolution" type="select" label="Model resolution">
+                    <option value="f09_g17_gl4">f09_g17_gl4</option>
+                    <option value="f09_g17">f09_g17</option>
+                    <option value="f19_g17_gl4">f19_g17_gl4</option>
+                    <option value="f19_g17">f19_g17</option>
+                </param>
+            </when>
+            <when value="BHIST">
+                <param name="resolution" type="select" label="Model resolution">
+                    <option value="f09_g17_gl4">f09_g17_gl4</option>
+                    <option value="f09_g17">f09_g17</option>
+                    <option value="f19_g17_gl4">f19_g17_gl4</option>
+                    <option value="f19_g17">f19_g17</option>
+                </param>
+            </when>
+	</conditional>
+        <param name="save_workdir" type="boolean" value="false" label="Save workdir as a tarball when successful"/>
+        <section name="adv_period" title="Customize the model run period" expanded="false">
+            <conditional name="condi_type_run">
+                <param name="run_type" type="select" label="Determines the model run initialization type.">
+                    <option value="startup" selected="true">startup</option>
+                    <option value="hybrid">hybrid</option>
+                    <option value="branch">branch</option>
+                </param>
+                <when value="startup">
+                    <param name="run_startdate" type="text" value="" label="Run start date (yyyy-mm-dd). Only used for startup or hybrid runs.">
+                       <validator type="regex" message="YYYY-MM-DD">(^$|(\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])))</validator>
+                    </param>
+                </when>
+                <when value="branch">
+                    <param name="run_refcase" type="text" value="" label="Reference case for hybrid or branch runs"/>
+                    <param name="run_refdate" type="text" value="" label="Reference date for hybrid or branch runs (yyyy-mm-dd)">
+                       <validator type="regex" message="YYYY-MM-DD">(^$|(\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])))</validator>
+                    </param>
+                    <param name="restart" type="data" format='tar' label="restart for running CESM"/>
+                </when>
+                <when value="hybrid">
+                    <param name="run_refcase" type="text" value="" label="Reference case for hybrid or branch runs"/>
+                    <param name="run_refdate" type="text" value="" label="Reference date for hybrid or branch runs (yyyy-mm-dd)">
+                       <validator type="regex" message="YYYY-MM-DD">(^$|(\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])))</validator>
+                    </param>
+                    <param name="run_startdate" type="text" value="" label="Run start date (yyyy-mm-dd). Only used for startup or hybrid runs.">
+                       <validator type="regex" message="YYYY-MM-DD">(^$|(\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])))</validator>
+                    </param>
+                    <param name="restart" type="data" format='tar' label="restart for running CESM"/>
+                </when>
+            </conditional>
+            <param name="stopn" type="integer" value="5" label="Provides a numerical count for STOP_OPTION."/>
+            <param name="stop_option" type="select" label=" Sets the run length along with STOP_N and STOP_DATE">
+                <option value="ndays" selected="true">ndays</option>
+                <option value="none">none</option>
+                <option value="never">never</option>
+                <option value="nsteps">nsteps</option>
+                <option value="nseconds">nseconds</option>
+                <option value="nminutes">nminutes</option>
+                <option value="nhours">nhours</option>
+                <option value="nday">ndays</option>
+                <option value="nmonths">nmonths</option>
+                <option value="nyears">nyears</option>
+                <option value="date">date</option>
+                <option value="ifdays0">ifday0</option>
+                <option value="end">end</option>
+            </param>
+            <param name="hist_option" type="select" label="Sets driver snapshot history file frequency">
+                <option value="unset" selected="true">unset</option>
+                <option value="ndays">ndays</option>
+                <option value="none">none</option>
+                <option value="never">never</option>
+                <option value="nsteps">nsteps</option>
+                <option value="nseconds">nseconds</option>
+                <option value="nminutes">nminutes</option>
+                <option value="nhours">nhours</option>
+                <option value="nday">ndays</option>
+                <option value="nmonths">nmonths</option>
+                <option value="nyears">nyears</option>
+                <option value="date">date</option>
+                <option value="ifdays0">ifday0</option>
+                <option value="end">end</option>
+            </param>
+        </section>
+        <section name="adv_restart" title="Customize the model restart period" expanded="false">
+            <param name="restn" type="integer" value="12" label="Provides a numerical count for RESTART_OPTION (only if REST_N is different from 'unset')."/>
+            <param name="restart_option" type="select" label="Sets frequency of model restart writes in conjuction with REST_N (default is 'unset' e.g. STOP_N and STOP_OPTION)">
+                <option value="unset" selected="true">unset</option>
+                <option value="ndays">ndays</option>
+                <option value="none">none</option>
+                <option value="never">never</option>
+                <option value="nsteps">nsteps</option>
+                <option value="nseconds">nseconds</option>
+                <option value="nminutes">nminutes</option>
+                <option value="nhours">nhours</option>
+                <option value="nday">ndays</option>
+                <option value="nmonths">nmonths</option>
+                <option value="nyears">nyears</option>
+                <option value="date">date</option>
+                <option value="ifdays0">ifday0</option>
+                <option value="end">end</option>
+            </param>
+            <param name="interim_files" type="boolean" value="false" label=""/>
+        </section>
+        
+        <section name="adv_lnd" title="Land namelist user customization" expanded="false">
+            <param name="user_nl_lnd_customization" type="data" format="txt" optional="true" label="LAND User namelist (lnd_in)"/>
+            <param name="inputs" type="data" format="netcdf" multiple="true" optional="true" label="Customized Input files for LAND component"/>
+        </section>
+        <section name="adv_rof" title="River-runoff namelist user customization" expanded="false">
+            <param name="user_nl_rof_customization" type="data" format="txt" optional="true" label="ROF User namelist (rof_in)"/>
+            <param name="inputs" type="data" format="netcdf" multiple="true" optional="true" label="Customized Input files for River-runoff component"/>
+        </section>
+        <section name="adv_atm" title="Atmopshere namelist user customization" expanded="false">
+            <param name="user_nl_atm_customization" type="data" format="txt" optional="true" label="ATM User namelist (atm_in)"/>
+            <param name="inputs" type="data" format="netcdf" multiple="true" optional="true" label="Customized Input files for Atmosphere component"/>
+        </section>
+        <section name="adv_glc" title="Land-ice namelist user customization" expanded="false">
+            <param name="user_nl_glc_customization" type="data" format="txt" optional="true" label="CISM User namelist (cism_in)"/>
+            <param name="inputs" type="data" format="netcdf" multiple="true" optional="true" label="Customized Input files for Land-Ice component"/>
+        </section>
+        <section name="adv_ice" title="Sea-ice namelist user customization" expanded="false">
+            <param name="user_nl_ice_customization" type="data" format="txt" optional="true" label="ICE User namelist (ice_in)"/>
+            <param name="inputs" type="data" format="netcdf" multiple="true" optional="true" label="Customized Input files for Sea-Ice component"/>
+        </section>
+        <section name="adv_ocn" title="Ocean namelist user customization" expanded="false">
+            <param name="user_nl_ocn_customization" type="data" format="txt" optional="true" label="OCN User namelist (ocn_in)"/>
+            <param name="inputs" type="data" format="netcdf" multiple="true" optional="true" label="Customized Input files for Ocean component"/>
+        </section>
+        <conditional name="condi_user_mods">
+            <param name="add_changes" type="select" label="user-modified source code"> 
+                <option value="yes">Yes</option>
+                <option value="no" selected="true">No</option>
+            </param>
+            <when value="yes">
+                <repeat name="usermods" title="SourceMods files">
+                    <param name="srcmod" type="data" format="txt" label="Modified source file"/>
+                </repeat>
+            </when>
+            <when value="no"/>
+        </conditional>
+    </inputs>
+    <outputs>
+        <data name="work" format="tar" label="${tool.name} on ${casename} (workdir)">
+            <filter> save_workdir == True</filter>
+        </data>
+        <data name="restart" format="tar" label="${tool.name} on ${casename} (restart)"/>
+        <data name="rinfo" format="txt" label="${tool.name} on ${casename} (restart info)"/>
+        <data name="case_info" format="txt" label="${tool.name} on ${casename} (case info)"/>
+        <collection name="logs_files" type="list" label="${tool.name} on ${casename} (logfiles)">
+            <discover_datasets pattern="__name__" directory="logs_dir" visible="false" format="txt"/>
+        </collection>
+        <collection name="history_files" type="list" label="${tool.name} on ${casename} (history file)">
+            <discover_datasets pattern="__name__" directory="output_dir" visible="true" format="netcdf"/>
+        </collection>
+    </outputs>
+    <tests>
+        <test>
+            <conditional name="input_type">
+                <param name="tarball" value="yes" />
+                <param name="inputdata" ftype="tar" value="inputdata_FKESSLER_ne30_g16_cesm2.1.3.tar" />
+            </conditional>
+            <param name="casename" value="FKESSLER" />
+            <conditional name="condi_compset">
+                <param name="compset" value="FKESSLER" />
+                <param name="resolution" value="ne30_g16 --run-unsupported" />
+            </conditional>
+            <param name="save_workdir" value="false"/>
+            <section name="adv_period">
+                <conditional name="condi_type_run">
+                    <param name="run_type" value="startup"/>
+                </conditional>
+                <param name="stop_option" value="nsteps" />
+                <param name="stopn" value="1" />
+                <param name="hist_option" value="never" />
+            </section>
+            <section name="adv_restart">
+                <param name="restart_option" value="never"/>
+            </section>
+            <output name="case_info" ftype="txt" file="case_info.txt" compare="sim_size" delta="1000">
+                    <assert_contents>
+                        <has_text text="MODEL EXECUTION HAS FINISHED" />
+                    </assert_contents>
+            </output>
+            <output_collection name="logs_files" type="list">
+                <element name="atm_log.txt" ftype="txt" file="atm_log.txt" compare="sim_size" delta="1000">
+                    <assert_contents>
+                        <has_text text="END OF MODEL RUN" />
+                    </assert_contents>
+                </element>
+                <element name="cesm_log.txt" ftype="txt" file="cesm_log.txt" compare="sim_size" delta="1000">
+                </element>
+                <element name="cpl_log.txt" ftype="txt" file="cpl_log.txt" compare="sim_size" delta="1000">
+                    <assert_contents>
+                        <has_text text="SUCCESSFUL TERMINATION" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+        <test>
+            <conditional name="input_type">
+                <param name="tarball" value="no" />
+                <param name="input_data_collection" ftype="netcdf" value="cam_vcoords_L30_c180105.nc" />
+                <param name="mapping" ftype='txt' value="inputdata_mapping.txt" />
+            </conditional>
+            <param name="casename" value="FKESSLER" />
+            <conditional name="condi_compset">
+                <param name="compset" value="FKESSLER" />
+                <param name="resolution" value="ne30_g16 --run-unsupported" />
+            </conditional>
+            <param name="save_workdir" value="false"/>
+            <section name="adv_period">
+                <conditional name="condi_type_run">
+                    <param name="run_type" value="startup"/>
+                </conditional>
+                <param name="stop_option" value="nsteps" />
+                <param name="stopn" value="1" />
+                <param name="hist_option" value="never" />
+            </section>
+            <section name="adv_restart">
+                <param name="restart_option" value="never"/>
+            </section>
+            <output name="case_info" ftype="txt" file="case_info.txt" compare="sim_size" delta="1000">
+                    <assert_contents>
+                        <has_text text="MODEL EXECUTION HAS FINISHED" />
+                    </assert_contents>
+            </output>
+            <output_collection name="logs_files" type="list">
+                <element name="atm_log.txt" ftype="txt" file="atm_log.txt" compare="sim_size" delta="1000">
+                    <assert_contents>
+                        <has_text text="END OF MODEL RUN" />
+                    </assert_contents>
+                </element>
+                <element name="cesm_log.txt" ftype="txt" file="cesm_log.txt" compare="sim_size" delta="1000">
+                </element>
+                <element name="cpl_log.txt" ftype="txt" file="cpl_log.txt" compare="sim_size" delta="1000">
+                    <assert_contents>
+                        <has_text text="SUCCESSFUL TERMINATION" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+        <test>
+            <conditional name="input_type">
+                <param name="tarball" value="yes" />
+                <param name="inputdata" ftype="tar" value="inputdata_FKESSLER_ne30_g16_cesm2.1.3.tar" />
+            </conditional>
+            <param name="casename" value="FKESSLER" />
+            <conditional name="condi_compset">
+                <param name="compset" value="FKESSLER" />
+                <param name="resolution" value="ne30_g16 --run-unsupported" />
+            </conditional>
+            <param name="save_workdir" value="false"/>
+            <section name="adv_period">
+                <conditional name="condi_type_run">
+                    <param name="run_type" value="startup"/>
+                </conditional>
+                <param name="stop_option" value="nsteps" />
+                <param name="stopn" value="1" />
+                <param name="hist_option" value="never" />
+            </section>
+            <section name="adv_restart">
+                <param name="restart_option" value="never"/>
+            </section>
+            <section name="adv_atm">
+                <param name="user_nl_atm_customization" ftype="txt" value="user_nl_cam" />
+            </section>
+            <output name="case_info" ftype="txt" file="case_info.txt" compare="sim_size" delta="1000">
+                    <assert_contents>
+                        <has_text text="MODEL EXECUTION HAS FINISHED" />
+                    </assert_contents>
+            </output>
+            <output_collection name="logs_files" type="list">
+                <element name="atm_log.txt" ftype="txt" file="atm_log.txt" compare="sim_size" delta="1000">
+                    <assert_contents>
+                        <has_text text="END OF MODEL RUN" />
+                    </assert_contents>
+                </element>
+                <element name="cesm_log.txt" ftype="txt" file="cesm_log.txt" compare="sim_size" delta="1000">
+                </element>
+                <element name="cpl_log.txt" ftype="txt" file="cpl_log.txt" compare="sim_size" delta="1000">
+                    <assert_contents>
+                        <has_text text="SUCCESSFUL TERMINATION" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+**The Community Earth System Model (CESM)**
+==========================================================================
+
+This tool creates and runs CESM experiments from CESM supported release.
+CESM is a fully-coupled, community, global climate model that provides state-of-the-art computer simulations of the Earth's past, present, and future climate states.
+
+Available component configurations and grids:
+----------------------------------------------
+	    - `Grid Resolutions <https://www.cesm.ucar.edu/models/cesm2/config/2.1.3/grids.html>`_
+	    - `Component Sets <https://www.cesm.ucar.edu/models/cesm2/config/2.1.3/compsets.html>`_
+	    - `Component Configuration Settings <https://www.cesm.ucar.edu/models/cesm2/settings/2.1.3/>`_
+    ]]></help>
+    <expand macro="citations"/>
+</tool>

@@ -1,0 +1,36 @@
+<macros>
+    <token name="@TOOL_VERSION@">2.1.3</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+    <xml name="edam_ontology">
+        <edam_topics>
+            <edam_topic>topic_3855</edam_topic>
+            <edam_topic>topic_3318</edam_topic>
+            <edam_topic>topic_3050</edam_topic>
+            <edam_topic>topic_0610</edam_topic>
+        </edam_topics>
+        <edam_operations>
+            <edam_operation>operation_3946</edam_operation>
+            <edam_operation>operation_2426</edam_operation>
+        </edam_operations>
+    </xml>
+    <xml name="citations">
+        <citations>
+            <citation type="bibtex">
+                @article{https://doi.org/10.1029/2019MS001916,
+                    author = {Danabasoglu, G. and Lamarque, J.-F. and Bacmeister, J. and Bailey, D. A. and DuVivier, A. K.  and Edwards, J. and Emmons, L. K. and Fasullo, J. and Garcia, R. and Gettelman, A. and Hannay, C. and Holland, M. M. and Large, W. G. and Lauritzen, P. H. and Lawrence, D. M. and Lenaerts, J. T. M. and Lindsay, K. and Lipscomb, W. H. and Mills, M. J. and Neale, R. and Oleson, K. W. and Otto-Bliesner, B. and Phillips, A. S. and Sacks, W. and Tilmes, S. and van Kampenhout, L. and Vertenstein, M. and Bertini, A. and Dennis, J. and Deser, C. and Fischer, C. and Fox-Kemper, B. and Kay, J. E. and Kinnison, D. and Kushner, P. J. and Larson, V. E. and Long, M. C. and Mickelson, S. and Moore, J. K. and Nienhouse, E. and Polvani, L. and Rasch, P. J. and Strand, W. G.},
+                    title = {The Community Earth System Model Version 2 (CESM2)},
+                    journal = {Journal of Advances in Modeling Earth Systems},
+                    volume = {12},
+                    number = {2},
+                    pages = {e2019MS001916},
+                    keywords = {Community Earth System Model (CESM), global coupled Earth system modeling, preindustrial and historical simulations, coupled model development and evaluation},
+                    doi = {https://doi.org/10.1029/2019MS001916},
+                    url = {https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1029/2019MS001916},
+                    eprint = {https://agupubs.onlinelibrary.wiley.com/doi/pdf/10.1029/2019MS001916},
+                    note = {e2019MS001916 2019MS001916},
+                    year = {2020}
+                }
+            </citation>
+        </citations>
+    </xml>
+</macros>

@@ -1,0 +1,1 @@
+atm/cam/inic/cam_vcoords_L30_c180105.nc

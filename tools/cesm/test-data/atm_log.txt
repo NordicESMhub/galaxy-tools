@@ -1,0 +1,803 @@
+ CAM atmosphere model initialization
+  
+ Initialize PIO subsystem:
+   iotype  =            6
+  
+  ------------------------------------------
+  *********** CAM LOG OUTPUT ***************
+  ------------------------------------------
+          Initial run
+  ********** CASE = FKESSLER **********
+ UNSET                                                                                                                                                                                                                                                           
+  ********** Time Manager Configuration **********
+   Calendar type:            NO_LEAP
+   Timestep size (seconds):          1800
+   Start date (yr mon day tod):                1           1           1           0
+   Stop date (yr mon day tod):                 1           1           1        1800
+   Reference date (yr mon day tod):            1           1           1           0
+   Current step number:                 0
+   Current date (yr mon day tod):              1           1           1           0
+  ************************************************
+ SPMD SWAP_COMM OPTIONS: 
+   swap_comm_protocol =            4
+   swap_comm_maxreq   =          128
+ SPMD FLOW CONTROL GATHER OPTION: 
+   fc_gather_flow_cntl =           64
+ PHYS_GRID options:
+   Using PCOLS         =          16
+   phys_loadbalance    =           2
+   phys_twin_algorithm =           0
+   phys_alltoall       =          -1
+   chunks_per_thread   =           1
+ cam_initfiles_readnl options:
+   Initial run will start from: /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/inputdata/atm/cam/inic/cam_vcoords_L30_c180105.nc
+   Topography dataset not used: PHIS, SGH, SGH30, LANDM_COSLAT set to zero
+   Maximum abs value of scale factor used to perturb initial conditions, pertlim=    0.0000000000000000     
+ Summary of constituent module options:
+   Read constituent initial values from initial file by default:  T
+ Read in cam_history_nl namelist from: atm_in
+ Unless overridden by namelist input on a per-field basis (FINCL),
+ All fields on history file            1  will have averaging flag I
+ Initial conditions history files will be written yearly.
+  
+ chem_surfvals_readnl: Settings for control of GHG surface values 
+   scenario_ghg = FIXED
+   CO2 will be fixed:
+     co2vmr =   -1.0000000000000000     
+   Other GHG values will be fixed as follows:
+     n2ovmr =   -1.0000000000000000     
+     ch4vmr =   -1.0000000000000000     
+     f11vmr =   -1.0000000000000000     
+     f12vmr =   -1.0000000000000000     
+  
+ Run model with Kessler warm-rain physics forcing
+ check_energy options:
+   print_energy_errors = F
+ Read in analytic_ic_nl namelist from: atm_in
+ Dynamics state will be set to a moist baroclinic wave initial condition used in DCMIP 2016.                                     
+ dyn_readnl: reading dyn_se_inparm namelist...
+initmpi: Number of MPI processes: 4
+ INITOMP: INFO: openmp not activated
+ HOMME_POSTPROCESS_NAMELIST: omp_get_max_threads() =            1
+ HOMME_POSTPROCESS_NAMELIST: Mesh File:none
+ HOMME_POSTPROCESS_NAMELIST: Reference element projection: cubed_sphere_map=           0
+dyn_readnl: se_ftype               = 2
+dyn_readnl: se_statediag_numtrac   = 3
+dyn_readnl: se_hypervis_subcycle   = 3
+dyn_readnl: se_hypervis_subcycle_q = 1
+dyn_readnl: se_limiter_option = 8
+dyn_readnl: se_ne = 30
+dyn_readnl: se_npes = 4
+dyn_readnl: se_nsplit = 2
+dyn_readnl: se_nu =  0.40E+15
+dyn_readnl: se_nu_div =  0.10E+16
+dyn_readnl: se_nu_p =  0.10E+16
+Note that nu_q=nu_p for  mass / tracer inconsistency
+dyn_readnl: se_nu_top =  0.25E+06
+dyn_readnl: se_qsplit = 1
+dyn_readnl: se_rsplit = 3
+dyn_readnl: se_statefreq = 0
+dyn_readnl: se_tstep_type = 4
+dyn_readnl: se_vert_remap_q_alg = 1
+dyn_readnl: se_qsize_condensate_loading = 1
+          : lcp_moist =    T
+ dyn_readnl: hypervis_on_plevs =    T
+ FYI: nu_p>0 and hypervis_on_plevs=T => hypervis is applied to dp-dp_ref
+dyn_readnl: Nudging off
+dyn_readnl: physics will run on SE GLL points
+dyn_readnl: se_horz_num_threads = 1
+dyn_readnl: se_vert_num_threads = 1
+dyn_readnl: se_tracer_num_threads = 1
+dyn_readnl: do not write grid file
+dyn_readnl: write gll corners to SEMapping.nc = F
+dyn_readnl: write restart data on unstructured grid = F
+ native_mapping_readnl: Check for native_mapping_nl namelist in atm_in
+ native_mapping_readnl: No native_mapping_nl namelist found
+ qneg_readnl: QNEG statistics will be collected and printed at the end of the run
+ (GETFIL): attempting to find local file cam_vcoords_L30_c180105.nc
+ (GETFIL): using /opt/uio/tmp/tmp92gxhvfo/job_working_directory/000/2/working/inputdata/atm/cam/inic/cam_vcoords_L30_c180105.nc
+ hycoef_read: read hyai, hybi, hyam, hybm
+ hycoef_read: read P0 value:    100000.00000000000     
+ Layer Locations (*1000) 
+   1    2.2552              0.0000              2.2552
+                  3.6435              0.0000              3.6435
+   2    5.0317              0.0000              5.0317
+                  7.5948              0.0000              7.5948
+   3   10.1579              0.0000             10.1579
+                 14.3566              0.0000             14.3566
+   4   18.5553              0.0000             18.5553
+                 24.6122              0.0000             24.6122
+   5   30.6691              0.0000             30.6691
+                 38.2683              0.0000             38.2683
+   6   45.8675              0.0000             45.8675
+                 54.5955              0.0000             54.5955
+   7   63.3235              0.0000             63.3235
+                 72.0125              0.0000             72.0125
+   8   80.7014              0.0000             80.7014
+                 87.8212              0.0000             87.8212
+   9   94.9410              0.0000             94.9410
+                103.3171              0.0000            103.3171
+  10  111.6932              0.0000            111.6932
+                121.5472              0.0000            121.5472
+  11  131.4013              0.0000            131.4013
+                142.9940              0.0000            142.9940
+  12  154.5868              0.0000            154.5868
+                168.2251              0.0000            168.2251
+  13  181.8634              0.0000            181.8634
+                178.2307             19.6774            197.9081
+  14  174.5980             39.3548            213.9528
+                170.3243             62.5043            232.8286
+  15  166.0507             85.6538            251.7044
+                161.0229            112.8879            273.9108
+  16  155.9952            140.1221            296.1172
+                150.0803            172.1616            322.2419
+  17  144.1654            204.2012            348.3666
+                137.2069            241.8940            379.1009
+  18  130.2483            279.5869            409.8352
+                122.0619            323.9306            445.9926
+  19  113.8756            368.2744            482.1499
+                104.2447            420.4425            524.6872
+  20   94.6139            472.6106            567.2244
+                 84.9792            524.7995            609.7787
+  21   75.3445            576.9885            652.3330
+                 66.5017            624.8877            691.3894
+  22   57.6589            672.7870            730.4459
+                 50.1968            713.2077            763.4045
+  23   42.7346            753.6284            796.3631
+                 37.1887            783.6697            820.8584
+  24   31.6427            813.7110            845.3537
+                 28.4319            831.1028            859.5348
+  25   25.2212            848.4946            873.7159
+                 22.2090            864.8113            887.0202
+  26   19.1967            881.1279            900.3246
+                 16.4074            896.2372            912.6445
+  27   13.6180            911.3464            924.9645
+                 11.0746            925.1238            936.1984
+  28    8.5311            938.9012            947.4323
+                  6.2550            951.2305            957.4855
+  29    3.9788            963.5598            967.5386
+                  1.9894            974.3360            976.3254
+  30    0.0000            985.1122            985.1122
+                  0.0000            992.5561            992.5561
+  31    0.0000           1000.0000           1000.0000
+ reference pressures (Pa)
+   1       225.5240
+                          364.3466       277.6452
+   2       503.1692
+                          759.4820       512.6256
+   3      1015.7947
+                         1435.6632       839.7370
+   4      1855.5317
+                         2461.2220      1211.3806
+   5      3066.9123
+                         3826.8300      1519.8354
+   6      4586.7477
+                         5459.5480      1745.6006
+   7      6332.3483
+                         7201.2451      1737.7935
+   8      8070.1418
+                         8782.1230      1423.9624
+   9      9494.1042
+                        10331.7127      1675.2169
+  10     11169.3211
+                        12154.7241      1970.8060
+  11     13140.1271
+                        14299.4039      2318.5536
+  12     15458.6807
+                        16822.5080      2727.6546
+  13     18186.3353
+                        19790.8087      3208.9468
+  14     21395.2821
+                        23282.8619      3775.1596
+  15     25170.4417
+                        27391.0817      4441.2799
+  16     29611.7216
+                        32224.1902      5224.9372
+  17     34836.6588
+                        37910.0904      6146.8631
+  18     40983.5219
+                        44599.2574      7231.4709
+  19     48214.9929
+                        52468.7175      8507.4492
+  20     56722.4421
+                        60977.8695      8510.8548
+  21     65233.2969
+                        69138.9430      7811.2923
+  22     73044.5892
+                        76340.4481      6591.7179
+  23     79636.3071
+                        82085.8369      4899.0596
+  24     84535.3667
+                        85953.4767      2836.2200
+  25     87371.5866
+                        88702.0249      2660.8765
+  26     90032.4631
+                        91264.4547      2463.9831
+  27     92496.4462
+                        93619.8398      2246.7872
+  28     94743.2335
+                        95748.5480      2010.6290
+  29     96753.8625
+                        97632.5407      1757.3566
+  30     98511.2190
+                        99255.6095      1488.7810
+  31    100000.0000
+ PRIM_INIT1: creating cube topology...
+ ...done.
+ PRIM_INIT1: total number of elements nelem =         5400
+ PRIM_INIT1: partitioning graph using SF Curve...
+ PRIM_INIT1: init shared boundary_exchange buffers
+ PRIM_INIT1: initializing cube elements...
+ PRIM_INIT1: running mass_matrix
+PRIM_INIT1: re-initializing cube elements: area correction= 0.99999999999943145
+ PRIM_INIT1: re-running mass_matrix
+ PRIM_INIT1: running global_dof
+ PRIM_INIT1: max_num_threads=           1
+ PRIM_INIT1: end of prim_init
+Grid: GLL, ID =  101, lat coord  = lat, lon coord  = lon, unstruct   =  T, block_ind  =  F, zonal_grid =  F
+Attribute: area, long name = 'gll grid areas'
+           dimname = ncol
+Attribute: np, long name = ''
+           value =            4
+Attribute: ne, long name = ''
+           value =           30
+ INFO: Non-scalable action: Allocating global blocks in SE dycore.
+ create_global_coords: INFO: Non-scalable action: Creating global coords in SE dycore.
+ create_global_area: INFO: Non-scalable action: gathering global area in SE dycore.
+Grid: physgrid, ID =  100, lat coord  = lat, lon coord  = lon, unstruct   =  T, block_ind  =  T, zonal_grid =  F
+Attribute: area, long name = 'gll grid areas'
+           dimname = ncol
+Attribute: np, long name = ''
+           value =            4
+Attribute: ne, long name = ''
+           value =           30
+ Advected constituent list:
+     1  Q         Specific humidity                                                                                                                 wet
+     2  CLDLIQ    Grid box averaged cloud liquid amount                                                                                             wet
+     3  RAINQM    Grid box averaged rain water amount                                                                                               wet
+     4  CL        CL                                                                                                                                dry
+     5  CL2       CL2                                                                                                                               dry
+     6  RHO       RHO                                                                                                                               dry
+           PHIS initialized by "BC_WAV_SET_IC"
+           U initialized by "BC_WAV_SET_IC"
+           V initialized by "BC_WAV_SET_IC"
+           T initialized by "BC_WAV_SET_IC"
+ BC_WAV_SET_IC: Model top (in km) is at z=    35.087419572768717     
+           PS initialized by "BC_WAV_SET_IC"
+           Q initialized by "BC_WAV_SET_IC"
+           CLDLIQ set to minimum value
+           RAINQM set to minimum value
+           CL initialized by "chem_init_cnst"
+           CL2 initialized by "chem_init_cnst"
+           RHO initialized by "chem_init_cnst"
+ 
+ Running Global Integral Diagnostic...
+ Area of unit sphere is   1.0000000000000000     
+ Should be 1.0 to round off...
+Element area:  max/min    1.377
+Average equatorial node spacing (deg, km) =  1.000  111.20
+norm of Dinv (min, max):    38.302   57.296
+Max Dinv-based element distortion:     1.73
+dx based on Dinv svd:          ave,min,max =    91.40   74.13  110.90
+dx based on sqrt element area: ave,min,max =   102.45   94.71  111.15
+CFL estimates in terms of S=time step stability region
+(i.e. advection w/leapfrog: S=1, viscosity w/forward Euler: S=2)
+SSP preservation (120m/s) RKSSP euler step dt  < S *    154.44s
+Stability: advective (120m/s)   dt_tracer < S *    338.20s
+Stability: advective (120m/s)   dt_tracer < S *    338.20s
+Stability: gravity wave(342m/s)   dt_dyn  < S *    118.67s
+Stability: nu_q   hyperviscosity dt < S *    169.89s
+Stability: nu_vor hyperviscosity dt < S *    424.71s
+Stability: nu_div hyperviscosity dt < S *    169.89s
+TOP3 viscosity CFL: dt < S*    412.17s
+ tstep_type =            4
+dt_remap: (0=disabled)      900.00
+dt_tracer (SE), per RK stage:    300.00   150.00
+dt_dyn:                     300.00
+dt_dyn (viscosity):         100.00
+dt_tracer (viscosity):      300.00
+CAM dtime (dt_phys):           1800.00
+ CAM-SE uses dry-mass vertical coordinates
+ initial state:
+ nstep=           0  time=   0.0000000000000000       [day]
+   
+ STATE DIAGNOSTICS
+   
+                                MIN                    MAX              AVE (hPa)      REL. MASS. CHANGE
+  U           0.000000000000000E+00  0.280261013339374E+02
+  V           0.000000000000000E+00  0.000000000000000E+00
+  T           0.149843161781875E+03  0.306211834562973E+03
+  OMEGA      -0.224996632776289E+00  0.279838208014316E+00
+  PSDRY       0.994576161327842E+05  0.999999999999894E+05  0.996842241887747E+03  0.000000000000000E+00
+  PS          0.999999958842053E+05  0.100000000000089E+06  0.999999986178254E+03  0.000000000000000E+00
+  Q           0.100000000000100E-11  0.183316201758619E-01  0.315774429050680E+01  0.000000000000000E+00
+  CLDLIQ      0.000000000000000E+00  0.000000000000000E+00  0.000000000000000E+00  0.000000000000000E+00
+  RAINQM      0.000000000000000E+00  0.000000000000000E+00  0.000000000000000E+00  0.000000000000000E+00
+   
+ FORCING DIAGNOSTICS
+   
+                                MIN                    MAX
+  FT          0.000000000000000E+00  0.000000000000000E+00
+  FM          0.000000000000000E+00  0.000000000000000E+00
+  FQ          0.000000000000000E+00  0.000000000000000E+00
+  FCLDLIQ     0.000000000000000E+00  0.000000000000000E+00
+  FRAINQM     0.000000000000000E+00  0.000000000000000E+00
+  *** SATURATION VAPOR PRESSURE TABLE COMPLETED ***
+  
+  ******* MASTER FIELD LIST *******
+    1 FU                               m/s2               30 A  Zonal wind forcing term on GLL grid
+    2 FV                               m/s2               30 A  Meridional wind forcing term on GLL grid
+    3 FT                               K/s                30 A  Temperature forcing term on GLL grid
+    4 FQ_gll                           kg/kg/s            30 I  Specific humidity mixing ratio forcing term (q_new-q_old) on GLL grid
+    5 FCLDLIQ_gll                      kg/kg/s            30 I  Grid box averaged cloud liquid amount mixing ratio forcing term (q_new-q_old) on GLL grid
+    6 FRAINQM_gll                      kg/kg/s            30 I  Grid box averaged rain water amount mixing ratio forcing term (q_new-q_old) on GLL grid
+    7 FCL_gll                          kg/kg/s            30 I  CL mixing ratio forcing term (q_new-q_old) on GLL grid
+    8 FCL2_gll                         kg/kg/s            30 I  CL2 mixing ratio forcing term (q_new-q_old) on GLL grid
+    9 FRHO_gll                         kg/kg/s            30 I  RHO mixing ratio forcing term (q_new-q_old) on GLL grid
+   10 ABS_dPSdt                        Pa/s                1 A  Absolute surface pressure tendency
+   11 WV_PDC                           kg/m2               1 A  Total column water vapor lost in physics-dynamics coupling
+   12 WL_PDC                           kg/m2               1 A  Total column cloud water lost in physics-dynamics coupling
+   13 WI_PDC                           kg/m2               1 A  Total column cloud ice lost in physics-dynamics coupling
+   14 TT_PDC                           kg/m2               1 A  Total column test tracer lost in physics-dynamics coupling
+   15 WV_dED                           kg/m2               1 A  Total column water vaporend of previous dynamics
+   16 WL_dED                           kg/m2               1 A  Total column cloud waterend of previous dynamics
+   17 WI_dED                           kg/m2               1 A  Total column cloud iceend of previous dynamics
+   18 SE_dED                           J/m2                1 A  Total column dry static energyend of previous dynamics
+   19 KE_dED                           J/m2                1 A  Total column kinetic energyend of previous dynamics
+   20 MR_dED                           kg*m2/s*rad2        1 A  Total column wind axial angular momentumend of previous dynamics
+   21 MO_dED                           kg*m2/s*rad2        1 A  Total column mass axial angular momentumend of previous dynamics
+   22 TT_dED                           kg/m2               1 A  Total column test tracerend of previous dynamics
+   23 WV_dAF                           kg/m2               1 A  Total column water vaporfrom previous remapping or state passed to dynamics
+   24 WL_dAF                           kg/m2               1 A  Total column cloud waterfrom previous remapping or state passed to dynamics
+   25 WI_dAF                           kg/m2               1 A  Total column cloud icefrom previous remapping or state passed to dynamics
+   26 SE_dAF                           J/m2                1 A  Total column dry static energyfrom previous remapping or state passed to dynamics
+   27 KE_dAF                           J/m2                1 A  Total column kinetic energyfrom previous remapping or state passed to dynamics
+   28 MR_dAF                           kg*m2/s*rad2        1 A  Total column wind axial angular momentumfrom previous remapping or state passed to dynamics
+   29 MO_dAF                           kg*m2/s*rad2        1 A  Total column mass axial angular momentumfrom previous remapping or state passed to dynamics
+   30 TT_dAF                           kg/m2               1 A  Total column test tracerfrom previous remapping or state passed to dynamics
+   31 WV_dBD                           kg/m2               1 A  Total column water vaporstate after applying CAM forcing
+   32 WL_dBD                           kg/m2               1 A  Total column cloud waterstate after applying CAM forcing
+   33 WI_dBD                           kg/m2               1 A  Total column cloud icestate after applying CAM forcing
+   34 SE_dBD                           J/m2                1 A  Total column dry static energystate after applying CAM forcing
+   35 KE_dBD                           J/m2                1 A  Total column kinetic energystate after applying CAM forcing
+   36 MR_dBD                           kg*m2/s*rad2        1 A  Total column wind axial angular momentumstate after applying CAM forcing
+   37 MO_dBD                           kg*m2/s*rad2        1 A  Total column mass axial angular momentumstate after applying CAM forcing
+   38 TT_dBD                           kg/m2               1 A  Total column test tracerstate after applying CAM forcing
+   39 WV_dAD                           kg/m2               1 A  Total column water vaporbefore vertical remapping
+   40 WL_dAD                           kg/m2               1 A  Total column cloud waterbefore vertical remapping
+   41 WI_dAD                           kg/m2               1 A  Total column cloud icebefore vertical remapping
+   42 SE_dAD                           J/m2                1 A  Total column dry static energybefore vertical remapping
+   43 KE_dAD                           J/m2                1 A  Total column kinetic energybefore vertical remapping
+   44 MR_dAD                           kg*m2/s*rad2        1 A  Total column wind axial angular momentumbefore vertical remapping
+   45 MO_dAD                           kg*m2/s*rad2        1 A  Total column mass axial angular momentumbefore vertical remapping
+   46 TT_dAD                           kg/m2               1 A  Total column test tracerbefore vertical remapping
+   47 WV_dAR                           kg/m2               1 A  Total column water vaporafter vertical remapping
+   48 WL_dAR                           kg/m2               1 A  Total column cloud waterafter vertical remapping
+   49 WI_dAR                           kg/m2               1 A  Total column cloud iceafter vertical remapping
+   50 SE_dAR                           J/m2                1 A  Total column dry static energyafter vertical remapping
+   51 KE_dAR                           J/m2                1 A  Total column kinetic energyafter vertical remapping
+   52 MR_dAR                           kg*m2/s*rad2        1 A  Total column wind axial angular momentumafter vertical remapping
+   53 MO_dAR                           kg*m2/s*rad2        1 A  Total column mass axial angular momentumafter vertical remapping
+   54 TT_dAR                           kg/m2               1 A  Total column test tracerafter vertical remapping
+   55 WV_dBF                           kg/m2               1 A  Total column water vaporstate passed to parameterizations
+   56 WL_dBF                           kg/m2               1 A  Total column cloud waterstate passed to parameterizations
+   57 WI_dBF                           kg/m2               1 A  Total column cloud icestate passed to parameterizations
+   58 SE_dBF                           J/m2                1 A  Total column dry static energystate passed to parameterizations
+   59 KE_dBF                           J/m2                1 A  Total column kinetic energystate passed to parameterizations
+   60 MR_dBF                           kg*m2/s*rad2        1 A  Total column wind axial angular momentumstate passed to parameterizations
+   61 MO_dBF                           kg*m2/s*rad2        1 A  Total column mass axial angular momentumstate passed to parameterizations
+   62 TT_dBF                           kg/m2               1 A  Total column test tracerstate passed to parameterizations
+   63 WV_dBH                           kg/m2               1 A  Total column water vaporstate before hypervis
+   64 WL_dBH                           kg/m2               1 A  Total column cloud waterstate before hypervis
+   65 WI_dBH                           kg/m2               1 A  Total column cloud icestate before hypervis
+   66 SE_dBH                           J/m2                1 A  Total column dry static energystate before hypervis
+   67 KE_dBH                           J/m2                1 A  Total column kinetic energystate before hypervis
+   68 MR_dBH                           kg*m2/s*rad2        1 A  Total column wind axial angular momentumstate before hypervis
+   69 MO_dBH                           kg*m2/s*rad2        1 A  Total column mass axial angular momentumstate before hypervis
+   70 TT_dBH                           kg/m2               1 A  Total column test tracerstate before hypervis
+   71 WV_dCH                           kg/m2               1 A  Total column water vaporstate after hypervis but before adding heating term
+   72 WL_dCH                           kg/m2               1 A  Total column cloud waterstate after hypervis but before adding heating term
+   73 WI_dCH                           kg/m2               1 A  Total column cloud icestate after hypervis but before adding heating term
+   74 SE_dCH                           J/m2                1 A  Total column dry static energystate after hypervis but before adding heating term
+   75 KE_dCH                           J/m2                1 A  Total column kinetic energystate after hypervis but before adding heating term
+   76 MR_dCH                           kg*m2/s*rad2        1 A  Total column wind axial angular momentumstate after hypervis but before adding heating term
+   77 MO_dCH                           kg*m2/s*rad2        1 A  Total column mass axial angular momentumstate after hypervis but before adding heating term
+   78 TT_dCH                           kg/m2               1 A  Total column test tracerstate after hypervis but before adding heating term
+   79 WV_dAH                           kg/m2               1 A  Total column water vaporstate after hypervis
+   80 WL_dAH                           kg/m2               1 A  Total column cloud waterstate after hypervis
+   81 WI_dAH                           kg/m2               1 A  Total column cloud icestate after hypervis
+   82 SE_dAH                           J/m2                1 A  Total column dry static energystate after hypervis
+   83 KE_dAH                           J/m2                1 A  Total column kinetic energystate after hypervis
+   84 MR_dAH                           kg*m2/s*rad2        1 A  Total column wind axial angular momentumstate after hypervis
+   85 MO_dAH                           kg*m2/s*rad2        1 A  Total column mass axial angular momentumstate after hypervis
+   86 TT_dAH                           kg/m2               1 A  Total column test tracerstate after hypervis
+   87 WV_p2d                           kg/m2               1 A  Total column water vaporphys2dyn mapping errors (requires ftype-1)
+   88 WL_p2d                           kg/m2               1 A  Total column cloud waterphys2dyn mapping errors (requires ftype-1)
+   89 WI_p2d                           kg/m2               1 A  Total column cloud icephys2dyn mapping errors (requires ftype-1)
+   90 SE_p2d                           J/m2                1 A  Total column dry static energyphys2dyn mapping errors (requires ftype-1)
+   91 KE_p2d                           J/m2                1 A  Total column kinetic energyphys2dyn mapping errors (requires ftype-1)
+   92 MR_p2d                           kg*m2/s*rad2        1 A  Total column wind axial angular momentumphys2dyn mapping errors (requires ftype-1)
+   93 MO_p2d                           kg*m2/s*rad2        1 A  Total column mass axial angular momentumphys2dyn mapping errors (requires ftype-1)
+   94 TT_p2d                           kg/m2               1 A  Total column test tracerphys2dyn mapping errors (requires ftype-1)
+   95 Q                                kg/kg              30 A  Specific humidity
+   96 NSTEP                            timestep            1 A  Model timestep
+   97 PHIS                             m2/s2               1 I  Surface geopotential
+   98 PS                               Pa                  1 A  Surface pressure
+   99 T                                K                  30 A  Temperature
+  100 U                                m/s                30 A  Zonal wind
+  101 V                                m/s                30 A  Meridional wind
+  102 TBP                              K                  30 A  Temperature (before physics)
+  103 QBP                              kg/kg              30 A  Specific humidity (before physics)
+  104 TAP                              K                  30 A  Temperature (after physics)
+  105 UAP                              m/s                30 A  Zonal wind (after physics)
+  106 VAP                              m/s                30 A  Meridional wind (after physics)
+  107 QAP                              kg/kg              30 A  Specific humidity (after physics)
+  108 TFIX                             K/s                 1 A  T fixer (T equivalent of Energy correction)
+  109 TTEND_TOT                        K/s                30 A  Total temperature tendency
+  110 Z3                               m                  30 A  Geopotential Height (above sea level)
+  111 Z1000                            m                   1 A  Geopotential Z at 1000 mbar pressure surface
+  112 Z700                             m                   1 A  Geopotential Z at 700 mbar pressure surface
+  113 Z500                             m                   1 A  Geopotential Z at 500 mbar pressure surface
+  114 Z300                             m                   1 A  Geopotential Z at 300 mbar pressure surface
+  115 Z200                             m                   1 A  Geopotential Z at 200 mbar pressure surface
+  116 Z100                             m                   1 A  Geopotential Z at 100 mbar pressure surface
+  117 Z050                             m                   1 A  Geopotential Z at 50 mbar pressure surface
+  118 ZZ                               m2                 30 A  Eddy height variance
+  119 VZ                               m2/s               30 A  Meridional transport of geopotential height
+  120 VT                               K m/s              30 A  Meridional heat transport
+  121 VU                               m2/s2              30 A  Meridional flux of zonal momentum
+  122 VV                               m2/s2              30 A  Meridional velocity squared
+  123 OMEGAV                           m Pa/s2            30 A  Vertical flux of meridional momentum
+  124 OMGAOMGA                         Pa2/s2             30 A  Vertical flux of vertical momentum
+  125 UU                               m2/s2              30 A  Zonal velocity squared
+  126 WSPEED                           m/s                30 X  Horizontal total wind speed maximum
+  127 WSPDSRFMX                        m/s                 1 X  Horizontal total wind speed maximum at the surface
+  128 WSPDSRFAV                        m/s                 1 A  Horizontal total wind speed average at the surface
+  129 OMEGA                            Pa/s               30 A  Vertical velocity (pressure)
+  130 OMEGAT                           K Pa/s             30 A  Vertical heat flux
+  131 OMEGAU                           m Pa/s2            30 A  Vertical flux of zonal momentum
+  132 OMEGA850                         Pa/s                1 A  Vertical velocity at 850 mbar pressure surface
+  133 OMEGA500                         Pa/s                1 A  Vertical velocity at 500 mbar pressure surface
+  134 PSL                              Pa                  1 A  Sea level pressure
+  135 T1000                            K                   1 A  Temperature at 1000 mbar pressure surface
+  136 T925                             K                   1 A  Temperature at 925 mbar pressure surface
+  137 T850                             K                   1 A  Temperature at 850 mbar pressure surface
+  138 T700                             K                   1 A  Temperature at 700 mbar pressure surface
+  139 T500                             K                   1 A  Temperature at 500 mbar pressure surface
+  140 T400                             K                   1 A  Temperature at 400 mbar pressure surface
+  141 T300                             K                   1 A  Temperature at 300 mbar pressure surface
+  142 T200                             K                   1 A  Temperature at 200 mbar pressure surface
+  143 T010                             K                   1 A  Temperature at 10 mbar pressure surface
+  144 T7001000                         K                   1 A  Temperature difference 700 mb - 1000 mb
+  145 TH7001000                        K                   1 A  Theta difference 700 mb - 1000 mb
+  146 THE7001000                       K                   1 A  ThetaE difference 700 mb - 1000 mb
+  147 T8501000                         K                   1 A  Temperature difference 850 mb - 1000 mb
+  148 TH8501000                        K                   1 A  Theta difference 850 mb - 1000 mb
+  149 T9251000                         K                   1 A  Temperature difference 925 mb - 1000 mb
+  150 TH9251000                        K                   1 A  Theta difference 925 mb - 1000 mb
+  151 TT                               K2                 30 A  Eddy temperature variance
+  152 U850                             m/s                 1 A  Zonal wind at 850 mbar pressure surface
+  153 U500                             m/s                 1 A  Zonal wind at 500 mbar pressure surface
+  154 U250                             m/s                 1 A  Zonal wind at 250 mbar pressure surface
+  155 U200                             m/s                 1 A  Zonal wind at 200 mbar pressure surface
+  156 U010                             m/s                 1 A  Zonal wind at  10 mbar pressure surface
+  157 V850                             m/s                 1 A  Meridional wind at 850 mbar pressure surface
+  158 V500                             m/s                 1 A  Meridional wind at 500 mbar pressure surface
+  159 V250                             m/s                 1 A  Meridional wind at 250 mbar pressure surface
+  160 V200                             m/s                 1 A  Meridional wind at 200 mbar pressure surface
+  161 UBOT                             m/s                 1 A  Lowest model level zonal wind
+  162 VBOT                             m/s                 1 A  Lowest model level meridional wind
+  163 ZBOT                             m                   1 A  Lowest model level height
+  164 ATMEINT                          J/m2                1 A  Vertically integrated total atmospheric energy
+  165 PTTEND                           K/s                30 A  T total physics tendency
+  166 T_24_COS                         K                  30 A  Temperature 24hr. cos coeff.
+  167 T_24_SIN                         K                  30 A  Temperature 24hr. sin coeff.
+  168 T_12_COS                         K                  30 A  Temperature 12hr. cos coeff.
+  169 T_12_SIN                         K                  30 A  Temperature 12hr. sin coeff.
+  170 T_08_COS                         K                  30 A  Temperature  8hr. cos coeff.
+  171 T_08_SIN                         K                  30 A  Temperature  8hr. sin coeff.
+  172 U_24_COS                         m/s                30 A  Zonal wind 24hr. cos coeff.
+  173 U_24_SIN                         m/s                30 A  Zonal wind 24hr. sin coeff.
+  174 U_12_COS                         m/s                30 A  Zonal wind 12hr. cos coeff.
+  175 U_12_SIN                         m/s                30 A  Zonal wind 12hr. sin coeff.
+  176 U_08_COS                         m/s                30 A  Zonal wind  8hr. cos coeff.
+  177 U_08_SIN                         m/s                30 A  Zonal wind  8hr. sin coeff.
+  178 V_24_COS                         m/s                30 A  Meridional wind 24hr. cos coeff.
+  179 V_24_SIN                         m/s                30 A  Meridional wind 24hr. sin coeff.
+  180 V_12_COS                         m/s                30 A  Meridional wind 12hr. cos coeff.
+  181 V_12_SIN                         m/s                30 A  Meridional wind 12hr. sin coeff.
+  182 V_08_COS                         m/s                30 A  Meridional wind  8hr. cos coeff.
+  183 V_08_SIN                         m/s                30 A  Meridional wind  8hr. sin coeff.
+  184 PS_24_COS                        Pa                  1 A  surface pressure 24hr. cos coeff.
+  185 PS_24_SIN                        Pa                  1 A  surface pressure 24hr. sin coeff.
+  186 PS_12_COS                        Pa                  1 A  surface pressure 12hr. cos coeff.
+  187 PS_12_SIN                        Pa                  1 A  surface pressure 12hr. sin coeff.
+  188 PS_08_COS                        Pa                  1 A  surface pressure  8hr. cos coeff.
+  189 PS_08_SIN                        Pa                  1 A  surface pressure  8hr. sin coeff.
+  190 OMEGA_24_COS                     Pa/s               30 A  vertical pressure velocity 24hr. cos coeff.
+  191 OMEGA_24_SIN                     Pa/s               30 A  vertical pressure velocity 24hr. sin coeff.
+  192 OMEGA_12_COS                     Pa/s               30 A  vertical pressure velocity 12hr. cos coeff.
+  193 OMEGA_12_SIN                     Pa/s               30 A  vertical pressure velocity 12hr. sin coeff.
+  194 OMEGA_08_COS                     Pa/s               30 A  vertical pressure velocity  8hr. cos coeff.
+  195 OMEGA_08_SIN                     Pa/s               30 A  vertical pressure velocity  8hr. sin coeff.
+  196 SE_pBF                           J/m2                1 A  Dry Static Energy before energy fixer
+  197 SE_pBP                           J/m2                1 A  Dry Static Energy before parameterizations
+  198 SE_pAP                           J/m2                1 A  Dry Static Energy after parameterizations
+  199 SE_pAM                           J/m2                1 A  Dry Static Energy after dry mass correction
+  200 KE_pBF                           J/m2                1 A  Kinetic Energy before energy fixer
+  201 KE_pBP                           J/m2                1 A  Kinetic Energy before parameterizations
+  202 KE_pAP                           J/m2                1 A  Kinetic Energy after parameterizations
+  203 KE_pAM                           J/m2                1 A  Kinetic Energy after dry mass correction
+  204 TT_pBF                           kg/m2               1 A  Total column test tracer before energy fixer
+  205 TT_pBP                           kg/m2               1 A  Total column test tracer before parameterizations
+  206 TT_pAP                           kg/m2               1 A  Total column test tracer after parameterizations
+  207 TT_pAM                           kg/m2               1 A  Total column test tracer after dry mass correction
+  208 WV_pBF                           kg/m2               1 A  Total column water vapor before energy fixer
+  209 WV_pBP                           kg/m2               1 A  Total column water vapor before parameterizations
+  210 WV_pAP                           kg/m2               1 A  Total column water vapor after parameterizations
+  211 WV_pAM                           kg/m2               1 A  Total column water vapor after dry mass correction
+  212 WL_pBF                           kg/m2               1 A  Total column cloud water before energy fixer
+  213 WL_pBP                           kg/m2               1 A  Total column cloud water before parameterizations
+  214 WL_pAP                           kg/m2               1 A  Total column cloud water after parameterizations
+  215 WL_pAM                           kg/m2               1 A  Total column cloud water after dry mass correction
+  216 WI_pBF                           kg/m2               1 A  Total column cloud ice before energy fixer
+  217 WI_pBP                           kg/m2               1 A  Total column cloud ice before parameterizations
+  218 WI_pAP                           kg/m2               1 A  Total column cloud ice after parameterizations
+  219 WI_pAM                           kg/m2               1 A  Total column cloud ice after dry mass correction
+  220 MR_pBF                           kg*m2/s*rad2        1 A  Total column wind axial angular momentum before energy fixer
+  221 MR_pBP                           kg*m2/s*rad2        1 A  Total column wind axial angular momentum before parameterizations
+  222 MR_pAP                           kg*m2/s*rad2        1 A  Total column wind axial angular momentum after parameterizations
+  223 MR_pAM                           kg*m2/s*rad2        1 A  Total column wind axial angular momentum after dry mass correction
+  224 MO_pBF                           kg*m2/s*rad2        1 A  Total column mass axial angular momentum before energy fixer
+  225 MO_pBP                           kg*m2/s*rad2        1 A  Total column mass axial angular momentum before parameterizations
+  226 MO_pAP                           kg*m2/s*rad2        1 A  Total column mass axial angular momentum after parameterizations
+  227 MO_pAM                           kg*m2/s*rad2        1 A  Total column mass axial angular momentum after dry mass correction
+  228 TMCLDLIQ                         kg/m2               1 A  CLDLIQ column burden
+  229 TMRAINQM                         kg/m2               1 A  RAINQM column burden
+  230 TMCL                             kg/m2               1 A  CL column burden
+  231 TMCL2                            kg/m2               1 A  CL2 column burden
+  232 TMRHO                            kg/m2               1 A  RHO column burden
+  233 OMEGAQ                           kgPa/kgs           30 A  Vertical water transport
+  234 VQ                               m/skg/kg           30 A  Meridional water transport
+  235 QQ                               kg2/kg2            30 A  Eddy moisture variance
+  236 MQ                               kg/m2              30 A  Water vapor mass in layer
+  237 TMQ                              kg/m2               1 A  Total (vertically integrated) precipitable water
+  238 RELHUM                           percent            30 A  Relative humidity
+  239 RHW                              percent            30 A  Relative humidity with respect to liquid
+  240 RHI                              percent            30 A  Relative humidity with respect to ice
+  241 RHCFMIP                          percent            30 A  Relative humidity with respect to water above 273 K, ice below 273 K
+  242 THE8501000                       K                   1 A  ThetaE difference 850 mb - 1000 mb
+  243 THE9251000                       K                   1 A  ThetaE difference 925 mb - 1000 mb
+  244 Q1000                            kg/kg               1 A  Specific Humidity at 1000 mbar pressure surface
+  245 Q925                             kg/kg               1 A  Specific Humidity at 925 mbar pressure surface
+  246 Q850                             kg/kg               1 A  Specific Humidity at 850 mbar pressure surface
+  247 Q200                             kg/kg               1 A  Specific Humidity at 700 mbar pressure surface
+  248 QBOT                             kg/kg               1 A  Lowest model level water vapor mixing ratio
+  249 PSDRY                            Pa                  1 A  Dry surface pressure
+  250 PMID                             Pa                 30 A  Pressure at layer midpoints
+  251 PDELDRY                          Pa                 30 A  Dry pressure difference between levels
+  252 DTCOND                           K/s                30 A  T tendency - moist processes
+  253 DTCOND_24_COS                    K/s                30 A  T tendency - moist processes 24hr. cos coeff.
+  254 DTCOND_24_SIN                    K/s                30 A  T tendency - moist processes 24hr. sin coeff.
+  255 DTCOND_12_COS                    K/s                30 A  T tendency - moist processes 12hr. cos coeff.
+  256 DTCOND_12_SIN                    K/s                30 A  T tendency - moist processes 12hr. sin coeff.
+  257 DTCOND_08_COS                    K/s                30 A  T tendency - moist processes  8hr. cos coeff.
+  258 DTCOND_08_SIN                    K/s                30 A  T tendency - moist processes  8hr. sin coeff.
+  259 PRECL                            m/s                 1 A  Large-scale (stable) precipitation rate (liq + ice)
+  260 PRECC                            m/s                 1 A  Convective precipitation rate (liq + ice)
+  261 PRECT                            m/s                 1 A  Total (convective and large-scale) precipitation rate (liq + ice)
+  262 PREC_PCW                         m/s                 1 A  LS_pcw precipitation rate
+  263 PREC_zmc                         m/s                 1 A  CV_zmc precipitation rate
+  264 PRECTMX                          m/s                 1 X  Maximum (convective and large-scale) precipitation rate (liq+ice)
+  265 PRECSL                           m/s                 1 A  Large-scale (stable) snow rate (water equivalent)
+  266 PRECSC                           m/s                 1 A  Convective snow rate (water equivalent)
+  267 PRECCav                          m/s                 1 A  Average large-scale precipitation (liq + ice)
+  268 PRECLav                          m/s                 1 A  Average convective precipitation  (liq + ice)
+  269 SHFLX                            W/m2                1 A  Surface sensible heat flux
+  270 LHFLX                            W/m2                1 A  Surface latent heat flux
+  271 QFLX                             kg/m2/s             1 A  Surface water flux
+  272 TAUX                             N/m2                1 A  Zonal surface stress
+  273 TAUY                             N/m2                1 A  Meridional surface stress
+  274 TREFHT                           K                   1 A  Reference height temperature
+  275 TREFHTMN                         K                   1 M  Minimum reference height temperature over output period
+  276 TREFHTMX                         K                   1 X  Maximum reference height temperature over output period
+  277 QREFHT                           kg/kg               1 A  Reference height humidity
+  278 U10                              m/s                 1 A  10m wind speed
+  279 RHREFHT                          fraction            1 A  Reference height relative humidity
+  280 LANDFRAC                         fraction            1 A  Fraction of sfc area covered by land
+  281 ICEFRAC                          fraction            1 A  Fraction of sfc area covered by sea-ice
+  282 OCNFRAC                          fraction            1 A  Fraction of sfc area covered by ocean
+  283 TREFMNAV                         K                   1 A  Average of TREFHT daily minimum
+  284 TREFMXAV                         K                   1 A  Average of TREFHT daily maximum
+  285 TS                               K                   1 A  Surface temperature (radiative)
+  286 TSMN                             K                   1 M  Minimum surface temperature over output period
+  287 TSMX                             K                   1 X  Maximum surface temperature over output period
+  288 SNOWHLND                         m                   1 A  Water equivalent snow depth
+  289 SNOWHICE                         m                   1 A  Snow depth over ice
+  290 TBOT                             K                   1 A  Lowest model level temperature
+  291 ASDIR                            1                   1 A  albedo: shortwave, direct
+  292 ASDIF                            1                   1 A  albedo: shortwave, diffuse
+  293 ALDIR                            1                   1 A  albedo: longwave, direct
+  294 ALDIF                            1                   1 A  albedo: longwave, diffuse
+  295 SST                              K                   1 A  sea surface temperature
+  296 PTEQ                             kg/kg/s            30 A  Q total physics tendency
+  297 PTECLDLIQ                        kg/kg/s            30 A  CLDLIQ total physics tendency
+  298 QCWAT&IC                         kg/kg              30 I  q associated with cloud water
+  299 TCWAT&IC                         kg/kg              30 I  T associated with cloud water
+  300 LCWAT&IC                         kg/kg              30 I  Cloud water (ice + liq
+  301 CLOUD&IC                         fraction           30 I  Cloud fraction
+  302 CONCLD&IC                        fraction           30 I  Convective cloud fraction
+  303 TKE&IC                           m2/s2              31 I  Turbulent Kinetic Energy
+  304 CUSH&IC                          m                   1 I  Convective Scale Height
+  305 KVH&IC                           m2/s               31 I  Vertical diffusion diffusivities (heat/moisture)
+  306 KVM&IC                           m2/s               31 I  Vertical diffusion diffusivities (momentum)
+  307 PBLH&IC                          m                   1 I  PBL height
+  308 TPERT&IC                         K                   1 I  Perturbation temperature (eddies in PBL)
+  309 QPERT&IC                         kg/kg               1 I  Perturbation specific humidity (eddies in PBL)
+  310 a2x_BCPHIWET                     kg/m2/s             1 A  wetdep of hydrophilic black carbon
+  311 a2x_BCPHIDRY                     kg/m2/s             1 A  drydep of hydrophilic black carbon
+  312 a2x_BCPHODRY                     kg/m2/s             1 A  drydep of hydrophobic black carbon
+  313 a2x_OCPHIWET                     kg/m2/s             1 A  wetdep of hydrophilic organic carbon
+  314 a2x_OCPHIDRY                     kg/m2/s             1 A  drydep of hydrophilic organic carbon
+  315 a2x_OCPHODRY                     kg/m2/s             1 A  drydep of hydrophobic organic carbon
+  316 a2x_DSTWET1                      kg/m2/s             1 A  wetdep of dust (bin1)
+  317 a2x_DSTDRY1                      kg/m2/s             1 A  drydep of dust (bin1)
+  318 a2x_DSTWET2                      kg/m2/s             1 A  wetdep of dust (bin2)
+  319 a2x_DSTDRY2                      kg/m2/s             1 A  drydep of dust (bin2)
+  320 a2x_DSTWET3                      kg/m2/s             1 A  wetdep of dust (bin3)
+  321 a2x_DSTDRY3                      kg/m2/s             1 A  drydep of dust (bin3)
+  322 a2x_DSTWET4                      kg/m2/s             1 A  wetdep of dust (bin4)
+  323 a2x_DSTDRY4                      kg/m2/s             1 A  drydep of dust (bin4)
+  324 DCQ                              kg/kg/s            30 A  Q tendency due to moist processes
+  325 TEINP                            J/m2                1 A  Total energy of physics input
+  326 TEOUT                            J/m2                1 A  Total energy of physics output
+  327 TEFIX                            J/m2                1 A  Total energy after fixer
+  328 EFIX                             W/m2                1 A  Effective sensible heat flux due to energy fixer
+  329 DTCORE                           K/s                30 A  T tendency due to dynamical core
+  330 CLDLIQ                           kg/kg              30 A  Grid box averaged cloud liquid amount
+  331 RAINQM                           kg/kg              30 A  Grid box averaged rain water amount
+  332 CLDLIQBP                         kg/kg              30 A  Grid box averaged cloud liquid amount (before physics)
+  333 CLDLIQAP                         kg/kg              30 A  Grid box averaged cloud liquid amount (after physics)
+  334 CL                               mole/mole          30 A  CL mixing ratio
+  335 CL2                              mole/mole          30 A  CL2 mixing ratio
+  336 RHO                              mole/mole          30 A  RHO mixing ratio
+  337 k1                               /s                  1 A  reaction rate
+  338 k2                               /s                  1 A  reaction rate
+  339 CLy                              mole/mole          30 A  CLy mixing ratio
+  340 iCLy                             mole/mole           1 A  Average mass-weighted column-integrated CLy mixing ratio
+  341 iCL                              mole/mole           1 A  Average mass-weighted column-integrated CL mixing ratio
+  342 iCL2                             mole/mole           1 A  Average mass-weighted column-integrated CL2 mixing ratio
+  343 Q_qneg3                          kg/kg              30 I  Specific humidity QNEG3 error (cell)
+  344 Q_qneg3_col                      kg/kg               1 I  Specific humidity QNEG3 error (column)
+  345 CLDLIQ_qneg3                     kg/kg              30 I  Grid box averaged cloud liquid amount QNEG3 error (cell)
+  346 CLDLIQ_qneg3_col                 kg/kg               1 I  Grid box averaged cloud liquid amount QNEG3 error (column)
+  347 RAINQM_qneg3                     kg/kg              30 I  Grid box averaged rain water amount QNEG3 error (cell)
+  348 RAINQM_qneg3_col                 kg/kg               1 I  Grid box averaged rain water amount QNEG3 error (column)
+  349 CL_qneg3                         kg/kg              30 I  CL QNEG3 error (cell)
+  350 CL_qneg3_col                     kg/kg               1 I  CL QNEG3 error (column)
+  351 CL2_qneg3                        kg/kg              30 I  CL2 QNEG3 error (cell)
+  352 CL2_qneg3_col                    kg/kg               1 I  CL2 QNEG3 error (column)
+  353 RHO_qneg3                        kg/kg              30 I  RHO QNEG3 error (cell)
+  354 RHO_qneg3_col                    kg/kg               1 I  RHO QNEG3 error (column)
+  355 qflux_exceeded                   kg/m^2/s            1 I  qflux excess (QNEG4)
+  356 DQP                              kg/kg/s            30 A  Specific humidity tendency due to precipitation
+  357 Q_gll                            kg/kg              30 I  Specific humidity
+  358 Qdp_gll                          kg/kg              30 I  Specific humidity*dp
+  359 CLDLIQ_gll                       kg/kg              30 I  Grid box averaged cloud liquid amount
+  360 CLDLIQdp_gll                     kg/kg              30 I  Grid box averaged cloud liquid amount*dp
+  361 RAINQM_gll                       kg/kg              30 I  Grid box averaged rain water amount
+  362 RAINQMdp_gll                     kg/kg              30 I  Grid box averaged rain water amount*dp
+  363 CL_gll                           kg/kg              30 I  CL
+  364 CLdp_gll                         kg/kg              30 I  CL*dp
+  365 CL2_gll                          kg/kg              30 I  CL2
+  366 CL2dp_gll                        kg/kg              30 I  CL2*dp
+  367 RHO_gll                          kg/kg              30 I  RHO
+  368 RHOdp_gll                        kg/kg              30 I  RHO*dp
+  369 U_gll                            m/s                30 I  U wind on gll grid
+  370 V_gll                            m/s                30 I  V wind on gll grid
+  371 T_gll                            K                  30 I  T on gll grid
+  372 PSDRY_gll                        Pa                  1 I  psdry on gll grid
+  373 PS_gll                           Pa                  1 I  ps on gll grid
+  374 PHIS_gll                         Pa                  1 I  PHIS on gll grid
+  375 U&IC                             m/s                30 I  Zonal wind
+  376 V&IC                             m/s                30 I  Meridional wind
+  377 PS&IC                            Pa                  1 I  Surface pressure
+  378 T&IC                             K                  30 I  Temperature
+  379 Q&IC                             kg/kg              30 I  Specific humidity
+  380 CLDLIQ&IC                        kg/kg              30 I  Grid box averaged cloud liquid amount
+  381 RAINQM&IC                        kg/kg              30 I  Grid box averaged rain water amount
+  382 CL&IC                            kg/kg              30 I  CL
+  383 CL2&IC                           kg/kg              30 I  CL2
+  384 RHO&IC                           kg/kg              30 I  RHO
+ intht:nfmaster=         384
+ FLDLST: Tape            3  is empty
+ FLDLST: Tape            4  is empty
+ FLDLST: Tape            5  is empty
+ FLDLST: Tape            6  is empty
+ FLDLST: Tape            7  is empty
+ FLDLST: Tape            8  is empty
+ FLDLST: Tape            9  is empty
+ FLDLST: Tape           10  is empty
+ FLDLST: Tape           11  is empty
+  
+ FLDLST: History file            1  contains            2  fields
+  Write frequency:                           48
+  Filename specifier:              %c.cam.h%t.%y-%m-%d-%s.nc
+  Output precision:                single
+  Number of time samples per file:           30
+  Fields are represented on global grids:
+           100
+  Included fields are:
+    1 PRECL                            m/s                 1 I  Large-scale (stable) precipitation rate (liq + ice)
+    2 PS                               Pa                  1 I  Surface pressure
+  
+ FLDLST: History file            2  contains           10  fields
+  Write frequency:                           48
+  Filename specifier:              %c.cam.h%t.%y-%m-%d-%s.nc
+  Output precision:                single
+  Number of time samples per file:           30
+  Fields are represented on global grids:
+           100
+  Included fields are:
+    1 CLDLIQ                           kg/kg              30 A  Grid box averaged cloud liquid amount
+    2 OMEGA                            Pa/s               30 A  Vertical velocity (pressure)
+    3 Q                                kg/kg              30 A  Specific humidity
+    4 RAINQM                           kg/kg              30 A  Grid box averaged rain water amount
+    5 T                                K                  30 A  Temperature
+    6 U                                m/s                30 A  Zonal wind
+    7 V                                m/s                30 A  Meridional wind
+    8 iCL                              mole/mole           1 A  Average mass-weighted column-integrated CL mixing ratio
+    9 iCL2                             mole/mole           1 A  Average mass-weighted column-integrated CL2 mixing ratio
+   10 iCLy                             mole/mole           1 A  Average mass-weighted column-integrated CLy mixing ratio
+  
+ FLDLST: History file           12  contains           10  fields
+  Write frequency:                 YEARLY   (INITIAL CONDITIONS)
+  Filename specifier:              %c.cam.i.%y-%m-%d-%s.nc
+  Output precision:                double
+  Number of time samples per file:            1
+  Fields are represented on global grids:
+           101
+  Included fields are:
+    1 CL&IC                            kg/kg              30 I  CL
+    2 CL2&IC                           kg/kg              30 I  CL2
+    3 CLDLIQ&IC                        kg/kg              30 I  Grid box averaged cloud liquid amount
+    4 PS&IC                            Pa                  1 I  Surface pressure
+    5 Q&IC                             kg/kg              30 I  Specific humidity
+    6 RAINQM&IC                        kg/kg              30 I  Grid box averaged rain water amount
+    7 RHO&IC                           kg/kg              30 I  RHO
+    8 T&IC                             K                  30 I  Temperature
+    9 U&IC                             m/s                30 I  Zonal wind
+   10 V&IC                             m/s                30 I  Meridional wind
+ nstep, te        0   0.26317785398197021E+10   0.26317785398197021E+10  -0.00000000000000000E+00   0.99999998617825389E+05
+WSHIST: writing time sample   0 to h-file 1 DATE=0001/01/01 NCSEC=     0
+
+ WSHIST: nhfil(           1 )=FKESSLER.cam.h0.0001-01-01-00000.nc
+ Opening netcdf history file FKESSLER.cam.h0.0001-01-01-00000.nc
+ H_DEFINE: Successfully opened netcdf file 
+ Creating new decomp: 16!760!!48602!!d6!i2!                           
+WSHIST: writing time sample   0 to h-file 2 DATE=0001/01/01 NCSEC=     0
+
+ WSHIST: nhfil(           2 )=FKESSLER.cam.h1.0001-01-01-00000.nc
+ Opening netcdf history file FKESSLER.cam.h1.0001-01-01-00000.nc
+ H_DEFINE: Successfully opened netcdf file 
+ Creating new decomp: 16!30!760!!48602!30!!d6!i2!                     
+ nstep, te        1   0.26317780750597858E+10   0.26317782522024746E+10   0.96723118242219288E-05   0.99999990163745926E+05
+ WRAPUP: nf_close(           1 )=FKESSLER.cam.h0.0001-01-01-00000.nc
+    Primary history file
+    Output at NSTEP     =          1
+    Number of time samples on this file =          1
+    Model Day           =       0.02
+---------------------------------------
+ WRAPUP: nf_close(           2 )=FKESSLER.cam.h1.0001-01-01-00000.nc
+    Auxiliary history file number            1
+    Output at NSTEP     =          1
+    Number of time samples on this file =          1
+    Model Day           =       0.02
+---------------------------------------
+ nstep, te        2   0.26317780735390315E+10   0.26317780750795765E+10   0.84116548054005219E-07   0.99999990164327610E+05
+
+
+Number of completed timesteps:     1
+Time step      2 partially done to provide convectively adjusted and time filtered values for history tape.
+  
+ ******* END OF MODEL RUN *******
