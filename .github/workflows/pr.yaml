@@ -254,12 +254,18 @@ jobs:
       with:
         path: ~/.planemo
         key: planemo_cache_py_${{ matrix.python-version }}_gxy_${{ needs.setup.outputs.galaxy-head-sha }}
-    - name: Create Copernicus Config file
+    - name: Create Copernicus Climate Change Config file
       uses: jwsi/secret-parser@v1
       with:
         filename: tools/essential_climate_variables/cdsapirc.cfg
         secret-name: GALAXY_COPERNICUS_CDSAPIRC_KEY
         secret-value: ${{ secrets.GALAXY_COPERNICUS_CDSAPIRC_KEY }}
+    - name: Create Copernicus Atmosphere Monitoring Config file
+      uses: jwsi/secret-parser@v1
+      with:
+        filename: tools/cads/adsapirc.cfg
+        secret-name: GALAXY_COPERNICUS_ADSAPIRC_KEY
+        secret-value: ${{ secrets.GALAXY_COPERNICUS_ADSAPIRC_KEY }}
     - name: Planemo test
       uses: galaxyproject/planemo-ci-action@v1
       id: test

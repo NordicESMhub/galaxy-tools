@@ -1,0 +1,21 @@
+import cdsapi
+
+c = cdsapi.Client()
+
+c.retrieve(
+    'cams-europe-air-quality-forecasts',
+    {
+        'variable': 'nitrogen_dioxide',
+        'model': 'ensemble',
+        'level': '0',
+        'date': '2021-06-16/2021-06-16',
+        'type': 'analysis',
+        'time': '00:00',
+        'leadtime_hour': '0',
+        'format': 'netcdf',
+        'area': [
+            59.96, 10.66, 59.87,
+            10.9,
+        ],
+    },
+    'download.nc')
