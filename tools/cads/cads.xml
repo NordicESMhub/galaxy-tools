@@ -12,6 +12,8 @@
        #set $cads_apikey = $__user__.extra_preferences.get('cads_account|cads_apikey', "")
        #if $cads_apikey == ""
 	    echo "Error. Set your CADS credentials via: User -> Preferences -> Manage Information"  &&
+            echo 'Will try to use tool adsapirc file (used for testing)' &&
+            cp '$__tool_directory__/adsapirc.cfg' .cdsapirc &&
        #else
             cp '$cds_key_file' .cdsapirc &&
        #end if
@@ -39,11 +41,14 @@ $is_file.api_req_text
     </configfiles>
     <inputs>
         <conditional name="is_file">
-            <param name="has_req" type="boolean" value="false" label="Paste CADS request as text"/>
-	   <when value="false">
+            <param name="has_req" type="select" label="Provide CADS request">
+                <option value="no">paste as text</option>
+                <option value="yes" selected="true">give a filename</option>
+            </param>
+	   <when value="yes">
 	        <param name="api_req_file" type="data" label="API Request filename" format="txt"/>
            </when>
-            <when value="true">
+            <when value="no">
 	        <param name="api_req_text" type="text" label="Paste API Request" area="true" />
            </when>
         </conditional>
@@ -54,26 +59,14 @@ $is_file.api_req_text
     </outputs>
     <tests>
         <test>
-            <param name="api_req_file" value="input.txt" />
-            <output name="request" ftype="txt">
-              <assert_contents>
-                  <has_text text="dataset to retrieve: reanalysis-era5-single-levels-monthly-means" />
-                  <has_text text="'format': 'netcdf'" />
-                  <has_text text="'product_type': 'monthly_averaged_reanalysis'" />
-                  <has_text text="'variable': '2m_temperature'" />
-                  <has_text text="'year': '2020'" />
-                  <has_text text="'month': '12'" />
-                  <has_text text="'time': '00:00'" />
-		  <has_text text="'area': [" />
-	          <has_text text="60," />
-		  <has_text text="10," />
-		  <has_text text="59.5," />            
-		  <has_text text="10.5," />
-		  <has_text text="]" />
-		  <has_text text="output filename: download.nc" />
-              </assert_contents>
-            </output>
+            <conditional name="is_file">
+                <param name="has_req" value="yes" />
+	        <param name="api_req_file" ftype="txt" value="req.txt" />
+            </conditional>
+            <output name="request" value="req_out.txt" compare="sim_size" delta="10"/>
+            <output name="ofilename" ftpye="netcdf" value="output.nc" compare="sim_size" delta="100"/>
         </test>
+
     </tests>
     <help><![CDATA[
 

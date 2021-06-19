@@ -8,3 +8,5 @@ name: cads
 owner: climate
 remote_repository_url: https://github.com/NordicESMhub/galaxy-tools/tree/master/tools/cads
 type: unrestricted
+exclude:
+  - adsapirc.cfg
