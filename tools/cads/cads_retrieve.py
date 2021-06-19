@@ -34,10 +34,10 @@ if path.isfile(args.request):
 print("req = ", req)
 c3s_type = req.split('c.retrieve')[1].split('(')[1].split(',')[0].strip(' "\'\t\r\n')
 
-c3s_req = '{' + req.split('{')[1].split('}')[0].replace('\n', '') + '}'
+c3s_req = '{' + req.split('{', 1)[1].rsplit('}', 1)[0].replace('\n', '') + '}'
 c3s_req_dict = ast.literal_eval(c3s_req)
 
-c3s_output = req.split('}')[1].split(',')[1].split(')')[0].strip(' "\'\t\r\n')
+c3s_output = req.rsplit('}', 1)[1].split(',')[1].split(')')[0].strip(' "\'\t\r\n')
 
 f = open(args.output, "w")
 f.write("dataset to retrieve: " + c3s_type + "\n")

@@ -66,7 +66,14 @@ $is_file.api_req_text
             <output name="request" value="req_out.txt" compare="sim_size" delta="10"/>
             <output name="ofilename" ftype="netcdf" value="output.nc" compare="sim_size" delta="100"/>
         </test>
-
+        <test>
+            <conditional name="is_file">
+                <param name="has_req" value="yes" />
+	        <param name="api_req_file" ftype="txt" value="req-timeseries.txt" />
+            </conditional>
+            <output name="request" value="timeseries_out.txt" compare="sim_size" delta="10"/>
+            <output name="ofilename" ftype="netcdf" value="timeseries.nc" compare="sim_size" delta="100"/>
+        </test>
     </tests>
     <help><![CDATA[
 
