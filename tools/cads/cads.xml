@@ -8,24 +8,25 @@
         <requirement type="package" version="6.0">unzip</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-       export HOME=`pwd`  &&
-       #set $cads_apikey = $__user__.extra_preferences.get('cads_account|cads_apikey', "")
-       #if $cads_apikey == ''
-	    echo 'Error. Set your CADS credentials via: User -> Preferences -> Manage Information'  &&
+        export HOME=`pwd`  &&
+        #set $cads_apikey = $__user__.extra_preferences.get('cads_account|cads_apikey', "")
+        #if $cads_apikey == ''
+            echo 'Error. Set your CADS credentials via: User -> Preferences -> Manage Information'  &&
             echo 'Will try to use tool adsapirc file (used for testing)' &&
             cp '$__tool_directory__/adsapirc.cfg' .cdsapirc &&
-       #else
+        #else
             cp '$cads_key_file' .cdsapirc &&
-       #end if
-       #if str($is_file.has_req).strip() == 'yes'
-            python3 '$__tool_directory__/cads_retrieve.py' 
-	             --request '$is_file.api_req_file' --output request.txt       &&
-       #else
-            python3 '$__tool_directory__/cads_retrieve.py' 
-	             --request '$req_from_paste' --output request.txt               &&
-       #end if
-       bash $__tool_directory__/cads.sh                                           &&
-       echo "Data retrieval from Copernicus Atmosphere Data Store is done"
+        #end if
+
+        python3 '$__tool_directory__/cads_retrieve.py' 
+        #if str($is_file.has_req).strip() == 'yes'
+            --request '$is_file.api_req_file' 
+        #else
+            --request '$req_from_paste'
+        #end if
+        --output request.txt &&
+        bash '$__tool_directory__/cads.sh' &&
+        echo "Data retrieval from Copernicus Atmosphere Data Store is done"
     ]]></command>
     <configfiles>
         <configfile name="cads_key_file"><![CDATA[
@@ -45,11 +46,11 @@ $is_file.api_req_text
                 <option value="no">paste as text</option>
                 <option value="yes" selected="true">give a filename</option>
             </param>
-	    <when value="yes">
-	        <param name="api_req_file" type="data" label="API Request filename" format="txt"/>
+            <when value="yes">
+                <param name="api_req_file" type="data" label="API Request filename" format="txt"/>
             </when>
             <when value="no">
-	        <param name="api_req_text" type="text" label="Paste API Request" area="true" />
+                <param name="api_req_text" type="text" label="Paste API Request" area="true" />
             </when>
         </conditional>
     </inputs>
@@ -61,7 +62,7 @@ $is_file.api_req_text
         <test>
             <conditional name="is_file">
                 <param name="has_req" value="yes" />
-	        <param name="api_req_file" ftype="txt" value="req.txt" />
+                <param name="api_req_file" ftype="txt" value="req.txt" />
             </conditional>
             <output name="request" value="req_out.txt" compare="sim_size" delta="10"/>
             <output name="ofilename" ftype="netcdf" value="output.nc" compare="sim_size" delta="100"/>
@@ -69,7 +70,7 @@ $is_file.api_req_text
         <test>
             <conditional name="is_file">
                 <param name="has_req" value="yes" />
-	        <param name="api_req_file" ftype="txt" value="req-timeseries.txt" />
+                <param name="api_req_file" ftype="txt" value="req-timeseries.txt" />
             </conditional>
             <output name="request" value="timeseries_out.txt" compare="sim_size" delta="10"/>
             <output name="ofilename" ftype="netcdf" value="timeseries.nc" compare="sim_size" delta="100"/>
@@ -97,7 +98,7 @@ Neither the European Commission nor ECMWF is responsible for any use
 that may be made of the Copernicus information or data it contains.
     ]]></help>
     <citations>
-
+        <citation></citation>
     </citations>
     <edam_topics>
       <edam_topic>topic_3855</edam_topic>
