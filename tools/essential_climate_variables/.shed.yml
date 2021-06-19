@@ -1,0 +1,23 @@
+categories:
+- Climate Analysis
+- Data Source
+description: Get Copernicus Essential Climate Variables for assessing climate variability
+homepage_url: https://cds.climate.copernicus.eu/cdsapp#!/dataset/ecv-for-climate-change?tab=overview
+long_description: |
+  This tool is a wrapper to retrieve Copernicus Essential Climate Variables. The 
+  Essential Climate Variables for assessment of climate variability from 1979 to 
+  present dataset contains a selection of climatologies and monthly anomalies of 
+  Essential Climate Variables (ECVs) suitable for monitoring and assessment of 
+  climate variability and change. Selection criteria are based on accuracy
+  and temporal consistency on monthly to decadal time scales. The ECV data 
+  products in this set have been estimated from multiple sources and, depending 
+  on the source, may have been adjusted to account for biases and other known 
+  deficiencies. Data sources and adjustment methods used are described in the 
+  Product User Guide, as are various particulars such as the baseline periods 
+  used to calculate monthly climatologies and the corresponding anomalies.
+name: cds_essential_variability
+owner: climate
+remote_repository_url: https://github.com/NordicESMhub/galaxy-tools/tree/master/tools/essential_climate_variables
+type: unrestricted
+exclude:
+  - cdsapirc.cfg
