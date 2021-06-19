@@ -9,8 +9,7 @@ parser.add_argument("-i", "--request", type=str, help="input API request")
 parser.add_argument("-o", "--output", type=str, help="output API request")
 args = parser.parse_args()
 
-if path.isfile(args.request):
-    f = open(args.request, "r")
+with open(args.request) as f:
     req = f.read()
     f.close()
     mapped_chars = {
@@ -39,11 +38,9 @@ c3s_req_dict = ast.literal_eval(c3s_req)
 
 c3s_output = req.rsplit('}', 1)[1].split(',')[1].split(')')[0].strip(' "\'\t\r\n')
 
-f = open(args.output, "w")
-f.write("dataset to retrieve: " + c3s_type + "\n")
-f.write("request: " + c3s_req + "\n")
-f.write("output filename: " + c3s_output)
-f.close()
+with open(args.output, "w") as f:
+    f.write(f'dataset to retrieve: {c3s_type}\nrequest: {c3s_req}\noutput filename: {c3s_output}')
+    f.close()
 
 print("start retrieving data...")
 
