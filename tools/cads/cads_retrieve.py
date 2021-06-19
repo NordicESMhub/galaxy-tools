@@ -9,22 +9,22 @@ parser.add_argument("-i", "--request", type=str, help="input API request")
 parser.add_argument("-o", "--output", type=str, help="output API request")
 args = parser.parse_args()
 
+mapped_chars = {
+    '>': '__gt__',
+    '<': '__lt__',
+    "'": '__sq__',
+    '"': '__dq__',
+    '[': '__ob__',
+    ']': '__cb__',
+    '{': '__oc__',
+    '}': '__cc__',
+    '@': '__at__',
+    '#': '__pd__',
+    "": '__cn__'
+}
+
 with open(args.request) as f:
     req = f.read()
-    f.close()
-    mapped_chars = {
-        '>': '__gt__',
-        '<': '__lt__',
-        "'": '__sq__',
-        '"': '__dq__',
-        '[': '__ob__',
-        ']': '__cb__',
-        '{': '__oc__',
-        '}': '__cc__',
-        '@': '__at__',
-        '#': '__pd__',
-        "": '__cn__'
-    }
 
     # Unsanitize labels (element_identifiers are always sanitized by Galaxy)
     for key, value in mapped_chars.items():
@@ -40,7 +40,6 @@ c3s_output = req.rsplit('}', 1)[1].split(',')[1].split(')')[0].strip(' "\'\t\r\n
 
 with open(args.output, "w") as f:
     f.write(f'dataset to retrieve: {c3s_type}\nrequest: {c3s_req}\noutput filename: {c3s_output}')
-    f.close()
 
 print("start retrieving data...")
 
