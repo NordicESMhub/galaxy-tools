@@ -64,7 +64,7 @@ $is_file.api_req_text
 	        <param name="api_req_file" ftype="txt" value="req.txt" />
             </conditional>
             <output name="request" value="req_out.txt" compare="sim_size" delta="10"/>
-            <output name="ofilename" ftpye="netcdf" value="output.nc" compare="sim_size" delta="100"/>
+            <output name="ofilename" ftype="netcdf" value="output.nc" compare="sim_size" delta="100"/>
         </test>
 
     </tests>
