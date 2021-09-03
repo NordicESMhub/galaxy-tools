@@ -1,0 +1,47 @@
+<tool id="cdo_info" name="CDO Climate Data Information Operators" profile="20.05" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
+    <description>to get information on Climate and NWP model data</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>macros_info.xml</import>
+    </macros>
+    <expand macro="edam_ontology"/>
+    <requirements>
+        <requirement type="package" version="3">python</requirement>
+        <requirement type="package" version="@TOOL_VERSION@">cdo</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+       export HOME=`pwd`  &&
+       cdo 
+       '$information.opt'
+       '$infile1'
+       #if str($information.opt) == "diff" or str($information.opt) == "diffn"
+           '$information.infile2'
+       #end if
+       > $info
+    ]]></command>
+    <inputs>
+        <expand macro="operator_information"/>
+    </inputs>
+    <outputs>
+        <data name="info" format="txt"/>
+    </outputs>
+    <tests>
+        <test>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+**CDO Climate Data Information Operators**
+=======================================================================================================
+
+This tool is a wrapper to the Climate Data Operators (CDO) for all Information Operators.
+
+- CDO Information operators return information about the input file(s). Output is written in a text file.
+- CDO is a collection of command line Operators to manipulate and analyse Climate and NWP model Data.
+- There are more than 600 operators available.
+
+- `CDO online documentation <https://code.mpimet.mpg.de/projects/cdo/>`_.
+
+    ]]></help>
+    <expand macro="citations"/>
+</tool>

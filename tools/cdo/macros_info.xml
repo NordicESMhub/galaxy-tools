@@ -1,0 +1,81 @@
+<macros>
+    <xml name="operator_information">
+        <param name="infile1" type="data" label="Input file" format="netcdf"/>
+        <conditional name="information">
+            <param name="opt" type="select" label="Select cdo operator" multiple="false">
+                <option value="info">info (Dataset information listed by parameter identifier)</option>
+                <option value="infon">infon (Dataset information listed by parameter name)</option>
+                <option value="map">map (Dataset information and simple map)</option>
+                <option value="sinfo">sinfo (Short information listed by parameter identifier)</option>
+                <option value="sinfon">sinfon (Short information listed by parameter name)</option>
+                <option value="diff">diff (Compare two datasets listed by parameter identifier)</option>
+                <option value="diffn">diffn (Compare two datasets listed by parameter name)</option>
+                <option value="npar">npar (Number of parameters)</option>
+                <option value="nlevel">nlevel (Number of levels)</option>
+                <option value="nyear">nyear (Number of years)</option>
+                <option value="nmon">nmon (Number of months)</option>
+                <option value="ndate">ndate (Number of dates)</option>
+                <option value="ntime">ntime (Number of timesteps)</option>
+                <option value="ngridpoints">ngridpoints (Number of gridpoints)</option>
+                <option value="ngrids">ngrids (Number of horizontal grids)</option>
+                <option value="showformat">showformat (Show file format)</option>
+                <option value="showcode">showcode (Show code numbers)</option>
+                <option value="showname">showname (Show variable names)</option>
+                <option value="showstdname">showstdname (Show standard names)</option>
+                <option value="showlevel">showlevel (Show levels)</option>
+                <option value="showltype">showltype (Show GRIB level types)</option>
+                <option value="showyear">showyear (Show years)</option>
+                <option value="showmon">showmon (Show months)</option>
+                <option value="showdate">showdate (Show date information)</option>
+                <option value="showtime">showtime (Show time information)</option>
+                <option value="showtimestamp">showtimestamp (Show timestamp)</option>
+                <option value="showattribute">showattribute (Show a global attribute or a variable attribute)</option>
+                <option value="partab">partab (Parameter table)</option>
+                <option value="codetab">codetab (Parameter code table)</option>
+                <option value="griddes">griddes (Grid description)</option>
+                <option value="zaxisdes">zaxisdes (Z-axis description)</option>
+                <option value="vct">vct (Vertical coordinate table)</option>
+            </param>
+	    <when value="info"/>
+	    <when value="infon"/>
+	    <when value="map"/>
+	    <when value="sinfo"/>
+	    <when value="sinfon"/>
+	    <when value="diff">
+	        <param name="infile2" type="data" label="Input file" format="netcdf"/>
+            </when>
+	    <when value="diffn">
+	        <param name="infile2" type="data" label="Input file" format="netcdf"/>
+            </when>
+            <when value="npar"/>
+            <when value="nlevel"/>
+            <when value="nyear"/>
+            <when value="nmon"/>
+            <when value="ndate"/>
+            <when value="ntime"/>
+            <when value="ngridpoints"/>
+            <when value="ngrids"/>
+            <when value="showformat"/>
+            <when value="showcode"/>
+            <when value="showname"/>
+            <when value="showstdname"/>
+            <when value="showlevel"/>
+            <when value="showltype"/>
+            <when value="showyear"/>
+            <when value="showmon"/>
+            <when value="showdate"/>
+            <when value="showtime"/>
+            <when value="showtimestamp"/>
+            <when value="showattribute">
+                <repeat name="attributes" title="List of attributes">
+	            <param name="attribute" type="text" label="Global or variable attribute name"/>
+                </repeat>
+            </when>
+            <when value="partab"/>
+            <when value="codetab"/>
+            <when value="griddes"/>
+            <when value="zaxisdes"/>
+            <when value="vct"/>
+        </conditional>
+    </xml>
+</macros>
