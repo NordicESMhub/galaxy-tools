@@ -19,7 +19,6 @@
         <regex match="Abort" />
     </stdio>
     <command><![CDATA[
-       export HOME=`pwd`  &&
        cdo 
        '$information.opt'
        '$infile1'

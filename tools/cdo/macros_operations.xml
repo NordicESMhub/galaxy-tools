@@ -1,0 +1,76 @@
+<macros>
+    <xml name="cdo_option">
+        <conditional name="option_type">
+            <param name="opt" type="select" label="Provide cdo options" optional="true" multiple="false">
+                <option value="-a">-a (Generate an absolute time axis)</option>
+                <option value="--cmor"> --cmor (CMOR conform NetCDF output)</option>
+                <option value="-f">-f format (Output format)</option>
+                <option value="-g">-g grid</option>
+                <option value="-gf">-g grid filename</option>
+                <option value="-M">-M (Indicate that the I/O streams have missing values)</option>
+                <option value="-m">-m missval (Set the default missing value. Default is-9e+33)</option>
+                <option value="-O">-O (Overwrite existing output file, if checked)</option>
+                <option value="--percentile">--percentile method (Percentile method)</option>
+                <option value="--reduce_dim">--reduce_dim (Reduce NetCDF dimensions</option>
+                <option value="-R">-R (Convert GRIB1 data from reduced to regular grid)</option>
+                <option value="--seed">--seed seed (Seed for a new sequence of pseudo-random numbers(</option>
+                <option value="--sortname">--sortname (Alphanumeric sorting of NetCDF parameter names)</option>
+                <option value="-r">-r (Generate a relative time axis)</option>
+            </param>
+            <when value="-a"/>
+            <when value="--cmor"/>
+	    <when value="-f">
+	        <param name="output_format" type="text" label="Output format"/>
+            </when>
+	    <when value="-g">
+	        <param name="grid" type="text" label="Grid (option -g grid)"/>
+            </when>
+	    <when value="-gf">
+	        <param name="gridfile" type="data" label="Grid file (option -g gridfile)" format="txt"/>
+            </when>
+            <when value="-M"/>
+	    <when value="-m">
+	        <param name="missval" type="float" value="-9e+33" label="Set the default missing value"/>
+            </when>
+            <when value="-O"/>
+	    <when value="--percentile">
+                <param name="percentile" type="select" label="Percentile method">
+		    <option value="nrank">nrank</option>
+		    <option value="nist">nist</option>
+		    <option value="rtype8">rtype8</option>
+		    <option value="numpy">numpy</option>
+		    <option value="numpy_lower">numpy_lower</option>
+		    <option value="numpy_higher">numpy_higher</option>
+		    <option value="numpy_nearest">numpy_nearest</option>
+                </param>
+            </when>
+            <when value="--reduce_dim"/>
+            <when value="-R"/>
+	    <when value="--seed">
+	        <param name="seed" type="float" value="0.0" label="Seed for a new sequence of pseudo-random numbers"/>
+            </when>
+            <when value="--sortname"/>
+            <when value="-r"/>
+        </conditional>
+    </xml>
+    <xml name="cdo_operator">
+        <conditional name="operator">
+            <param name="opt" type="select" label="Select cdo operator" multiple="false">
+                <option value="copy">copy (Copy datasets)</option>
+                <option value="cat">cat (Concatenate datasets)</option>
+                <option value="splitname">splitname (Split variable names)</option>
+            </param>
+	    <when value="copy">
+                <repeat name="input_files" title="Infiles" >
+	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                </repeat>
+            </when>
+	    <when value="cat">
+                <repeat name="input_files" title="Infiles" >
+	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                </repeat>
+            </when>
+	    <when value="splitname"/>
+        </conditional>
+    </xml>
+</macros>

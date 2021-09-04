@@ -1,0 +1,72 @@
+<tool id="cdo_operations" name="CDO Climate Data Manipulation Operators" profile="20.05" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
+    <description>operations for standard processing of climate and NWP model output.</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>macros_operations.xml</import>
+    </macros>
+    <expand macro="edam_ontology"/>
+    <requirements>
+        <requirement type="package" version="3">python</requirement>
+        <requirement type="package" version="@TOOL_VERSION@">cdo</requirement>
+    </requirements>
+    <stdio>
+        <!-- Anything other than zero is an error -->
+        <exit_code range="1:" />
+        <exit_code range=":-1"/>
+        <!-- In case the return code has not been set propery check stderr too -->
+        <regex match="Error" />
+        <regex match="Exception" />
+        <regex match="Abort" />
+    </stdio>
+    <command detect_errors="exit_code"><![CDATA[
+        mkdir output_dir &&
+        cdo 
+        '$operator.opt'
+        '$infile1'
+        #if $operator.opt == 'splitname'
+            'output_dir/outfile'
+        #else
+            'output_dir/outfile.netcdf'
+        #end if
+    ]]></command>
+    <inputs>
+        <param name="infile1" type="data" label="Input file" format="netcdf"/>
+        <expand macro="cdo_operator"/>
+        <repeat name="section_operators" title="CDO Operators" >
+            <expand macro="cdo_operator"/>
+        </repeat>
+        <repeat name="section_option" title="CDO Options" >
+            <expand macro="cdo_option"/>
+	</repeat>
+    </inputs>
+    <outputs>
+        <collection name="output_files" type="list" label="${tool.name} outfiles">
+            <discover_datasets pattern="__name__" directory="output_dir" visible="true" format="netcdf"/>
+        </collection>
+    </outputs>
+    <tests>
+        <test>
+            <param name="infile1" ftype="netcdf" value="WMI_Lear.nc"/>
+            <conditional name="operator">
+                <param name="opt" value="copy" />
+            </conditional>
+            <output_collection name="output_files" type="list">
+                <element name="WMI_Lear_copy.nc" ftype="netcdf" file="WMI_Lear_copy.nc" compare="sim_size" delta="10"/>
+            </output_collection>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+**Climate Data Operators (CDO)**
+=======================================================================================================
+
+This tool is a wrapper to the Climate Data Operators (CDO) for all operators manipulating input files and creating a new output file.
+
+- CDO is a collection of command line Operators to manipulate and analyse Climate and NWP model Data.
+- There are more than 600 operators available.
+
+- `CDO online documentation <https://code.mpimet.mpg.de/projects/cdo/>`_.
+
+    ]]></help>
+    <expand macro="citations"/>
+</tool>
