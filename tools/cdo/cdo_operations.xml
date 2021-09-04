@@ -58,7 +58,7 @@
                 </repeat>
             </conditional>
             <output_collection name="output_files" type="list">
-                <element name="outfile.netcdf" ftype="netcdf" file="WMI_Lear_copy.nc" compare="sim_size" delta="10"/>
+                <element name="outfile.netcdf" ftype="netcdf" file="WMI_Lear_copy.nc" compare="sim_size" delta="15"/>
             </output_collection>
         </test>
         <test>
@@ -70,7 +70,7 @@
                 </repeat>
             </conditional>
             <output_collection name="output_files" type="list">
-                <element name="outfile.netcdf" ftype="netcdf" file="drops_cat.nc" compare="sim_size" delta="10"/>
+                <element name="outfile.netcdf" ftype="netcdf" file="drops_cat.nc" compare="sim_size" delta="15"/>
             </output_collection>
         </test>
         <test>
@@ -91,7 +91,7 @@
                 </repeat>
             </conditional>
             <output_collection name="output_files" type="list">
-                <element name="outfile.netcdf" ftype="netcdf" file="lat_long_modified.nc" compare="sim_size" delta="10"/>
+                <element name="outfile.netcdf" ftype="netcdf" file="lat_long_modified.nc" compare="sim_size" delta="15"/>
             </output_collection>
         </test>
         <test>
@@ -103,7 +103,7 @@
                 </repeat>
             </conditional>
             <output_collection name="output_files" type="list">
-                <element name="outfile.netcdf" ftype="netcdf" file="latitude3.nc" compare="sim_size" delta="10"/>
+                <element name="outfile.netcdf" ftype="netcdf" file="latitude3.nc" compare="sim_size" delta="15"/>
             </output_collection>
         </test>
     </tests>
