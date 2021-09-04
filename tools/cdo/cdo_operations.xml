@@ -21,11 +21,15 @@
     <command detect_errors="exit_code"><![CDATA[
         mkdir output_dir &&
         cdo 
-        '$operator.opt'
+        #if $operator.opt == 'duplicate'
+            '$operator.opt',$operator.ndup
+        #else
+            '$operator.opt'
+        #end if
         #for $i, $ifile in enumerate($operator.input_files):
             '${ifile.add_file}'
         #end for
-        #if $operator.opt == 'splitname'
+        #if $operator.opt == 'splitcode' or $operator.opt == 'splitparam' or $operator.opt == 'splitname' or $operator.opt == 'splitlevel' or $operator.opt == 'splitgrid' or  $operator.opt == 'splitzaxis' or $operator.opt == 'splittabnum' or $operator.opt == 'splithour' or $operator.opt == 'splitday' or $operator.opt == 'splitseas' or $operator.opt == 'splityear' or $operator.opt == 'splityearmon' or $operator.opt == 'splitmon' 
             'output_dir/outfile_'
         #else
             'output_dir/outfile.netcdf'
@@ -77,6 +81,30 @@
                 </repeat>
             </conditional>
             <output_collection name="output_files" type="list" count="2"/>
+        </test>
+        <test>
+            <conditional name="operator">
+                <param name="opt" value="replace" />
+                <repeat name="input_files">
+                    <param name="add_file" value="lat_long.nc" ftype="netcdf" />
+                    <param name="add_file" value="latitude_modified.nc" ftype="netcdf" />
+                </repeat>
+            </conditional>
+            <output_collection name="output_files" type="list">
+                <element name="outfile.netcdf" ftype="netcdf" file="lat_long_modified.nc" compare="sim_size" delta="10"/>
+            </output_collection>
+        </test>
+        <test>
+            <conditional name="operator">
+                <param name="opt" value="duplicate" />
+                <param name="ndup" value="3" ftype="integer" />
+                <repeat name="input_files">
+                    <param name="add_file" value="latitude.nc" ftype="netcdf" />
+                </repeat>
+            </conditional>
+            <output_collection name="output_files" type="list">
+                <element name="outfile.netcdf" ftype="netcdf" file="latitude3.nc" compare="sim_size" delta="10"/>
+            </output_collection>
         </test>
     </tests>
     <help><![CDATA[
