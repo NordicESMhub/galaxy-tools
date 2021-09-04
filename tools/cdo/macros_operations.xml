@@ -61,16 +61,20 @@
                 <option value="splitname">splitname (Split variable names)</option>
             </param>
 	    <when value="copy">
-                <repeat name="input_files" title="Infiles" >
+                <repeat name="input_files" title="Infiles" min="1">
 	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
 	    <when value="cat">
-                <repeat name="input_files" title="Infiles" >
+                <repeat name="input_files" title="Infiles" min="1">
 	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="splitname"/>
+	    <when value="splitname">
+                <repeat name="input_files" title="Infiles" min="1" max="1">
+	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                </repeat>
+            </when>
         </conditional>
     </xml>
 </macros>

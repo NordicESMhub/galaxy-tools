@@ -22,15 +22,16 @@
         mkdir output_dir &&
         cdo 
         '$operator.opt'
-        '$infile1'
+        #for $i, $ifile in enumerate($operator.input_files):
+            '${ifile.add_file}'
+        #end for
         #if $operator.opt == 'splitname'
-            'output_dir/outfile'
+            'output_dir/outfile_'
         #else
             'output_dir/outfile.netcdf'
         #end if
     ]]></command>
     <inputs>
-        <param name="infile1" type="data" label="Input file" format="netcdf"/>
         <expand macro="cdo_operator"/>
         <repeat name="section_operators" title="CDO Operators" >
             <expand macro="cdo_operator"/>
@@ -46,13 +47,36 @@
     </outputs>
     <tests>
         <test>
-            <param name="infile1" ftype="netcdf" value="WMI_Lear.nc"/>
             <conditional name="operator">
                 <param name="opt" value="copy" />
+                <repeat name="input_files">
+                    <param name="add_file" value="WMI_Lear.nc" ftype="netcdf" />
+                </repeat>
             </conditional>
             <output_collection name="output_files" type="list">
-                <element name="WMI_Lear_copy.nc" ftype="netcdf" file="WMI_Lear_copy.nc" compare="sim_size" delta="10"/>
+                <element name="outfile.netcdf" ftype="netcdf" file="WMI_Lear_copy.nc" compare="sim_size" delta="10"/>
             </output_collection>
+        </test>
+        <test>
+            <conditional name="operator">
+                <param name="opt" value="cat" />
+                <repeat name="input_files">
+                    <param name="add_file" value="drops1.nc" ftype="netcdf" />
+                    <param name="add_file" value="drops2.nc" ftype="netcdf" />
+                </repeat>
+            </conditional>
+            <output_collection name="output_files" type="list">
+                <element name="outfile.netcdf" ftype="netcdf" file="drops_cat.nc" compare="sim_size" delta="10"/>
+            </output_collection>
+        </test>
+        <test>
+            <conditional name="operator">
+                <param name="opt" value="splitname" />
+                <repeat name="input_files">
+                    <param name="add_file" value="lat_long.nc" ftype="netcdf" />
+                </repeat>
+            </conditional>
+            <output_collection name="output_files" type="list" count="2"/>
         </test>
     </tests>
     <help><![CDATA[

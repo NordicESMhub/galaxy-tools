@@ -35,19 +35,19 @@
     </outputs>
     <tests>
         <test>
-            <param name="infile1" ftype="netcdf" value="WMI_Lear.nc"/>
+            <param name="infile1" ftype="netcdf" value="longitude.nc"/>
             <conditional name="information">
                 <param name="opt" value="info" />
             </conditional>
-            <output name="info" value="WMI_Lear_info.txt" compare="sim_size" delta="10"/>
+            <output name="info" value="longitude.txt" compare="sim_size" delta="10"/>
         </test>
         <test>
-            <param name="infile1" ftype="netcdf" value="WMI_Lear.nc"/>
+            <param name="infile1" ftype="netcdf" value="latitude.nc"/>
             <conditional name="information">
                 <param name="diff" value="info" />
-                <param name="infile2" ftype="netcdf" value="WMI_Lear_modified.nc"/>
+                <param name="infile2" ftype="netcdf" value="latitude_modified.nc"/>
             </conditional>
-            <output name="info" value="WMI_Lear_diff.txt" compare="sim_size" delta="10"/>
+            <output name="info" value="latitude_diff.txt" compare="sim_size" delta="10"/>
         </test>
         <test>
             <param name="infile1" ftype="netcdf" value="WMI_Lear.nc"/>
