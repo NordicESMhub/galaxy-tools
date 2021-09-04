@@ -91,7 +91,7 @@
                 </repeat>
             </conditional>
             <output_collection name="output_files" type="list">
-                <element name="outfile.netcdf" ftype="netcdf" file="lat_long_modified.nc" compare="sim_size" delta="15"/>
+                <element name="outfile.netcdf" ftype="netcdf" file="lat_long_modified.nc" compare="sim_size" delta="20"/>
             </output_collection>
         </test>
         <test>
