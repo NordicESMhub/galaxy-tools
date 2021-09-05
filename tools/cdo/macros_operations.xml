@@ -76,6 +76,11 @@
                 <option value="splityear">splityear (Split years)</option>
                 <option value="splityearmon">splityearmon (Split in years and months)</option>
                 <option value="splitmon">splitmon (Split months)</option>
+                <option value="splitsel">splitsel (Split time selection)</option>
+                <option value="distgrid">distgrid (Distribute horizontal grid)</option>
+                <option value="collgrid">collgrid (Collect horizontal grid)</option>
+                <option value="select">select (Select all fields with parameters in a user given list.)</option>
+                <option value="delete">select (Delete all fields with parameters in a user given list.)</option>
             </param>
 	    <when value="copy">
                 <repeat name="input_files" title="Infiles" min="1">
@@ -175,6 +180,40 @@
             </when>
 	    <when value="splitmon">
                 <repeat name="input_files" title="Infiles" min="1" max="1">
+	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                </repeat>
+            </when>
+	    <when value="splitsel">
+	        <param name="nset" type="integer" value="0" label="Number of input timesteps for each output file"/>
+	        <param name="noffset" type="integer" optional="true" label="Number of input timesteps skipped before the first timestep range (optional)"/>
+	        <param name="nskip" type="integer" optional="true" label="Number of input timesteps skipped between timestep ranges (optional)"/>
+                <repeat name="input_files" title="Infiles" min="1" max="1">
+	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                </repeat>
+            </when>
+	    <when value="distgrid">
+	        <param name="nx" type="integer" value="1" label="Number of regions in x direction, or number of pieces for unstructured grids"/>
+	        <param name="ny" type="integer" label="Number of regions in y direction" value="1"/>
+                <repeat name="input_files" title="Infiles" min="1" max="1">
+	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                </repeat>
+            </when>
+	    <when value="collgrid">
+	        <param name="nx" type="integer" label="Number of regions in x direction" optional="true"/>
+	        <param name="names" type="text" label="Comma-separated list of variable names" optional="true"/>
+                <repeat name="input_files" title="Infiles" min="1">
+	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                </repeat>
+            </when>
+	    <when value="select">
+	        <param name="params" type="text" value="" label="Parameters for selection"/>
+                <repeat name="input_files" title="Infiles" min="1">
+	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                </repeat>
+            </when>
+	    <when value="delete">
+	        <param name="params" type="text" label="Parameters for deletion"/>
+                <repeat name="input_files" title="Infiles" min="1">
 	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>

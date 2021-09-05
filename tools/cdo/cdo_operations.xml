@@ -23,6 +23,31 @@
         cdo 
         #if $operator.opt == 'duplicate'
             '$operator.opt',$operator.ndup
+        #elif $operator.opt == 'collgrid'
+            #if str($operator.nx)
+                #if str($operator.names)
+                    '$operator.opt',$operator.nx,'$operator.names'
+                #else
+                    '$operator.opt',$operator.nx
+                #end if
+            #else
+                '$operator.opt'
+            #end if
+        #elif $operator.opt == 'distgrid'
+            '$operator.opt',$operator.nx,$operator.ny
+        #elif $operator.opt == 'splitsel'
+                #if str($operator.noffset)
+                    #if str($operator.nskip)
+                        '$operator.opt',$operator.nsets,$operator.noffset,$operator.nskip
+                    #else
+                        '$operator.opt',$operator.nsets,$operator.noffset
+                    #end if
+                #else
+                    '$operator.opt',$operator.nsets
+
+                #end if
+        #elif $operator.opt == 'select' or $operator.opt == 'delete'
+            '$operator.opt','$operator.params'
         #else
             '$operator.opt'
         #end if
