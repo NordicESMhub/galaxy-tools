@@ -1,19 +1,61 @@
-<tool id="eodie" name="EODIE" version="0.1.0">
-    <description>Earth Observation Data Information Extractor</description>
+<tool id="eodie" name="EODIE" profile="20.05" version="@TOOL_VERSION@">
+    <description>The Earth Observation Data Information Extractor is a toolkit to extract object based timeseries information from Earth Observation data.</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
     <requirements>
         <requirement type="package" version="3.7">python</requirement>
         <requirement type="package" version="1.7">shapely</requirement>
         <requirement type="package" version="1.2">rasterio</requirement>
+        <requirement type="package" version="0.14">rasterstats</requirement>
+        <requirement type="package" version="1.8">fiona</requirement>
         <requirement type="package" version="1.20">numpy</requirement>
         <requirement type="package" version="3.1.4">gdal</requirement>
+        <requirement type="package" version="5.4.1">pyyaml</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
+       mkdir work &&
+       cp '$config_tif' config_tif.yml && 
+       cp '$config_s2'  config_s2.yml  && 
+       cp '$config_ls8' config_ls8.yml && 
+       cd work &&
+       eodie_process.py --platform $input_type.platform 
+           #if str($input_type.platform) == 'tif'
+               --file $input_type.input_file
+           #else
+               --dir data_collection
+           #end if
+           --shp '$shapefile.extra_files_path' 
+           --id '$identifier' --statistics_out
+           --statistics  
+           #for $stat in $adv_period.stats
+              $stat
+           #end for
+           --exclude_splitshp &&
        echo "EODIE data extractor is done"
     ]]></command>
+    <expand macro="configfiles"/>
     <inputs>
-        <repeat name="list_input_files" title="Input datasets" min="1">
-            <param name='input_file' format="binary" type="data_collection" collection_type="list" multiple="true" label="Individual input files list"/>
-        </repeat>
+        <conditional name="input_type">
+            <param name="platform" type="select" label="Select platform of the input data">
+                <option value="s2">Sentinel 2</option>
+                <option value="ls8">Landsat 8</option>
+                <option value="tif">tif file</option>
+            </param>
+            <when value="tif">
+                <param name='input_file' format="tiff" type="data" label="Individual input file"/>
+            </when>
+            <when value="ls8">
+                <repeat name="list_input_files" title="Input datasets" min="1">
+                    <param name='input_file' format="binary" type="data_collection" collection_type="list" multiple="true" label="Individual input files list"/>
+               </repeat>
+            </when>
+            <when value="s2">
+                <repeat name="list_input_files" title="Input datasets" min="1">
+                    <param name='input_file' format="binary" type="data_collection" collection_type="list" multiple="true" label="Individual input files list"/>
+               </repeat>
+            </when>
+        </conditional>
         <param name="shapefile" type="data" format="shp" label="shapefile with polygons"/>
         <param name="identifier" type="text" value="PlotID" label="Name of identifier" />
         <section name="adv_period" title="Advanced options" expanded="false">
@@ -23,6 +65,8 @@
                 <option value="mean">Mean</option>
                 <option value="min">Minimum</option>
                 <option value="max">Maximum</option>
+                <option value="std">Standard deviation</option>
+                <option value="median">Median</option>
             </param>
             <conditional name="condi_type_run">
 	        <param name="indices" label="Indice to compute" type="select">
@@ -41,6 +85,17 @@
     </outputs>
     <tests>
         <test>
+            <conditional name="input_type">
+                <param name="platform" value="tif" />
+                <param name="input_file" ftype="tif" value="smaller_area_20100401.tif" />
+                <param name="shapefile" value="test_polygons.html" ftype="shp" >
+                    <composite_data value="test_polygons.html/test_polygons.shp"/>
+                    <composite_data value="test_polygons.html/test_polygons.shx"/>
+                    <composite_data value="test_polygons/test_polygons.dbf"/>
+                    <composite_data value="test_polygons/test_polygons.prj"/>
+                </param>
+                <param name="identifier" value="id"/>
+            </conditional>
         </test>
     </tests>
     <help><![CDATA[
