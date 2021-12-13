@@ -1,0 +1,19 @@
+import cdsapi
+  
+c = cdsapi.Client()
+
+c.retrieve(
+    'cams-solar-radiation-timeseries',
+    {
+        'sky_type': 'clear',
+        'location': {
+            'latitude': 60,
+            'longitude': 11,
+        },
+        'altitude': '-999.',
+        'date': '2021-06-17/2021-06-17',
+        'time_step': '15minute',
+        'time_reference': 'universal_time',
+        'format': 'netcdf',
+    },
+    'download.nc')
