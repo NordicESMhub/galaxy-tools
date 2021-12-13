@@ -4,14 +4,14 @@
         <import>macros.xml</import>
     </macros>
     <requirements>
-        <requirement type="package" version="3.7">python</requirement>
-        <requirement type="package" version="1.7">shapely</requirement>
+        <requirement type="package" version="3.9">python</requirement>
+        <requirement type="package" version="1.8">shapely</requirement>
         <requirement type="package" version="1.2">rasterio</requirement>
-        <requirement type="package" version="0.14">rasterstats</requirement>
+        <requirement type="package" version="0.16">rasterstats</requirement>
         <requirement type="package" version="1.8">fiona</requirement>
-        <requirement type="package" version="1.20">numpy</requirement>
-        <requirement type="package" version="3.1.4">gdal</requirement>
-        <requirement type="package" version="5.4.1">pyyaml</requirement>
+        <requirement type="package" version="1.21">numpy</requirement>
+        <requirement type="package" version="3.4.0">gdal</requirement>
+        <requirement type="package" version="6.0">pyyaml</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
        mkdir work &&
