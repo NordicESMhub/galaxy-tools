@@ -12,9 +12,10 @@
         <requirement type="package" version="1.21">numpy</requirement>
         <requirement type="package" version="3.4.0">gdal</requirement>
         <requirement type="package" version="6.0">pyyaml</requirement>
+        <requirement type="package" version="1.0.0">eodie</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-       mkdir work &&
+       mkdir -p work/results work/results_csv work/results_tiffs &&
        cp '$config_tif' config_tif.yml && 
        cp '$config_s2'  config_s2.yml  && 
        cp '$config_ls8' config_ls8.yml && 
@@ -26,12 +27,13 @@
                --dir data_collection
            #end if
            --shp '$shapefile.extra_files_path' 
-           --id '$identifier' --statistics_out
-           --statistics  
-           #for $stat in $adv_period.stats
-              $stat
-           #end for
+           --id '$identifier' 
+           --statistics_out
+           --statistics 'mean std median' 
            --exclude_splitshp &&
+       mv results/*.log '$logfile'
+       mv results/*.csv results_csv/  &&
+       mv results/*.tif results_tiffs/  &&
        echo "EODIE data extractor is done"
     ]]></command>
     <expand macro="configfiles"/>
@@ -82,15 +84,22 @@
 
     </inputs>
     <outputs>
+        <data name="logfile" format="txt"/>
+        <collection name="csv_files" type="list" label="${tool.name} (statistics csv outputs)">
+            <discover_datasets pattern="__name__" directory="results_csv" visible="false" format="csv"/>
+        </collection>
+        <collection name="tiff_files" type="list" label="${tool.name} (geotiff outputs)">
+            <discover_datasets pattern="__name__" directory="results_tiffs" visible="false" format="tiff"/>
+        </collection>
     </outputs>
     <tests>
         <test>
             <conditional name="input_type">
                 <param name="platform" value="tif" />
-                <param name="input_file" ftype="tif" value="smaller_area_20100401.tif" />
-                <param name="shapefile" value="test_polygons.html" ftype="shp" >
-                    <composite_data value="test_polygons.html/test_polygons.shp"/>
-                    <composite_data value="test_polygons.html/test_polygons.shx"/>
+                <param name="input_file" ftype="tiff" value="smaller_area_20100401.tif" />
+                <param name="shapefile" value="test_polygons/test_polygons.html" ftype="shp" >
+                    <composite_data value="test_polygons/test_polygons.shp"/>
+                    <composite_data value="test_polygons/test_polygons.shx"/>
                     <composite_data value="test_polygons/test_polygons.dbf"/>
                     <composite_data value="test_polygons/test_polygons.prj"/>
                 </param>
