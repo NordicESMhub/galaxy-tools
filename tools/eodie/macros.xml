@@ -163,6 +163,37 @@ resampling_method: 'bilinear'
 
 pathbuildinglist: ['*', 'bandname', '*' , '.TIF']
         ]]></configfile>
+        <configfile name="user_config"><![CDATA[
+####
+
+# Configuration file for adjusting the process/results and give paths #
+
+####
+
+# Process only files with less than xx % cloudcover
+maxcloudcover: 99
+
+# Extract files with xx m pixel size 
+# options: 10,20 (for Sentinel-2)
+# options: 30 (for Landsat8)
+pixelsize: 10
+
+#resampling (converting to higher/lower resolution/smaller cells)
+#available: 'biliner','nearest','cubic','average', ...
+# from https://rasterio.readthedocs.io/en/latest/api/rasterio.enums.html#rasterio.enums.Resampling
+
+resampling_method: 'bilinear'
+
+#location of the shapefile with tiles (Sentinel2-tiles-world in case of Sentinel-2, WRS2_descending in case of Landsat 8)
+tileshp: './sentinel2_tiles_world/sentinel2_tiles_world'
+
+#name of field where tilenames are stored in shapefile ('Name' in case of sentinel2_tiles_world, 'PR' in case of WRS2_descending )
+fieldname: 'Name'
+
+# Lookup table for storing the tiles and the IDs they include for every tile processed by EODIE with --array_out
+# Table needed for array plotting
+lookup: './postprocesses/lookuptable.txt'
+        ]]></configfile>
     </configfiles>
     </xml>
 </macros>

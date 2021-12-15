@@ -1,4 +1,4 @@
-<tool id="eodie" name="EODIE" profile="20.05" version="@TOOL_VERSION@">
+<tool id="eodie" name="EODIE" version="@TOOL_VERSION@">
     <description>The Earth Observation Data Information Extractor is a toolkit to extract object based timeseries information from Earth Observation data.</description>
     <macros>
         <import>macros.xml</import>
@@ -19,21 +19,27 @@
        cp '$config_tif' config_tif.yml && 
        cp '$config_s2'  config_s2.yml  && 
        cp '$config_ls8' config_ls8.yml && 
+       cp '$user_config' user_config.yml && 
        cd work &&
+       cp $input_type.input_file  smaller_area_20100401.tif &&
+       mkdir -p test_polygons &&
+       cp '$shapefile.extra_files_path'/*.prj test_polygons.prj && 
+       cp '$shapefile.extra_files_path'/*.shp test_polygons.shp && 
+       cp '$shapefile.extra_files_path'/*.dbf test_polygons.dbf && 
+       cp '$shapefile.extra_files_path'/*.shx test_polygons.shx && 
        eodie_process.py --platform $input_type.platform 
            #if str($input_type.platform) == 'tif'
-               --file $input_type.input_file
+               --file smaller_area_20100401.tif
            #else
                --dir data_collection
            #end if
-           --shp '$shapefile.extra_files_path' 
+           --shp test_polygons
            --id '$identifier' 
            --statistics_out
-           --statistics 'mean std median' 
+           --statistics 'mean' 'std' 'median' 
            --exclude_splitshp &&
-       mv results/*.log '$logfile'
+       mv results/*.log '$logfile'  &&
        mv results/*.csv results_csv/  &&
-       mv results/*.tif results_tiffs/  &&
        echo "EODIE data extractor is done"
     ]]></command>
     <expand macro="configfiles"/>
