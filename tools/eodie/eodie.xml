@@ -99,11 +99,11 @@
             <conditional name="input_type">
                 <param name="platform" value="tif" />
                 <param name="input_file" ftype="tiff" value="smaller_area_20100401.tif" />
-                <param name="shapefile" value="test_polygons/test_polygons.html" ftype="shp" >
-                    <composite_data value="test_polygons/test_polygons.shp"/>
-                    <composite_data value="test_polygons/test_polygons.shx"/>
-                    <composite_data value="test_polygons/test_polygons.dbf"/>
-                    <composite_data value="test_polygons/test_polygons.prj"/>
+                <param name="shapefile" value="test_polygons" ftype="shp" >
+                    <composite_data value='shapefile_dir/test_polygons.shp'/>
+                    <composite_data value='shapefile_dir/test_polygons.shx'/>
+                    <composite_data value='shapefile_dir/test_polygons.dbf'/>
+                    <composite_data value='shapefile_dir/test_polygons.prj'/>
                 </param>
                 <param name="identifier" value="id"/>
             </conditional>
