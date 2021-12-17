@@ -14,9 +14,11 @@
         <requirement type="package" version="3.4.0">gdal</requirement>
         <requirement type="package" version="6.0">pyyaml</requirement>
         <requirement type="package" version="1.0.0">eodie</requirement>
+        <requirement type="package" version="6.0">unzip</requirement>
+        <requirement type="package" version="1.34">tar</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-       mkdir -p work/results results_csv results_tiffs &&
+       mkdir -p work/data_collection work/results results_csv results_tiffs &&
        cp '$config_tif' config_tif.yml && 
        cp '$config_s2'  config_s2.yml  && 
        cp '$config_ls8' config_ls8.yml && 
@@ -24,11 +26,20 @@
        cp ${input.extra_files_path}/*  work/ &&
        cd work &&
        ln -s ${input_type.input_file}  ${input_type.input_file.element_identifier} &&
+       #if $input_type.input_file.is_of_type("zip")
+           unzip '$input_type.input_file' -d data_collection/    &&
+       #elif $input_type.input_file.is_of_type("tar")
+           tar -xf '$input_type.input_file' -C data_collection   &&
+       #end if
+       #if str($input_type.platform) == 's2'
+           mkdir -p sentinel2_tiles_world &&
+           cp '$input_type.s2_shp.extra_files_path'/* sentinel2_tiles_world/  &&
+       #end if
        eodie_process.py --platform 'tif'
            #if str($input_type.platform) == 'tif'
                --file ${input_type.input_file.element_identifier}
 	   #else
-               --dir $data_collection
+               --dir data_collection
 	   #end if
 	   --shp shapefile
 	   #if $adv_options.stats and str($adv_options.stats) != '':
@@ -69,14 +80,11 @@
                 <param name='input_file' format="tiff" type="data" label="Individual input file"/>
             </when>
             <when value="ls8">
-                <repeat name="list_input_files" title="Input datasets" min="1">
-                    <param name='input_file' format="binary" type="data_collection" collection_type="list" multiple="true" label="Individual input files list"/>
-                </repeat>
+                <param name="input_file" type="data" format='zip,tar' label="Landsat 8 input data (zip or tarball)" />
             </when>
             <when value="s2">
-                <repeat name="list_input_files" title="Input datasets" min="1">
-                    <param name='input_file' format="binary" type="data_collection" collection_type="list" multiple="true" label="Individual input files list"/>
-                </repeat>
+                <param name="input_file" type="data" format='zip,tar' label="Sentinel 2 input data (zip or tarball)" />
+                <param type="data" name="s2_shp" format="shp" label="Sentinel-2 tile shapefile" help="Provide the Sentinel-2 tile shapefile"/>
             </when>
         </conditional>
         <param type="data" name="input" format="shp" label="Shapefile with polygons" help="Provide shapefile with polygons"/>
@@ -146,7 +154,7 @@
             <conditional name="input_type">
                 <param name="platform" value="tif" />
                 <param name="input_file" ftype="tiff" value="smaller_area_20100401.tif" />
-	    </conditional>
+            </conditional>
             <param name="input" value="test_polygons/test_polygons.html" ftype="shp">
                 <composite_data value="test_polygons/test_polygons.shp"/>
                 <composite_data value="test_polygons/test_polygons.shx"/>
