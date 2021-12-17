@@ -1,4 +1,4 @@
-<tool id="eodie" name="EODIE" version="@VERSION@">
+<tool id="eodie" name="EODIE" profile="20.09" version="@VERSION@">
     <description>converts simple features data between file formats</description>
     <macros>
         <import>macros.xml</import>
@@ -18,55 +18,55 @@
         <requirement type="package" version="1.34">tar</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-       mkdir -p work/data_collection work/results results_csv results_tiffs &&
-       cp '$config_tif' config_tif.yml && 
-       cp '$config_s2'  config_s2.yml  && 
-       cp '$config_ls8' config_ls8.yml && 
-       cp '$user_config' user_config.yml && 
-       cp ${input.extra_files_path}/*  work/ &&
-       cd work &&
-       ln -s ${input_type.input_file}  ${input_type.input_file.element_identifier} &&
-       #if $input_type.input_file.is_of_type("zip")
-           unzip '$input_type.input_file' -d data_collection/    &&
-       #elif $input_type.input_file.is_of_type("tar")
-           tar -xf '$input_type.input_file' -C data_collection   &&
-       #end if
-       #if str($input_type.platform) == 's2'
-           mkdir -p sentinel2_tiles_world &&
-           cp '$input_type.s2_shp.extra_files_path'/* sentinel2_tiles_world/  &&
-       #end if
-       eodie_process.py --platform 'tif'
-           #if str($input_type.platform) == 'tif'
-               --file ${input_type.input_file.element_identifier}
-	   #else
-               --dir data_collection
-	   #end if
-	   --shp shapefile
-	   #if $adv_options.stats and str($adv_options.stats) != '':
-               --statistics_out
-	       --statistics 
-	       #for $stat in str($adv_options.stats).split(','):
-	           '$stat'
-	       #end for
-	   #end if
-	   #if $adv_options.indices and str($adv_options.indices) != '':
-	       --index 
-	       #for $idx in str($adv_options.indices).split(','):
-	           '$idx'
-	       #end for
-	   #end if
-	   #if $adv_options.start_date and str($adv_options.start_date) != '':
-               --start int($adv_options.start_date)
-	   #end if
-	   #if $adv_options.end_date and str($adv_options.end_date) != '':
-               --start int($adv_options.end_date)
-	   #end if
-	   $adv_options.exclude_border 
-	   $adv_options.exclude_splitshp 
-           --id '$identifier'  &&
-       mv results/*.log '$logfile'  &&
-       mv results/*.csv ../results_csv/  &&
-       echo "EODIE data extractor is done"
+        mkdir -p work/data_collection work/results results_csv results_tiffs &&
+        cp '$config_tif' config_tif.yml && 
+        cp '$config_s2'  config_s2.yml  && 
+        cp '$config_ls8' config_ls8.yml && 
+        cp '$user_config' user_config.yml && 
+        cp ${input.extra_files_path}/*  work/ &&
+        cd work &&
+        ln -s ${input_type.input_file}  ${input_type.input_file.element_identifier} &&
+        #if $input_type.input_file.is_of_type("zip")
+            unzip '$input_type.input_file' -d data_collection/    &&
+        #elif $input_type.input_file.is_of_type("tar")
+            tar -xf '$input_type.input_file' -C data_collection   &&
+        #end if
+        #if str($input_type.platform) == 's2'
+            mkdir -p sentinel2_tiles_world &&
+            cp '$input_type.s2_shp.extra_files_path'/* sentinel2_tiles_world/  &&
+        #end if
+        eodie_process.py --platform 'tif'
+        #if str($input_type.platform) == 'tif'
+            --file ${input_type.input_file.element_identifier}
+	    #else
+            --dir data_collection
+	    #end if
+	        --shp shapefile
+	    #if $adv_options.stats and str($adv_options.stats) != '':
+            --statistics_out
+	        --statistics 
+	        #for $stat in str($adv_options.stats).split(','):
+	            '$stat'
+	        #end for
+	    #end if
+	    #if $adv_options.indices and str($adv_options.indices) != '':
+	        --index 
+	        #for $idx in str($adv_options.indices).split(','):
+	            '$idx'
+	        #end for
+	    #end if
+	    #if $adv_options.start_date and str($adv_options.start_date) != '':
+            --start int($adv_options.start_date)
+	    #end if
+	    #if $adv_options.end_date and str($adv_options.end_date) != '':
+            --start int($adv_options.end_date)
+	    #end if
+	        $adv_options.exclude_border 
+	        $adv_options.exclude_splitshp 
+            --id '$identifier'  &&
+        mv results/*.log '$logfile'  &&
+        mv results/*.csv ../results_csv/  &&
+        echo "EODIE data extractor is done"
     ]]></command>
     <expand macro="configfiles"/>
     <inputs>
@@ -74,7 +74,7 @@
             <param name="platform" type="select" label="Select platform of the input data">
                 <option value="s2">Sentinel 2</option>
                 <option value="ls8">Landsat 8</option>
-                <option value="tif">tif file</option>
+                <option value="tif">tiff file</option>
             </param>
             <when value="tif">
                 <param name='input_file' format="tiff" type="data" label="Individual input file"/>
