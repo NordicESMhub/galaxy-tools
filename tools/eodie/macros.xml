@@ -202,4 +202,9 @@ lookup: './postprocesses/lookuptable.txt'
         ]]></configfile>
     </configfiles>
     </xml>
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.5281/zenodo.4762323</citation>
+        </citations>
+    </xml>
 </macros>
