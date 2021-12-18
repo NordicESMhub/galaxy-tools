@@ -23,9 +23,9 @@
         cp '$config_s2'  config_s2.yml  && 
         cp '$config_ls8' config_ls8.yml && 
         cp '$user_config' user_config.yml && 
-        cp ${input.extra_files_path}/*  work/ &&
+        cp '${input.extra_files_path}'/*  work/ &&
         cd work &&
-        ln -s ${input_type.input_file}  ${input_type.input_file.element_identifier} &&
+        ln -s '${input_type.input_file}'  '${input_type.input_file.element_identifier}' &&
         #if $input_type.input_file.is_of_type("zip")
             unzip '$input_type.input_file' -d data_collection/    &&
         #elif $input_type.input_file.is_of_type("tar")
@@ -33,13 +33,23 @@
         #end if
         #if str($input_type.platform) == 's2'
             mkdir -p sentinel2_tiles_world &&
-            cp '$input_type.s2_shp.extra_files_path'/* sentinel2_tiles_world/  &&
+            (cp '$input_type.s2_shp.extra_files_path'/shapefile.shp sentinel2_tiles_world/sentinel2_tiles_world.shp || true )  &&
+            (cp '$input_type.s2_shp.extra_files_path'/shapefile.shx sentinel2_tiles_world/sentinel2_tiles_world.shx || true )  &&
+            (cp '$input_type.s2_shp.extra_files_path'/shapefile.dbf sentinel2_tiles_world/sentinel2_tiles_world.dbf || true )  &&
+            (cp '$input_type.s2_shp.extra_files_path'/shapefile.prj sentinel2_tiles_world/sentinel2_tiles_world.prj || true )  &&
+        #elif str($input_type.platform) == 'ls8'
+            mkdir -p WRS2_descending &&
+            (cp '$input_type.ls8_shp.extra_files_path'/shapefile.shp WRS2_descending/WRS2_descending.shp || true )  &&
+            (cp '$input_type.ls8_shp.extra_files_path'/shapefile.shx WRS2_descending/WRS2_descending.shx || true )  &&
+            (cp '$input_type.ls8_shp.extra_files_path'/shapefile.dbf WRS2_descending/WRS2_descending.dbf || true )  &&
+            (cp '$input_type.ls8_shp.extra_files_path'/shapefile.prj WRS2_descending/WRS2_descending.prj || true )  &&
         #end if
-        eodie_process.py --platform 'tif'
+        eodie_process.py --platform $input_type.platform
         #if str($input_type.platform) == 'tif'
             --file ${input_type.input_file.element_identifier}
 	    #else
             --dir data_collection
+            --out ./results
 	    #end if
 	        --shp shapefile
 	    #if $adv_options.stats and str($adv_options.stats) != '':
@@ -65,7 +75,8 @@
 	        $adv_options.exclude_splitshp 
             --id '$identifier'  &&
         mv results/*.log '$logfile'  &&
-        mv results/*.csv ../results_csv/  &&
+        ( mv results/*.csv ../results_csv/ || echo "No csv files generated" ) &&
+        ( mv results/*.tif ../results_tiffs/ || echo "No tiff files generated" ) &&
         echo "EODIE data extractor is done"
     ]]></command>
     <expand macro="configfiles"/>
@@ -81,6 +92,7 @@
             </when>
             <when value="ls8">
                 <param name="input_file" type="data" format='zip,tar' label="Landsat 8 input data (zip or tarball)" />
+                <param type="data" name="ls8_shp" format="shp" label="Landsat 8 tile shapefile" help="Provide the Landsat-8 tile shapefile"/>
             </when>
             <when value="s2">
                 <param name="input_file" type="data" format='zip,tar' label="Sentinel 2 input data (zip or tarball)" />
@@ -141,6 +153,7 @@
             </param>
             <param name="exclude_splitshp" type="boolean" checked="false" label="exclude splitshp" help="Flag to indicate that splitshp has been run manually beforehand" truevalue="--exclude_splitshp" falsevalue="" />
             <param name="exclude_border" type="boolean" checked="false" label="exclude border" help="Flag to indicate that border pixels (within the polygon) should be excluded from statistics calculations / array extraction" truevalue="--exclude_border" falsevalue="" />
+            <param name="geotiff_out" type="boolean" checked="false" label="generate geotiffs" help="flag to indicate that geotiffs shall be extracted" truevalue="--geotiff_out" falsevalue="" />
         </section>
     </inputs>
     <outputs>
@@ -168,6 +181,62 @@
             <output file="20211213-104427.log" name="logfile" compare="sim_size" delta="1000"/> 
             <output_collection name="csv_files" type="list">
                 <element name="testrgb_20100401__statistics.csv" ftype="csv" file="testrgb_20100401__statistics.csv" compare="sim_size" delta="100">
+                </element>
+            </output_collection>
+        </test>
+        <test>
+            <conditional name="input_type">
+                <param name="platform" value="ls8" />
+                <param name="input_file" ftype="tar" value="LS8.tar" />
+                <param name="ls8_shp" ftype="shp" value="WRS2_descending/WRS2_descending.html">
+                    <composite_data value="WRS2_descending/WRS2_descending.shp"/>
+                    <composite_data value="WRS2_descending/WRS2_descending.shx"/>
+                    <composite_data value="WRS2_descending/WRS2_descending.dbf"/>
+                    <composite_data value="WRS2_descending/WRS2_descending.prj"/>
+                </param>
+            </conditional>
+            <param name="input" value="test_parcels_32635/test_parcels_32635.html" ftype="shp">
+                <composite_data value="test_parcels_32635/test_parcels_32635.shp"/>
+                <composite_data value="test_parcels_32635/test_parcels_32635.shx"/>
+                <composite_data value="test_parcels_32635/test_parcels_32635.dbf"/>
+                <composite_data value="test_parcels_32635/test_parcels_32635.prj"/>
+            </param>
+            <param name="identifier" value="ID"/>
+            <section name="adv_options">
+                <param name="stats" value="mean,median,std"/>
+                <param name="indices" value="ndvi"/>
+            </section>
+            <output file="20211218-102629.log" name="logfile" compare="sim_size" delta="1000"/>
+            <output_collection name="csv_files" type="list">
+                <element name="ndvi_20190628_189017_statistics.csv.csv" ftype="csv" file="ndvi_20190628_189017_statistics.csv.csv" compare="sim_size" delta="100">
+                </element>
+            </output_collection>
+        </test>
+        <test>
+            <conditional name="input_type">
+                <param name="platform" value="s2" />
+                <param name="input_file" ftype="tar" value="S2.tar" />
+                <param name="s2_shp" ftype="shp" value="sentinel2_tiles_world/sentinel2_tiles_world.html">
+                    <composite_data value="sentinel2_tiles_world/sentinel2_tiles_world.shp"/>
+                    <composite_data value="sentinel2_tiles_world/sentinel2_tiles_world.shx"/>
+                    <composite_data value="sentinel2_tiles_world/sentinel2_tiles_world.dbf"/>
+                    <composite_data value="sentinel2_tiles_world/sentinel2_tiles_world.prj"/>
+                </param>
+            </conditional>
+            <param name="input" value="test_parcels_32635/test_parcels_32635.html" ftype="shp">
+                <composite_data value="test_parcels_32635/test_parcels_32635.shp"/>
+                <composite_data value="test_parcels_32635/test_parcels_32635.shx"/>
+                <composite_data value="test_parcels_32635/test_parcels_32635.dbf"/>
+                <composite_data value="test_parcels_32635/test_parcels_32635.prj"/>
+            </param>
+            <param name="identifier" value="ID"/>
+            <section name="adv_options">
+                <param name="stats" value="mean,median,std"/>
+                <param name="indices" value="ndvi"/>
+            </section>
+            <output file="20211217-210343.log" name="logfile" compare="sim_size" delta="1000"/>
+            <output_collection name="csv_files" type="list">
+                <element name="ndvi_20200626_34VFN_statistics.csv" ftype="csv" file="ndvi_20200626_34VFN_statistics.csv" compare="sim_size" delta="100">
                 </element>
             </output_collection>
         </test>
