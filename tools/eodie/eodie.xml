@@ -52,17 +52,19 @@
             --out ./results
 	    #end if
 	        --shp shapefile
-	    #if $adv_options.stats and str($adv_options.stats) != '':
-            --statistics_out
+        #for $i, $s in enumerate( $adv_options.statistics )
+            #if str($i) == '0'
+                --statistics_out
 	        --statistics 
-	        #for $stat in str($adv_options.stats).split(','):
-                #if str($stat) == 'percentile':
-                    '$stat'_'$adv_options.p_value'
+            #end if
+	    #if $s.stats_input.stats and str($s.stats_input.stats) != '':
+                #if str($s.stats_input.stats) == 'percentile':
+                    '$s.stats_input.stats'_'$s.stats_input.p_value'
                 #else
-                    '$stat'
+                    '$s.stats_input.stats'
                 #end if
-	        #end for
 	    #end if
+        #end for
 	    #if $adv_options.indices and str($adv_options.indices) != '':
 	        --index 
 	        #for $idx in str($adv_options.indices).split(','):
@@ -112,21 +114,36 @@
             <param name="end_date" type="text" optional="true" label="Time frame end date (YYYYMMDD)">
                 <validator type="length" min="8" max="8" message="Please enter a date YYYYMMDD"/>
             </param>
-            <param name="stats" label="Statistics" type="select" multiple="true">
-                <option value="mean">Mean</option>
-                <option value="sum">Sum</option>
-                <option value="min">Minimum</option>
-                <option value="max">Maximum</option>
-                <option value="std">Standard deviation</option>
-                <option value="median">Median</option>
-                <option value="majority">Majority</option>
-                <option value="minority">Minority</option>
-                <option value="unique">Unique</option>
-                <option value="range">Range</option>
-                <option value="percentile">Percentile</option>
-            </param>
-            <param name="p_value" type="integer" value="0" min="0" max="100" label="percentile value (if percentile selected)" />
-
+            <repeat name="statistics" title="Compute statistics" min="0">
+                <conditional name="stats_input">
+                    <param name="stats" label="Statistics" type="select">
+                        <option value="mean">Mean</option>
+                        <option value="sum">Sum</option>
+                        <option value="min">Minimum</option>
+                        <option value="max">Maximum</option>
+                        <option value="std">Standard deviation</option>
+                        <option value="median">Median</option>
+                        <option value="majority">Majority</option>
+                        <option value="minority">Minority</option>
+                        <option value="unique">Unique</option>
+                        <option value="range">Range</option>
+                        <option value="percentile">Percentile</option>
+                    </param>
+                    <when value="mean"/>
+                    <when value="sum"/>
+                    <when value="min"/>
+                    <when value="max"/>
+                    <when value="std"/>
+                    <when value="median"/>
+                    <when value="majority"/>
+                    <when value="minority"/>
+                    <when value="unique"/>
+                    <when value="range"/>
+                    <when value="percentile">
+                        <param name="p_value" type="integer" value="0" min="0" max="100" label="percentile value (if percentile selected)" />
+                    </when>
+                </conditional>
+            </repeat>
             <param name="indices" label="Indice to compute" type="select" multiple="true">
                 <option value="ndvi">ndvi</option>
                 <option value="rvi">rvi</option>
@@ -181,13 +198,22 @@
             </param>
             <param name="identifier" value="id"/>
             <section name="adv_options">
-                <param name="stats" value="mean,percentile"/>
-                <param name="p_value" value="10"/>
+                <repeat name="statistics">
+                    <conditional name="stats_input">
+                        <param name="stats" value="mean"/>
+                    </conditional>
+                </repeat>
+                <repeat name="statistics">
+                    <conditional name="stats_input">
+                        <param name="stats" value="percentile"/>
+                        <param name="p_value" value="10"/>
+                    </conditional>
+                </repeat>
                 <param name="exclude_splitshp" value="true"/>
             </section>
-            <output file="20211213-104427.log" name="logfile" compare="sim_size" delta="1000"/>
+            <output file="20211213-104427.log" name="logfile" compare="sim_size" delta="100"/>
             <output_collection name="csv_files" type="list" count="1">
-                <element name="testrgb_20100401__statistics.csv" ftype="csv" file="testrgb_20100401__statistics.csv" compare="sim_size" delta="100"/>
+                <element name="testrgb_20100401__statistics.csv" ftype="csv" file="testrgb_20100401__statistics.csv" compare="sim_size" delta="50"/>
             </output_collection>
         </test>
         <test>
@@ -209,12 +235,26 @@
             </param>
             <param name="identifier" value="ID"/>
             <section name="adv_options">
-                <param name="stats" value="mean,median,std"/>
+                <repeat name="statistics">
+                    <conditional name="stats_input">
+                        <param name="stats" value="mean"/>
+                    </conditional>
+                </repeat>
+                <repeat name="statistics">
+                    <conditional name="stats_input">
+                        <param name="stats" value="median"/>
+                    </conditional>
+                </repeat>
+                <repeat name="statistics">
+                    <conditional name="stats_input">
+                        <param name="stats" value="std"/>
+                    </conditional>
+                </repeat>
                 <param name="indices" value="ndvi"/>
             </section>
-            <output file="20211218-102629.log" name="logfile" compare="sim_size" delta="1000"/>
+            <output file="20211218-102629.log" name="logfile" compare="sim_size" delta="100"/>
             <output_collection name="csv_files" type="list" count="1">
-                <element name="ndvi_20190628_189017_statistics.csv" ftype="csv" file="ndvi_20190628_189017_statistics.csv" compare="sim_size" delta="100">
+                <element name="ndvi_20190628_189017_statistics.csv" ftype="csv" file="ndvi_20190628_189017_statistics.csv" compare="sim_size" delta="50">
                 </element>
             </output_collection>
         </test>
@@ -237,12 +277,26 @@
             </param>
             <param name="identifier" value="ID"/>
             <section name="adv_options">
-                <param name="stats" value="mean,median,std"/>
+                <repeat name="statistics">
+                    <conditional name="stats_input">
+                        <param name="stats" value="mean"/>
+                    </conditional>
+                </repeat>
+                <repeat name="statistics">
+                    <conditional name="stats_input">
+                        <param name="stats" value="median"/>
+                    </conditional>
+                </repeat>
+                <repeat name="statistics">
+                    <conditional name="stats_input">
+                        <param name="stats" value="std"/>
+                    </conditional>
+                </repeat>
                 <param name="indices" value="ndvi"/>
             </section>
-            <output file="20211217-210343.log" name="logfile" compare="sim_size" delta="1000"/>
+            <output file="20211217-210343.log" name="logfile" compare="sim_size" delta="100"/>
             <output_collection name="csv_files" type="list" count="1">
-                <element name="ndvi_20200626_34VFN_statistics.csv" ftype="csv" file="ndvi_20200626_34VFN_statistics.csv" compare="sim_size" delta="100">
+                <element name="ndvi_20200626_34VFN_statistics.csv" ftype="csv" file="ndvi_20200626_34VFN_statistics.csv" compare="sim_size" delta="50">
                 </element>
             </output_collection>
         </test>
