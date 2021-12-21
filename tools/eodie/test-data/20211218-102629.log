@@ -1,12 +1,19 @@
-INFO:root:All inputs for this process: dict_items([('platform', 'ls8'), ('config', {'platform': 'ls8', 'maxcloudcover': 99, 'bitmask': 1, 'tobemaskedlist': [0, 1, 2, 3, 4, 5, 9, 11, 13, 15], 'filepattern': 'LC08_L\\d.._\\d{6}_\\d{8}_\\d{8}_02_[TR][12T]$', 'bandlocation': ['.'], 'cloudfilename': 'QA_PIXEL', 'red': 'B4', 'green': 'B3', 'blue': 'B2', 'nir': 'B5', 'swir1': 'B6', 'swir2': 'B7', 'tilepattern': '[0-9]{6}', 'datepattern': '20[1-2][0-9][0-1][0-9][0-3][0-9]', 'band_designation': 'B\\d?\\d', 'quantification_value': 65535, 'B1': [30], 'B2': [30], 'B3': [30], 'B4': [30], 'B5': [30], 'B6': [30], 'B7': [30], 'QA_PIXEL': [30], 'resampling_method': 'bilinear', 'pathbuildinglist': ['*', 'bandname', '*', '.TIF'], 'pixelsize': 30, 'tileshp': './WRS2_descending/WRS2_descending', 'fieldname': 'PR', 'lookup': './postprocesses/lookuptable.txt'}), ('mydir', 'LS8'), ('myfile', None), ('input', ['LS8/LC08_L2SP_189017_20190628_20200827_02_T1']), ('shpbase', 'shapefile'), ('outpath', './results'), ('idname', 'ID'), ('statistics_out', True), ('array_out', False), ('indexlist', ['ndvi']), ('statistics', ['count', 'mean', 'median', 'std']), ('startdate', '20160101'), ('enddate', '20211218'), ('keep_shp', False), ('geotiff_out', False), ('test', False), ('exclude_border', False), ('extmask', None), ('exclude_splitshp', False), ('verbose', False), ('format', ['statistics'])])
+INFO:root:All inputs for this process: dict_items([('platform', 'ls8'), ('config', {'platform': 'ls8', 'maxcloudcover': 99, 'bitmask': 1, 'tobemaskedlist': [0, 1, 2, 3, 4, 5, 9, 11, 13, 15], 'filepattern': 'LC08_L\\d.._\\d{6}_\\d{8}_\\d{8}_02_[TR][12T]$', 'bandlocation': ['.'], 'cloudfilename': 'QA_PIXEL', 'red': 'B4', 'green': 'B3', 'blue': 'B2', 'nir': 'B5', 'swir1': 'B6', 'swir2': 'B7', 'tilepattern': '[0-9]{6}', 'datepattern': '20[1-2][0-9][0-1][0-9][0-3][0-9]', 'band_designation': 'B\\d?\\d', 'quantification_value': 65535, 'B1': [30], 'B2': [30], 'B3': [30], 'B4': [30], 'B5': [30], 'B6': [30], 'B7': [30], 'QA_PIXEL': [30], 'resampling_method': 'bilinear', 'pathbuildinglist': ['*', 'bandname', '*', '.TIF'], 'pixelsize': 30, 'tileshp': './WRS2_descending/WRS2_descending', 'fieldname': 'PR', 'lookup': './postprocesses/lookuptable.txt'}), ('mydir', 'data_collection'), ('myfile', None), ('input', ['data_collection/LC08_L2SP_189017_20190628_20200827_02_T1']), ('shpbase', 'shapefile'), ('outpath', './results'), ('idname', 'ID'), ('statistics_out', True), ('array_out', False), ('indexlist', ['ndvi']), ('statistics', ['count', 'mean', 'median', 'std']), ('startdate', '20160101'), ('enddate', '20211221'), ('keep_shp', False), ('geotiff_out', False), ('test', False), ('exclude_border', False), ('extmask', None), ('exclude_splitshp', False), ('verbose', False), ('format', ['statistics'])])
 INFO:root:checking the projection of the inputfile now
+INFO:root:input shapefile had other than EPSG 4326 but was reprojected and works now
 INFO:root:checking the projection of the inputfile now
-INFO:root:splitted shapefiles already exist
+INFO:root:input shapefile had other than EPSG 4326 but was reprojected and works now
+INFO:root:checking the projection of the inputfile now
+INFO:root:input shapefile had other than EPSG 4326 but was reprojected and works now
+INFO:root:number of usable cores for shapesplitting is 2
+INFO:root:splitted shapefiles now exist
 INFO:root:deleted splitted worldtiles
-INFO:root:Imagepath is LS8/LC08_L2SP_189017_20190628_20200827_02_T1/.
+INFO:root:Imagepath is data_collection/LC08_L2SP_189017_20190628_20200827_02_T1/.
 INFO:root:Tile is 189017
 INFO:root:Date is 20190628
-INFO:root:Shape of cloudmask is (8411, 8351)
+INFO:root:Shape of cloudmask is (40, 27)
 INFO:root:Checking the projection of the inputfile now
+INFO:root:Reprojectcommand: ogr2ogr -t_srs EPSG:32635 EODIE_temp_shp/shapefile_189017_reprojected_32635.shp EODIE_temp_shp/shapefile_reprojected_4326_189017.shp
+INFO:root:input shapefile had other than EPSG 32635 but was reprojected and works now
 INFO:root:stat to csv in: ./results/ndvi_20190628_189017_statistics.csv
 INFO:root:deleted splitted shapefiles
