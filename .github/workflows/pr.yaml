@@ -269,7 +269,7 @@ jobs:
     - name: Get test files from Zenodo
       uses: wei/wget@v1
       with:
-        args: -O eodie/test-data/S2.tar https://zenodo.org/record/5794508/files/S2B_MSIL2A_20200626T095029_N0214_R079_T34VFN_20200626T123234.SAFE.tar
+        args: -O tools/eodie/test-data/S2.tar https://zenodo.org/record/5794508/files/S2B_MSIL2A_20200626T095029_N0214_R079_T34VFN_20200626T123234.SAFE.tar
     - name: Planemo test
       uses: galaxyproject/planemo-ci-action@v1
       id: test
