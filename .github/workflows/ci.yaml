@@ -126,7 +126,7 @@ jobs:
     - name: Get LS8 test files from Zenodo
       uses: wei/wget@v1
       with:
-        args: -O tools/eodie/test-data/LS8.tar https://zenodo.org/record/5795599/files/LC08_L2SP_189017_20190628_20200827_02_T1.tar
+        args: -O tools/eodie/test-data/LS8.tar https://zenodo.org/record/5796122/files/LC08_L2SP_189017_20190628_20200827_02_T1.tar
     - name: Get S2 test files from Zenodo
       uses: wei/wget@v1
       with:

@@ -18,7 +18,6 @@
         <requirement type="package" version="1.34">tar</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-        #set $nprocs = "\${GALAXY_SLOTS:-1}"
         mkdir -p work/data_collection work/results results_csv results_tiffs &&
         cp '$config_tif' config_tif.yml && 
         cp '$config_s2'  config_s2.yml  && 
@@ -46,9 +45,6 @@
             (cp '$input_type.ls8_shp.extra_files_path'/shapefile.prj WRS2_descending/WRS2_descending.prj || true )  &&
         #end if
         eodie_process.py --platform $input_type.platform
-        #if str($nprocs) == '1'
-            --test
-        #end if
         #if str($input_type.platform) == 'tif'
             --file ${input_type.input_file.element_identifier}
 	    #else
