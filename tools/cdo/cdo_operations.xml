@@ -59,15 +59,15 @@
         #else
             'output_dir/outfile.netcdf'
         #end if
-    ]]></command>
+    ]]>    </command>
     <inputs>
         <expand macro="cdo_operator"/>
-        <repeat name="section_operators" title="CDO Operators" >
+        <repeat name="section_operators" title="CDO Operators">
             <expand macro="cdo_operator"/>
         </repeat>
-        <repeat name="section_option" title="CDO Options" >
+        <repeat name="section_option" title="CDO Options">
             <expand macro="cdo_option"/>
-	</repeat>
+        </repeat>
     </inputs>
     <outputs>
         <collection name="output_files" type="list" label="${tool.name} outfiles">
@@ -144,6 +144,6 @@ This tool is a wrapper to the Climate Data Operators (CDO) for all operators man
 
 - `CDO online documentation <https://code.mpimet.mpg.de/projects/cdo/>`_.
 
-    ]]></help>
+    ]]>    </help>
     <expand macro="citations"/>
 </tool>

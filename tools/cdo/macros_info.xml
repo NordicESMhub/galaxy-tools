@@ -36,16 +36,16 @@
                 <option value="zaxisdes">zaxisdes (Z-axis description)</option>
                 <option value="vct">vct (Vertical coordinate table)</option>
             </param>
-	    <when value="info"/>
-	    <when value="infon"/>
-	    <when value="map"/>
-	    <when value="sinfo"/>
-	    <when value="sinfon"/>
-	    <when value="diff">
-	        <param name="infile2" type="data" label="Input file" format="netcdf"/>
+            <when value="info"/>
+            <when value="infon"/>
+            <when value="map"/>
+            <when value="sinfo"/>
+            <when value="sinfon"/>
+            <when value="diff">
+                <param name="infile2" type="data" label="Input file" format="netcdf"/>
             </when>
-	    <when value="diffn">
-	        <param name="infile2" type="data" label="Input file" format="netcdf"/>
+            <when value="diffn">
+                <param name="infile2" type="data" label="Input file" format="netcdf"/>
             </when>
             <when value="npar"/>
             <when value="nlevel"/>
@@ -68,7 +68,7 @@
             <when value="showtimestamp"/>
             <when value="showattribute">
                 <repeat name="attributes" title="List of attributes">
-	            <param name="attribute" type="text" label="Global or variable attribute name"/>
+                    <param name="attribute" type="text" label="Global or variable attribute name"/>
                 </repeat>
             </when>
             <when value="partab"/>

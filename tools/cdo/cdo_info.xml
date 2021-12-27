@@ -26,7 +26,7 @@
            '$information.infile2'
        #end if
        > $info
-    ]]></command>
+    ]]>    </command>
     <inputs>
         <expand macro="operator_information"/>
     </inputs>
@@ -77,6 +77,6 @@ This tool is a wrapper to the Climate Data Operators (CDO) for all Information O
 
 - `CDO online documentation <https://code.mpimet.mpg.de/projects/cdo/>`_.
 
-    ]]></help>
+    ]]>    </help>
     <expand macro="citations"/>
 </tool>

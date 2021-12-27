@@ -19,35 +19,35 @@
             </param>
             <when value="-a"/>
             <when value="--cmor"/>
-	    <when value="-f">
-	        <param name="output_format" type="text" label="Output format"/>
+            <when value="-f">
+                <param name="output_format" type="text" label="Output format"/>
             </when>
-	    <when value="-g">
-	        <param name="grid" type="text" label="Grid (option -g grid)"/>
+            <when value="-g">
+                <param name="grid" type="text" label="Grid (option -g grid)"/>
             </when>
-	    <when value="-gf">
-	        <param name="gridfile" type="data" label="Grid file (option -g gridfile)" format="txt"/>
+            <when value="-gf">
+                <param name="gridfile" type="data" label="Grid file (option -g gridfile)" format="txt"/>
             </when>
             <when value="-M"/>
-	    <when value="-m">
-	        <param name="missval" type="float" value="-9e+33" label="Set the default missing value"/>
+            <when value="-m">
+                <param name="missval" type="float" value="-9e+33" label="Set the default missing value"/>
             </when>
             <when value="-O"/>
-	    <when value="--percentile">
+            <when value="--percentile">
                 <param name="percentile" type="select" label="Percentile method">
-		    <option value="nrank">nrank</option>
-		    <option value="nist">nist</option>
-		    <option value="rtype8">rtype8</option>
-		    <option value="numpy">numpy</option>
-		    <option value="numpy_lower">numpy_lower</option>
-		    <option value="numpy_higher">numpy_higher</option>
-		    <option value="numpy_nearest">numpy_nearest</option>
+                    <option value="nrank">nrank</option>
+                    <option value="nist">nist</option>
+                    <option value="rtype8">rtype8</option>
+                    <option value="numpy">numpy</option>
+                    <option value="numpy_lower">numpy_lower</option>
+                    <option value="numpy_higher">numpy_higher</option>
+                    <option value="numpy_nearest">numpy_nearest</option>
                 </param>
             </when>
             <when value="--reduce_dim"/>
             <when value="-R"/>
-	    <when value="--seed">
-	        <param name="seed" type="float" value="0.0" label="Seed for a new sequence of pseudo-random numbers"/>
+            <when value="--seed">
+                <param name="seed" type="float" value="0.0" label="Seed for a new sequence of pseudo-random numbers"/>
             </when>
             <when value="--sortname"/>
             <when value="-r"/>
@@ -82,139 +82,139 @@
                 <option value="select">select (Select all fields with parameters in a user given list.)</option>
                 <option value="delete">select (Delete all fields with parameters in a user given list.)</option>
             </param>
-	    <when value="copy">
+            <when value="copy">
                 <repeat name="input_files" title="Infiles" min="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="cat">
+            <when value="cat">
                 <repeat name="input_files" title="Infiles" min="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="replace">
+            <when value="replace">
                 <repeat name="input_files" title="Infiles" min="2" max="2">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="duplicate">
-	        <param name="ndup" type="integer" label="Number of duplicates, default is 2." value="2"/>
+            <when value="duplicate">
+                <param name="ndup" type="integer" label="Number of duplicates, default is 2." value="2"/>
                 <repeat name="input_files" title="Infiles" min="1" max="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="mergegrid">
+            <when value="mergegrid">
                 <repeat name="input_files" title="Infiles" min="1" max="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="merge">
+            <when value="merge">
                 <repeat name="input_files" title="Infiles" min="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="mergetime">
+            <when value="mergetime">
                 <repeat name="input_files" title="Infiles" min="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="splitcode">
+            <when value="splitcode">
                 <repeat name="input_files" title="Infiles" min="1" max="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="splitparam">
+            <when value="splitparam">
                 <repeat name="input_files" title="Infiles" min="1" max="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="splitname">
+            <when value="splitname">
                 <repeat name="input_files" title="Infiles" min="1" max="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="splitlevel">
+            <when value="splitlevel">
                 <repeat name="input_files" title="Infiles" min="1" max="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="splitgrid">
+            <when value="splitgrid">
                 <repeat name="input_files" title="Infiles" min="1" max="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="splitzaxis">
+            <when value="splitzaxis">
                 <repeat name="input_files" title="Infiles" min="1" max="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="splittabnum">
+            <when value="splittabnum">
                 <repeat name="input_files" title="Infiles" min="1" max="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="splithour">
+            <when value="splithour">
                 <repeat name="input_files" title="Infiles" min="1" max="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="splitday">
+            <when value="splitday">
                 <repeat name="input_files" title="Infiles" min="1" max="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="splitseas">
+            <when value="splitseas">
                 <repeat name="input_files" title="Infiles" min="1" max="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="splityear">
+            <when value="splityear">
                 <repeat name="input_files" title="Infiles" min="1" max="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="splityearmon">
+            <when value="splityearmon">
                 <repeat name="input_files" title="Infiles" min="1" max="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="splitmon">
+            <when value="splitmon">
                 <repeat name="input_files" title="Infiles" min="1" max="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="splitsel">
-	        <param name="nset" type="integer" value="0" label="Number of input timesteps for each output file"/>
-	        <param name="noffset" type="integer" optional="true" label="Number of input timesteps skipped before the first timestep range (optional)"/>
-	        <param name="nskip" type="integer" optional="true" label="Number of input timesteps skipped between timestep ranges (optional)"/>
+            <when value="splitsel">
+                <param name="nset" type="integer" value="0" label="Number of input timesteps for each output file"/>
+                <param name="noffset" type="integer" optional="true" label="Number of input timesteps skipped before the first timestep range (optional)"/>
+                <param name="nskip" type="integer" optional="true" label="Number of input timesteps skipped between timestep ranges (optional)"/>
                 <repeat name="input_files" title="Infiles" min="1" max="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="distgrid">
-	        <param name="nx" type="integer" value="1" label="Number of regions in x direction, or number of pieces for unstructured grids"/>
-	        <param name="ny" type="integer" label="Number of regions in y direction" value="1"/>
+            <when value="distgrid">
+                <param name="nx" type="integer" value="1" label="Number of regions in x direction, or number of pieces for unstructured grids"/>
+                <param name="ny" type="integer" label="Number of regions in y direction" value="1"/>
                 <repeat name="input_files" title="Infiles" min="1" max="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="collgrid">
-	        <param name="nx" type="integer" label="Number of regions in x direction" optional="true"/>
-	        <param name="names" type="text" label="Comma-separated list of variable names" optional="true"/>
+            <when value="collgrid">
+                <param name="nx" type="integer" label="Number of regions in x direction" optional="true"/>
+                <param name="names" type="text" label="Comma-separated list of variable names" optional="true"/>
                 <repeat name="input_files" title="Infiles" min="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="select">
-	        <param name="params" type="text" value="" label="Parameters for selection"/>
+            <when value="select">
+                <param name="params" type="text" value="" label="Parameters for selection"/>
                 <repeat name="input_files" title="Infiles" min="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
-	    <when value="delete">
-	        <param name="params" type="text" label="Parameters for deletion"/>
+            <when value="delete">
+                <param name="params" type="text" label="Parameters for deletion"/>
                 <repeat name="input_files" title="Infiles" min="1">
-	            <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
+                    <param name="add_file" type="data" label="Additional input file" format="netcdf"/>
                 </repeat>
             </when>
         </conditional>
