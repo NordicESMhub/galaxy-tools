@@ -1,6 +1,6 @@
 <macros>
     <xml name="operator_information">
-        <param name="infile1" type="data" label="Input file" format="netcdf"/>
+        <param name="infile1" type="data" label="Input file" format="netcdf,binary"/>
         <conditional name="information">
             <param name="opt" type="select" label="Select cdo operator" multiple="false">
                 <option value="info">info (Dataset information listed by parameter identifier)</option>
@@ -42,10 +42,10 @@
 	    <when value="sinfo"/>
 	    <when value="sinfon"/>
 	    <when value="diff">
-	        <param name="infile2" type="data" label="Input file" format="netcdf"/>
+	        <param name="infile2" type="data" label="Input file" format="netcdf,binary"/>
             </when>
 	    <when value="diffn">
-	        <param name="infile2" type="data" label="Input file" format="netcdf"/>
+	        <param name="infile2" type="data" label="Input file" format="netcdf,binary"/>
             </when>
             <when value="npar"/>
             <when value="nlevel"/>

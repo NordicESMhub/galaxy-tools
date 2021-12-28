@@ -1,5 +1,5 @@
-<tool id="cdo_info" name="CDO Climate Data Information Operators" profile="20.05" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
-    <description>to get information on Climate and NWP model data</description>
+<tool id="cdo_info" name="CDO get info" profile="20.05" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
+    <description>Climate Data Information Operators to get information on Climate and NWP model data</description>
     <macros>
         <import>macros.xml</import>
         <import>macros_info.xml</import>
@@ -39,7 +39,7 @@
             <conditional name="information">
                 <param name="opt" value="info" />
             </conditional>
-            <output name="info" value="longitude.txt" compare="sim_size" delta="10"/>
+            <output name="info" value="longitude.txt" compare="diff" lines_diff="2"/>
         </test>
         <test>
             <param name="infile1" ftype="netcdf" value="latitude.nc"/>
@@ -47,21 +47,21 @@
                 <param name="diff" value="info" />
                 <param name="infile2" ftype="netcdf" value="latitude_modified.nc"/>
             </conditional>
-            <output name="info" value="latitude_diff.txt" compare="sim_size" delta="10"/>
+            <output name="info" value="latitude_diff.txt" compare="diff" lines_diff="2"/>
         </test>
         <test>
             <param name="infile1" ftype="netcdf" value="WMI_Lear.nc"/>
             <conditional name="information">
                 <param name="opt" value="showdate" />
             </conditional>
-            <output name="info" value="WMI_Lear_showdate.txt" compare="sim_size" delta="10"/>
+            <output name="info" value="WMI_Lear_showdate.txt" compare="diff" lines_diff="2"/>
         </test>
         <test>
             <param name="infile1" ftype="netcdf" value="WMI_Lear.nc"/>
             <conditional name="information">
                 <param name="opt" value="griddes" />
             </conditional>
-            <output name="info" value="WMI_Lear_griddes.txt" compare="sim_size" delta="10"/>
+            <output name="info" value="WMI_Lear_griddes.txt" compare="diff" lines_diff="2"/>
         </test>
     </tests>
     <help><![CDATA[

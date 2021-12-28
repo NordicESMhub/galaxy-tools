@@ -1,5 +1,5 @@
-<tool id="cdo_operations" name="CDO Climate Data Manipulation Operators" profile="20.05" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
-    <description>operations for standard processing of climate and NWP model output.</description>
+<tool id="cdo_operations" name="CDO Operations" profile="20.05" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
+    <description>Climate Data Manipulation Operators operations for standard processing of climate and NWP model output.</description>
     <macros>
         <import>macros.xml</import>
         <import>macros_operations.xml</import>
@@ -74,7 +74,19 @@
             <discover_datasets pattern="__name__" directory="output_dir" visible="true" format="netcdf"/>
         </collection>
     </outputs>
-    <tests>
+    <tests>  
+        <test>
+            <conditional name="operator">
+                <param name="opt" value="select" />
+                <param name="params" value="name=Drops" />
+                <repeat name="input_files">
+                    <param name="add_file" value="WMI_Lear.nc" ftype="netcdf" />
+                </repeat>
+            </conditional>
+            <output_collection name="output_files" type="list">
+                <element name="outfile.netcdf" ftype="netcdf" file="drops1.nc" compare="sim_size" delta="50"/>
+            </output_collection>
+        </test>
         <test>
             <conditional name="operator">
                 <param name="opt" value="copy" />
@@ -83,7 +95,7 @@
                 </repeat>
             </conditional>
             <output_collection name="output_files" type="list">
-                <element name="outfile.netcdf" ftype="netcdf" file="WMI_Lear_copy.nc" compare="sim_size" delta="15"/>
+                <element name="outfile.netcdf" ftype="netcdf" file="WMI_Lear_copy.nc" compare="sim_size" delta="50"/>
             </output_collection>
         </test>
         <test>
@@ -95,7 +107,7 @@
                 </repeat>
             </conditional>
             <output_collection name="output_files" type="list">
-                <element name="outfile.netcdf" ftype="netcdf" file="drops_cat.nc" compare="sim_size" delta="15"/>
+                <element name="outfile.netcdf" ftype="netcdf" file="drops_cat.nc" compare="sim_size" delta="50"/>
             </output_collection>
         </test>
         <test>
@@ -116,7 +128,7 @@
                 </repeat>
             </conditional>
             <output_collection name="output_files" type="list">
-                <element name="outfile.netcdf" ftype="netcdf" file="lat_long_modified.nc" compare="sim_size" delta="20"/>
+                <element name="outfile.netcdf" ftype="netcdf" file="lat_long_modified.nc" compare="sim_size" delta="50"/>
             </output_collection>
         </test>
         <test>
@@ -128,7 +140,7 @@
                 </repeat>
             </conditional>
             <output_collection name="output_files" type="list">
-                <element name="outfile.netcdf" ftype="netcdf" file="latitude3.nc" compare="sim_size" delta="15"/>
+                <element name="outfile.netcdf" ftype="netcdf" file="latitude3.nc" compare="sim_size" delta="50"/>
             </output_collection>
         </test>
     </tests>
