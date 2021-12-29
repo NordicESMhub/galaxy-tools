@@ -5,10 +5,7 @@
         <import>macros_operations.xml</import>
     </macros>
     <expand macro="edam_ontology"/>
-    <requirements>
-        <requirement type="package" version="3">python</requirement>
-        <requirement type="package" version="@TOOL_VERSION@">cdo</requirement>
-    </requirements>
+    <expand macro="cdo_requirements"/>
     <stdio>
         <!-- Anything other than zero is an error -->
         <exit_code range="1:" />
@@ -21,48 +18,50 @@
     <command detect_errors="exit_code"><![CDATA[
         mkdir output_dir &&
         cdo 
-        #if $operator.opt == 'duplicate'
-            '$operator.opt',$operator.ndup
-        #elif $operator.opt == 'collgrid'
-            #if str($operator.nx)
-                #if str($operator.names)
-                    '$operator.opt',$operator.nx,'$operator.names'
-                #else
-                    '$operator.opt',$operator.nx
-                #end if
-            #else
-                '$operator.opt'
-            #end if
-        #elif $operator.opt == 'distgrid'
-            '$operator.opt',$operator.nx,$operator.ny
-        #elif $operator.opt == 'splitsel'
-                #if str($operator.noffset)
-                    #if str($operator.nskip)
-                        '$operator.opt',$operator.nsets,$operator.noffset,$operator.nskip
+        #for $i, $cdo_oper in enumerate( $section_operators )
+            #if $cdo_oper.operator.opt == 'duplicate'
+                '$cdo_oper.operator.opt',$cdo_oper.operator.ndup
+            #elif $cdo_oper.operator.opt == 'collgrid'
+                #if str($cdo_oper.operator.nx)
+                    #if str($cdo_oper.operator.names)
+                        '$cdo_oper.operator.opt',$cdo_oper.operator.nx,'$cdo_oper.operator.names'
                     #else
-                        '$operator.opt',$operator.nsets,$operator.noffset
+                        '$cdo_oper.operator.opt',$cdo_oper.operator.nx
                     #end if
                 #else
-                    '$operator.opt',$operator.nsets
-
+                    '$cdo_oper.operator.opt'
                 #end if
-        #elif $operator.opt == 'select' or $operator.opt == 'delete'
-            '$operator.opt','$operator.params'
-        #else
-            '$operator.opt'
-        #end if
-        #for $i, $ifile in enumerate($operator.input_files):
-            '${ifile.add_file}'
+            #elif $cdo_oper.operator.opt == 'distgrid'
+                '$cdo_oper.operator.opt',$cdo_oper.operator.nx,$cdo_oper.operator.ny
+            #elif $cdo_oper.operator.opt == 'splitsel'
+                    #if str($cdo_oper.operator.noffset)
+                        #if str($cdo_oper.operator.nskip)
+                            '$cdo_oper.operator.opt',$cdo_oper.operator.nsets,$cdo_oper.operator.noffset,$cdo_oper.operator.nskip
+                        #else
+                            '$cdo_oper.operator.opt',$cdo_oper.operator.nsets,$cdo_oper.operator.noffset
+                        #end if
+                    #else
+                        '$cdo_oper.operator.opt',$cdo_oper.operator.nsets
+                    #end if
+            #elif $cdo_oper.operator.opt == 'select' or $cdo_oper.operator.opt == 'delete'
+                '$cdo_oper.operator.opt','$cdo_oper.operator.params'
+            #else
+                '$cdo_oper.operator.opt'
+            #end if
+	    #for $ifile in $cdo_oper.operator.add_file
+                '${ifile}'
+            #end for
+            #if $i == 0
+                #if $cdo_oper.operator.opt == 'splitcode' or $cdo_oper.operator.opt == 'splitparam' or $cdo_oper.operator.opt == 'splitname' or $cdo_oper.operator.opt == 'splitlevel' or $cdo_oper.operator.opt == 'splitgrid' or  $cdo_oper.operator.opt == 'splitzaxis' or $cdo_oper.operator.opt == 'splittabnum' or $cdo_oper.operator.opt == 'splithour' or $cdo_oper.operator.opt == 'splitday' or $cdo_oper.operator.opt == 'splitseas' or $cdo_oper.operator.opt == 'splityear' or $cdo_oper.operator.opt == 'splityearmon' or $cdo_oper.operator.opt == 'splitmon' 
+                    'output_dir/outfile_'
+                #else
+                    'output_dir/outfile.netcdf'
+                #end if
+            #end if
         #end for
-        #if $operator.opt == 'splitcode' or $operator.opt == 'splitparam' or $operator.opt == 'splitname' or $operator.opt == 'splitlevel' or $operator.opt == 'splitgrid' or  $operator.opt == 'splitzaxis' or $operator.opt == 'splittabnum' or $operator.opt == 'splithour' or $operator.opt == 'splitday' or $operator.opt == 'splitseas' or $operator.opt == 'splityear' or $operator.opt == 'splityearmon' or $operator.opt == 'splitmon' 
-            'output_dir/outfile_'
-        #else
-            'output_dir/outfile.netcdf'
-        #end if
     ]]>    </command>
     <inputs>
-        <expand macro="cdo_operator"/>
-        <repeat name="section_operators" title="CDO Operators">
+        <repeat name="section_operators" title="CDO Operators" min="1" max="10">
             <expand macro="cdo_operator"/>
         </repeat>
         <repeat name="section_option" title="CDO Options">
@@ -79,55 +78,43 @@
             <conditional name="operator">
                 <param name="opt" value="select" />
                 <param name="params" value="name=Drops" />
-                <repeat name="input_files">
-                    <param name="add_file" value="WMI_Lear.nc" ftype="netcdf" />
-                </repeat>
+                <param name="add_file" value="WMI_Lear.nc" ftype="netcdf" />
             </conditional>
-            <output_collection name="output_files" type="list">
+            <output_collection name="output_files" type="list" count="1">
                 <element name="outfile.netcdf" ftype="netcdf" file="drops1.nc" compare="sim_size" delta="50"/>
             </output_collection>
         </test>
         <test>
             <conditional name="operator">
                 <param name="opt" value="copy" />
-                <repeat name="input_files">
-                    <param name="add_file" value="WMI_Lear.nc" ftype="netcdf" />
-                </repeat>
+                <param name="add_file" value="WMI_Lear.nc" ftype="netcdf" />
             </conditional>
-            <output_collection name="output_files" type="list">
+            <output_collection name="output_files" type="list" count="1">
                 <element name="outfile.netcdf" ftype="netcdf" file="WMI_Lear_copy.nc" compare="sim_size" delta="50"/>
             </output_collection>
         </test>
         <test>
             <conditional name="operator">
                 <param name="opt" value="cat" />
-                <repeat name="input_files">
-                    <param name="add_file" value="drops1.nc" ftype="netcdf" />
-                    <param name="add_file" value="drops2.nc" ftype="netcdf" />
-                </repeat>
+                <param name="add_file" value="drops1.nc,drops2.nc" ftype="netcdf" />
             </conditional>
-            <output_collection name="output_files" type="list">
+            <output_collection name="output_files" type="list" count="1">
                 <element name="outfile.netcdf" ftype="netcdf" file="drops_cat.nc" compare="sim_size" delta="50"/>
             </output_collection>
         </test>
         <test>
             <conditional name="operator">
                 <param name="opt" value="splitname" />
-                <repeat name="input_files">
-                    <param name="add_file" value="lat_long.nc" ftype="netcdf" />
-                </repeat>
+                <param name="add_file" value="lat_long.nc" ftype="netcdf" />
             </conditional>
             <output_collection name="output_files" type="list" count="2"/>
         </test>
         <test>
             <conditional name="operator">
                 <param name="opt" value="replace" />
-                <repeat name="input_files">
-                    <param name="add_file" value="lat_long.nc" ftype="netcdf" />
-                    <param name="add_file" value="latitude_modified.nc" ftype="netcdf" />
-                </repeat>
+                <param name="add_file" value="lat_long.nc,latitude_modified.nc" ftype="netcdf" />
             </conditional>
-            <output_collection name="output_files" type="list">
+            <output_collection name="output_files" type="list" count="1">
                 <element name="outfile.netcdf" ftype="netcdf" file="lat_long_modified.nc" compare="sim_size" delta="50"/>
             </output_collection>
         </test>
@@ -135,11 +122,9 @@
             <conditional name="operator">
                 <param name="opt" value="duplicate" />
                 <param name="ndup" value="3" ftype="integer" />
-                <repeat name="input_files">
-                    <param name="add_file" value="latitude.nc" ftype="netcdf" />
-                </repeat>
+                <param name="add_file" value="latitude.nc" ftype="netcdf" />
             </conditional>
-            <output_collection name="output_files" type="list">
+            <output_collection name="output_files" type="list" count="1">
                 <element name="outfile.netcdf" ftype="netcdf" file="latitude3.nc" compare="sim_size" delta="50"/>
             </output_collection>
         </test>

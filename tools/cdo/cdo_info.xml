@@ -5,10 +5,7 @@
         <import>macros_info.xml</import>
     </macros>
     <expand macro="edam_ontology"/>
-    <requirements>
-        <requirement type="package" version="3">python</requirement>
-        <requirement type="package" version="@TOOL_VERSION@">cdo</requirement>
-    </requirements>
+    <expand macro="cdo_requirements"/>
     <stdio>
         <!-- Anything other than zero or one is an error -->
         <exit_code range="2:" />
@@ -21,9 +18,9 @@
     <command><![CDATA[
        cdo 
        '$information.opt'
-       '$infile1'
-       #if str($information.opt) == "diff" or str($information.opt) == "diffn"
-           '$information.infile2'
+       '$main_infile'
+       #if str($information.opt) == 'diff' or str($information.opt) == 'diffn'
+           '$information.secondary_infile'
        #end if
        > $info
     ]]>    </command>
@@ -35,29 +32,29 @@
     </outputs>
     <tests>
         <test>
-            <param name="infile1" ftype="netcdf" value="longitude.nc"/>
+            <param name="main_infile" ftype="netcdf" value="longitude.nc"/>
             <conditional name="information">
                 <param name="opt" value="info" />
             </conditional>
             <output name="info" value="longitude.txt" compare="diff" lines_diff="2"/>
         </test>
         <test>
-            <param name="infile1" ftype="netcdf" value="latitude.nc"/>
+            <param name="main_infile" ftype="netcdf" value="latitude.nc"/>
             <conditional name="information">
                 <param name="diff" value="info" />
-                <param name="infile2" ftype="netcdf" value="latitude_modified.nc"/>
+                <param name="secondary_infile" ftype="netcdf" value="latitude_modified.nc"/>
             </conditional>
             <output name="info" value="latitude_diff.txt" compare="diff" lines_diff="2"/>
         </test>
         <test>
-            <param name="infile1" ftype="netcdf" value="WMI_Lear.nc"/>
+            <param name="main_infile" ftype="netcdf" value="WMI_Lear.nc"/>
             <conditional name="information">
                 <param name="opt" value="showdate" />
             </conditional>
             <output name="info" value="WMI_Lear_showdate.txt" compare="diff" lines_diff="2"/>
         </test>
         <test>
-            <param name="infile1" ftype="netcdf" value="WMI_Lear.nc"/>
+            <param name="main_infile" ftype="netcdf" value="WMI_Lear.nc"/>
             <conditional name="information">
                 <param name="opt" value="griddes" />
             </conditional>
