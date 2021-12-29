@@ -44,42 +44,45 @@
             (cp '$input_type.ls8_shp.extra_files_path'/shapefile.dbf WRS2_descending/WRS2_descending.dbf || true )  &&
             (cp '$input_type.ls8_shp.extra_files_path'/shapefile.prj WRS2_descending/WRS2_descending.prj || true )  &&
         #end if
-        eodie_process.py --platform $input_type.platform
+
+        eodie_process.py
+        --platform $input_type.platform
         #if str($input_type.platform) == 'tif'
             --file ${input_type.input_file.element_identifier}
-	    #else
+        #else
             --dir data_collection
             --out ./results
-	    #end if
-	        --shp shapefile
+        #end if
+        --shp shapefile
         #for $i, $s in enumerate( $adv_options.statistics )
             #if str($i) == '0'
                 --statistics_out
-	        --statistics 
+            --statistics 
             #end if
-	    #if $s.stats_input.stats and str($s.stats_input.stats) != '':
+            #if $s.stats_input.stats and str($s.stats_input.stats) != '':
                 #if str($s.stats_input.stats) == 'percentile':
                     '$s.stats_input.stats'_'$s.stats_input.p_value'
                 #else
                     '$s.stats_input.stats'
                 #end if
-	    #end if
+            #end if
         #end for
-	    #if $adv_options.indices and str($adv_options.indices) != '':
-	        --index 
-	        #for $idx in str($adv_options.indices).split(','):
-	            '$idx'
-	        #end for
-	    #end if
-	    #if $adv_options.start_date and str($adv_options.start_date) != '':
+        #if $adv_options.indices and str($adv_options.indices) != '':
+            --index 
+            #for $idx in str($adv_options.indices).split(','):
+                '$idx'
+            #end for
+        #end if
+        #if $adv_options.start_date and str($adv_options.start_date) != '':
             --start int($adv_options.start_date)
-	    #end if
-	    #if $adv_options.end_date and str($adv_options.end_date) != '':
+        #end if
+        #if $adv_options.end_date and str($adv_options.end_date) != '':
             --start int($adv_options.end_date)
-	    #end if
-	        $adv_options.exclude_border 
-	        $adv_options.exclude_splitshp 
-            --id '$identifier'  &&
+        #end if
+        $adv_options.exclude_border 
+        $adv_options.exclude_splitshp 
+        --id '$identifier'  &&
+
         mv results/*.log '$logfile'  &&
         ( mv results/*.csv ../results_csv/ || echo "No csv files generated" ) &&
         ( mv results/*.tif ../results_tiffs/ || echo "No tiff files generated" ) &&
@@ -98,21 +101,21 @@
             </when>
             <when value="ls8">
                 <param name="input_file" type="data" format='zip,tar' label="Landsat 8 input data (zip or tarball)" />
-                <param type="data" name="ls8_shp" format="shp" label="Landsat 8 tile shapefile" help="Provide the Landsat-8 tile shapefile"/>
+                <param name="ls8_shp" type="data" format="shp" label="Landsat 8 tile shapefile" help="Provide the Landsat-8 tile shapefile"/>
             </when>
             <when value="s2">
                 <param name="input_file" type="data" format='zip,tar' label="Sentinel 2 input data (zip or tarball)" />
-                <param type="data" name="s2_shp" format="shp" label="Sentinel-2 tile shapefile" help="Provide the Sentinel-2 tile shapefile"/>
+                <param name="s2_shp"  type="data" format="shp" label="Sentinel-2 tile shapefile" help="Provide the Sentinel-2 tile shapefile"/>
             </when>
         </conditional>
         <param type="data" name="input" format="shp" label="Shapefile with polygons" help="Provide shapefile with polygons"/>
         <param name="identifier" type="text" value="PlotID" label="Name of identifier" />
         <section name="adv_options" title="Advanced options" expanded="false">
             <param name="start_date" type="text" optional="true" label="Time frame start date (YYYYMMDD)">
-                <validator type="length" min="8" max="8" message="Please enter a date YYYYMMDD"/>
+                <validator type="length" min="8" max="8" message="Please enter a date in the form of YYYYMMDD"/>
             </param>
             <param name="end_date" type="text" optional="true" label="Time frame end date (YYYYMMDD)">
-                <validator type="length" min="8" max="8" message="Please enter a date YYYYMMDD"/>
+                <validator type="length" min="8" max="8" message="Please enter a date in the form of YYYYMMDD"/>
             </param>
             <repeat name="statistics" title="Compute statistics" min="0">
                 <conditional name="stats_input">
