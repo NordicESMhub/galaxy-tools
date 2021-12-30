@@ -251,7 +251,7 @@
                 <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
             </when>
             <when value="sp2gp">
-                <param name="trunc" type="integer" optionl="true" value="" label="New spectral resolution"/>
+                <param name="trunc" type="integer" optional="true" value="" label="New spectral resolution"/>
                 <param name="add_file" type="data" optional="true" value="" label="Additional input file" format="netcdf"/>
             </when>
             <when value="gp2sp">
