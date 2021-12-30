@@ -180,3 +180,4 @@
    179 : 2003-07-06 06:59:49       0        1       0 :                 -96.244             : -1            
    180 : 2003-07-06 06:59:59       0        1       0 :                 -96.227             : -1            
        :       Date     Time   Level Gridsize    Miss :     Minimum        Mean     Maximum : Parameter ID
+cdo    info: Processed 180 values from 1 variable over 180 timesteps [0.00s 22MB].

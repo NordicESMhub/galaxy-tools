@@ -1,1 +1,2 @@
   2003-07-06
+cdo    showdate: Processed 10 variables over 180 timesteps [0.00s 22MB].

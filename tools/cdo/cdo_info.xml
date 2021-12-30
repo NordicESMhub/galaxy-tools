@@ -60,6 +60,13 @@
             </conditional>
             <output name="info" value="WMI_Lear_griddes.txt" compare="diff" lines_diff="2"/>
         </test>
+        <test>
+            <param name="main_infile" ftype="netcdf" value="WMI_Lear.nc"/>
+            <conditional name="information">
+                <param name="opt" value="showname" />
+            </conditional>
+            <output name="info" value="WMI_Lear_names.txt" compare="diff" lines_diff="2"/>
+        </test>
     </tests>
     <help><![CDATA[
 
