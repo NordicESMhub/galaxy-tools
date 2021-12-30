@@ -12,7 +12,7 @@
     </xml>
     <xml name="cdo_option">
         <conditional name="option_type">
-            <param name="opt" type="select" label="Provide cdo options" optional="true" multiple="false">
+            <param name="add_opt" type="select" label="Provide cdo options" multiple="false">
                 <option value="-a">Generate an absolute time axis (-a)</option>
                 <option value="--cmor">CMOR conform NetCDF output (--cmor)</option>
                 <option value="-f">-Output format (-f format)</option>

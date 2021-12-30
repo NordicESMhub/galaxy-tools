@@ -18,6 +18,23 @@
     <command detect_errors="exit_code"><![CDATA[
         mkdir output_dir &&
         cdo 
+        #for $i, $cdo_option in enumerate( $section_option )
+            #if $cdo_option.option_type.add_opt == '-f'
+                $cdo_option.option_type.add_opt $cdo_option.option_type.output_format
+            #elif $cdo_option.option_type.add_opt == '-g'
+                $cdo_option.option_type.add_opt $cdo_option.option_type.grid
+            #elif $cdo_option.option_type.add_opt == '-gf'
+                $cdo_option.option_type.add_opt $cdo_option.option_type.gridfile
+            #elif $cdo_option.option_type.add_opt == '-m'
+                $cdo_option.option_type.add_opt $cdo_option.option_type.missval
+            #elif $cdo_option.option_type.add_opt == '--percentile'
+                $cdo_option.option_type.add_opt $cdo_option.option_type.percentile
+            #elif $cdo_option.option_type.add_opt == '--seed'
+                $cdo_option.option_type.add_opt $cdo_option.option_type.seed
+            #else
+                $cdo_option.option_type.add_opt
+            #end if
+        #end for
         #for $i, $cdo_oper in enumerate( $section_operators )
             #if $cdo_oper.operator.opt == 'duplicate'
                 -'$cdo_oper.operator.opt',$cdo_oper.operator.ndup
@@ -79,7 +96,7 @@
         <repeat name="section_operators" title="CDO Operators" min="1" max="10">
             <expand macro="cdo_operator"/>
         </repeat>
-        <repeat name="section_option" title="CDO Options">
+        <repeat name="section_option" title="CDO Options" min="0" max="5">
             <expand macro="cdo_option"/>
         </repeat>
     </inputs>
