@@ -105,7 +105,7 @@
             </when>
             <when value="s2">
                 <param name="input_file" type="data" format='zip,tar' label="Sentinel 2 input data (zip or tarball)" />
-                <param name="s2_shp"  type="data" format="shp" label="Sentinel-2 tile shapefile" help="Provide the Sentinel-2 tile shapefile"/>
+                <param name="s2_shp" type="data" format="shp" label="Sentinel-2 tile shapefile" help="Provide the Sentinel-2 tile shapefile"/>
             </when>
         </conditional>
         <param type="data" name="input" format="shp" label="Shapefile with polygons" help="Provide shapefile with polygons"/>
@@ -216,18 +216,18 @@
             </section>
             <output file="20211213-104427.log" name="logfile" compare="sim_size" delta="100"/>
             <output_collection name="csv_files" type="list" count="1">
-		    <element name="testrgb_20100401__statistics.csv" ftype="tabular" file="testrgb_20100401__statistics.csv" compare="diff" lines_diff="1">
-        <assert_contents>
-            <has_text text="percentile_10" />
-            <has_text text="20508" />
-            <has_text text="12049" />
-            <has_text text="4508" />
-            <has_text text="110." />
-            <has_text text="147." />
-            <has_text text="32." />
-            <has_n_columns n="4" />
-    </assert_contents>
-	    </element>
+                <element name="testrgb_20100401__statistics.csv" ftype="tabular" file="testrgb_20100401__statistics.csv" compare="diff" lines_diff="1">
+                    <assert_contents>
+                        <has_text text="percentile_10" />
+                        <has_text text="20508" />
+                        <has_text text="12049" />
+                        <has_text text="4508" />
+                        <has_text text="110." />
+                        <has_text text="147." />
+                        <has_text text="32." />
+                        <has_n_columns n="4" />
+                    </assert_contents>
+                </element>
 
 
             </output_collection>
@@ -270,23 +270,23 @@
             </section>
             <output file="20211218-102629.log" name="logfile" compare="sim_size" delta="100"/>
             <output_collection name="csv_files" type="list" count="1">
-                <element name="ndvi_20190628_189017_statistics.csv" ftype="tabular" file="ndvi_20190628_189017_statistics.csv" compare="diff" lines_diff="1" >
-        <assert_contents>
-            <has_text text="count" />
-            <has_text text="32" />
-            <has_text text="81" />
-            <has_text text="48" />
-            <has_text text=".384" />
-            <has_text text=".304" />
-            <has_text text=".424" />
-            <has_text text=".387" />
-            <has_text text=".295" />
-            <has_text text=".432" />
-            <has_text text=".033" />
-            <has_text text=".078" />
-            <has_text text=".031" />
-            <has_n_columns n="5" />
-    </assert_contents>
+                <element name="ndvi_20190628_189017_statistics.csv" ftype="tabular" file="ndvi_20190628_189017_statistics.csv" compare="diff" lines_diff="1">
+                    <assert_contents>
+                        <has_text text="count" />
+                        <has_text text="32" />
+                        <has_text text="81" />
+                        <has_text text="48" />
+                        <has_text text=".384" />
+                        <has_text text=".304" />
+                        <has_text text=".424" />
+                        <has_text text=".387" />
+                        <has_text text=".295" />
+                        <has_text text=".432" />
+                        <has_text text=".033" />
+                        <has_text text=".078" />
+                        <has_text text=".031" />
+                        <has_n_columns n="5" />
+                    </assert_contents>
                 </element>
             </output_collection>
         </test>
@@ -328,22 +328,22 @@
             </section>
             <output file="20211217-210343.log" name="logfile" compare="sim_size" delta="100"/>
             <output_collection name="csv_files" type="list" count="1">
-                <element name="ndvi_20200626_34VFN_statistics.csv" ftype="tabular" file="ndvi_20200626_34VFN_statistics.csv" compare="diff" lines_diff="1" >
-        <assert_contents>
-            <has_text text="204" />
-            <has_text text="551" />
-            <has_text text="335" />
-            <has_text text=".321" />
-            <has_text text=".293" />
-            <has_text text=".661" />
-            <has_text text=".302" />
-            <has_text text=".294" />
-            <has_text text=".686" />
-            <has_text text=".091" />
-            <has_text text=".088" />
-            <has_text text=".091" />
-            <has_n_columns n="5" />
-    </assert_contents>
+                <element name="ndvi_20200626_34VFN_statistics.csv" ftype="tabular" file="ndvi_20200626_34VFN_statistics.csv" compare="diff" lines_diff="1">
+                    <assert_contents>
+                        <has_text text="204" />
+                        <has_text text="551" />
+                        <has_text text="335" />
+                        <has_text text=".321" />
+                        <has_text text=".293" />
+                        <has_text text=".661" />
+                        <has_text text=".302" />
+                        <has_text text=".294" />
+                        <has_text text=".686" />
+                        <has_text text=".091" />
+                        <has_text text=".088" />
+                        <has_text text=".091" />
+                        <has_n_columns n="5" />
+                    </assert_contents>
                 </element>
             </output_collection>
         </test>

@@ -7,8 +7,8 @@
         </edam_topics>
     </xml>
     <xml name="configfiles">
-    <configfiles>
-        <configfile name="config_tif"><![CDATA[
+        <configfiles>
+            <configfile name="config_tif"><![CDATA[
 platform: tif
 
 ##the first that is found is used
@@ -16,8 +16,8 @@ datepattern: '20[1-2][0-9][0-1][0-9][0-3][0-9]'
 
 ##name to write into output statistics filename
 name: 'testrgb'
-        ]]></configfile>
-        <configfile name="config_s2"><![CDATA[
+        ]]>            </configfile>
+            <configfile name="config_s2"><![CDATA[
 ####
 
 ## Configuration file for the use of Sentinel-2 ##
@@ -92,8 +92,8 @@ SCL: [20,60]
 AOT: [10,20,60]
 TCI: [10,20,60]
 WVP: [10,20,60]
-     ]]></configfile>
-        <configfile name="config_ls8"><![CDATA[
+     ]]>            </configfile>
+            <configfile name="config_ls8"><![CDATA[
 platform: 'ls8'
 
 ## Process only files with less than xx % cloudcover
@@ -168,8 +168,8 @@ resampling_method: 'bilinear'
 ## path building set *after inpath* to get the bandfile
 
 pathbuildinglist: ['*', 'bandname', '*' , '.TIF']
-     ]]></configfile>
-        <configfile name="user_config"><![CDATA[
+     ]]>            </configfile>
+            <configfile name="user_config"><![CDATA[
 ####
 
 ## Configuration file for adjusting the process/results and give paths ##
@@ -212,8 +212,8 @@ fieldname: 'Name'
 ## Lookup table for storing the tiles and the IDs they include for every tile processed by EODIE with --array_out
 ## Table needed for array plotting
 lookup: './postprocesses/lookuptable.txt'
-    ]]></configfile>
-    </configfiles>
+    ]]>            </configfile>
+        </configfiles>
     </xml>
     <xml name="citations">
         <citations>
