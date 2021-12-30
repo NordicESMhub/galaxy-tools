@@ -7,7 +7,7 @@ on:
     types: [run-all-tool-tests-command]
 env:
   GALAXY_FORK: galaxyproject
-  GALAXY_BRANCH: release_21.05
+  GALAXY_BRANCH: release_21.09
   GALAXY_COPERNICUS_CDSAPIRC_KEY: ${{ secrets.GALAXY_COPERNICUS_CDSAPIRC_KEY }}
   COPERNICUS_CDSAPIRC_KEY_FILE: ${{ secrets.COPERNICUS_CDSAPIRC_KEY_FILE }}
   MAX_CHUNKS: 40
@@ -123,6 +123,14 @@ jobs:
         filename: tools/cads/adsapirc.cfg
         secret-name: GALAXY_COPERNICUS_ADSAPIRC_KEY
         secret-value: ${{ secrets.GALAXY_COPERNICUS_ADSAPIRC_KEY }}
+    - name: Get LS8 test files from Zenodo
+      uses: wei/wget@v1
+      with:
+        args: -O tools/eodie/test-data/LS8.tar https://zenodo.org/record/5796122/files/LC08_L2SP_189017_20190628_20200827_02_T1.tar
+    - name: Get S2 test files from Zenodo
+      uses: wei/wget@v1
+      with:
+        args: -O tools/eodie/test-data/S2.tar https://zenodo.org/record/5794508/files/S2B_MSIL2A_20200626T095029_N0214_R079_T34VFN_20200626T123234.SAFE.tar
     - name: Planemo test
       uses: galaxyproject/planemo-ci-action@v1
       id: test

@@ -1,0 +1,6 @@
+INFO:root:All inputs for this process: dict_items([('platform', 'tif'), ('config', {'platform': 'tif', 'datepattern': '20[1-2][0-9][0-1][0-9][0-3][0-9]', 'name': 'testrgb', 'maxcloudcover': 99, 'pixelsize': 10, 'resampling_method': 'bilinear', 'fieldname': 'Name', 'lookup': './postprocesses/lookuptable.txt'}), ('mydir', None), ('myfile', 'smaller_area_20100401.tif'), ('input', ['smaller_area_20100401.tif']), ('shpbase', 'shapefile'), ('outpath', './results'), ('idname', 'id'), ('statistics_out', True), ('array_out', False), ('indexlist', None), ('statistics', ['count', 'mean', 'percentile_10']), ('startdate', '20160101'), ('enddate', '20211221'), ('keep_shp', False), ('geotiff_out', False), ('test', False), ('exclude_border', False), ('extmask', None), ('exclude_splitshp', True), ('verbose', False), ('format', ['statistics'])])
+INFO:root:File to be processed smaller_area_20100401.tif
+INFO:root:Checking the projection of the inputfile now
+INFO:root:Reprojectcommand: ogr2ogr -t_srs EPSG:3067 shapefile_reprojected_3067.shp shapefile.shp
+INFO:root:input shapefile had other than EPSG 3067 but was reprojected and works now
+INFO:root:stat to csv in: ./results/testrgb_20100401__statistics.csv

@@ -1,0 +1,363 @@
+<tool id="eodie" name="EODIE" version="@VERSION@" profile="20.09">
+    <description>converts simple features data between file formats</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="edam_ontology"/>
+    <requirements>
+        <requirement type="package" version="@VERSION@">eodie</requirement>
+        <requirement type="package" version="3.9">python</requirement>
+        <requirement type="package" version="1.8">shapely</requirement>
+        <requirement type="package" version="1.2">rasterio</requirement>
+        <requirement type="package" version="0.16">rasterstats</requirement>
+        <requirement type="package" version="1.8">fiona</requirement>
+        <requirement type="package" version="1.21">numpy</requirement>
+        <requirement type="package" version="3.4.0">gdal</requirement>
+        <requirement type="package" version="6.0">pyyaml</requirement>
+        <requirement type="package" version="6.0">unzip</requirement>
+        <requirement type="package" version="1.34">tar</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        mkdir -p work/data_collection work/results results_csv results_tiffs &&
+        cp '$config_tif' config_tif.yml && 
+        cp '$config_s2'  config_s2.yml  && 
+        cp '$config_ls8' config_ls8.yml && 
+        cp '$user_config' user_config.yml && 
+        cp '${input.extra_files_path}'/*  work/ &&
+        cd work &&
+        ln -s '${input_type.input_file}'  '${input_type.input_file.element_identifier}' &&
+        #if $input_type.input_file.is_of_type("zip")
+            unzip '$input_type.input_file' -d data_collection/    &&
+        #elif $input_type.input_file.is_of_type("tar")
+            tar -xf '$input_type.input_file' -C data_collection   &&
+        #end if
+        #if str($input_type.platform) == 's2'
+            mkdir -p sentinel2_tiles_world &&
+            (cp '$input_type.s2_shp.extra_files_path'/shapefile.shp sentinel2_tiles_world/sentinel2_tiles_world.shp || true )  &&
+            (cp '$input_type.s2_shp.extra_files_path'/shapefile.shx sentinel2_tiles_world/sentinel2_tiles_world.shx || true )  &&
+            (cp '$input_type.s2_shp.extra_files_path'/shapefile.dbf sentinel2_tiles_world/sentinel2_tiles_world.dbf || true )  &&
+            (cp '$input_type.s2_shp.extra_files_path'/shapefile.prj sentinel2_tiles_world/sentinel2_tiles_world.prj || true )  &&
+        #elif str($input_type.platform) == 'ls8'
+            mkdir -p WRS2_descending &&
+            (cp '$input_type.ls8_shp.extra_files_path'/shapefile.shp WRS2_descending/WRS2_descending.shp || true )  &&
+            (cp '$input_type.ls8_shp.extra_files_path'/shapefile.shx WRS2_descending/WRS2_descending.shx || true )  &&
+            (cp '$input_type.ls8_shp.extra_files_path'/shapefile.dbf WRS2_descending/WRS2_descending.dbf || true )  &&
+            (cp '$input_type.ls8_shp.extra_files_path'/shapefile.prj WRS2_descending/WRS2_descending.prj || true )  &&
+        #end if
+
+        eodie_process.py
+        --platform $input_type.platform
+        #if str($input_type.platform) == 'tif'
+            --file ${input_type.input_file.element_identifier}
+        #else
+            --dir data_collection
+            --out ./results
+        #end if
+        --shp shapefile
+        #for $i, $s in enumerate( $adv_options.statistics )
+            #if str($i) == '0'
+                --statistics_out
+            --statistics 
+            #end if
+            #if $s.stats_input.stats and str($s.stats_input.stats) != '':
+                #if str($s.stats_input.stats) == 'percentile':
+                    '$s.stats_input.stats'_'$s.stats_input.p_value'
+                #else
+                    '$s.stats_input.stats'
+                #end if
+            #end if
+        #end for
+        #if $adv_options.indices and str($adv_options.indices) != '':
+            --index 
+            #for $idx in str($adv_options.indices).split(','):
+                '$idx'
+            #end for
+        #end if
+        #if $adv_options.start_date and str($adv_options.start_date) != '':
+            --start int($adv_options.start_date)
+        #end if
+        #if $adv_options.end_date and str($adv_options.end_date) != '':
+            --start int($adv_options.end_date)
+        #end if
+        $adv_options.exclude_border 
+        $adv_options.exclude_splitshp 
+        --id '$identifier'  &&
+
+        mv results/*.log '$logfile'  &&
+        bash '$__tool_directory__/postprocess_csv.sh' 'results' '../results_csv' &&
+        ( mv results/*.tif ../results_tiffs/ || echo "No tiff files generated" ) &&
+        echo "EODIE data extractor is done"
+    ]]>    </command>
+    <expand macro="configfiles"/>
+    <inputs>
+        <conditional name="input_type">
+            <param name="platform" type="select" label="Select platform of the input data">
+                <option value="s2">Sentinel 2</option>
+                <option value="ls8">Landsat 8</option>
+                <option value="tif">tiff file</option>
+            </param>
+            <when value="tif">
+                <param name='input_file' format="tiff" type="data" label="Individual input file"/>
+            </when>
+            <when value="ls8">
+                <param name="input_file" type="data" format='zip,tar' label="Landsat 8 input data (zip or tarball)" />
+                <param name="ls8_shp" type="data" format="shp" label="Landsat 8 tile shapefile" help="Provide the Landsat-8 tile shapefile"/>
+            </when>
+            <when value="s2">
+                <param name="input_file" type="data" format='zip,tar' label="Sentinel 2 input data (zip or tarball)" />
+                <param name="s2_shp" type="data" format="shp" label="Sentinel-2 tile shapefile" help="Provide the Sentinel-2 tile shapefile"/>
+            </when>
+        </conditional>
+        <param type="data" name="input" format="shp" label="Shapefile with polygons" help="Provide shapefile with polygons"/>
+        <param name="identifier" type="text" value="PlotID" label="Name of identifier" />
+        <section name="adv_options" title="Advanced options" expanded="false">
+            <param name="start_date" type="text" optional="true" label="Time frame start date (YYYYMMDD)">
+                <validator type="length" min="8" max="8" message="Please enter a date in the form of YYYYMMDD"/>
+            </param>
+            <param name="end_date" type="text" optional="true" label="Time frame end date (YYYYMMDD)">
+                <validator type="length" min="8" max="8" message="Please enter a date in the form of YYYYMMDD"/>
+            </param>
+            <repeat name="statistics" title="Compute statistics" min="0">
+                <conditional name="stats_input">
+                    <param name="stats" label="Statistics" type="select">
+                        <option value="mean">Mean</option>
+                        <option value="sum">Sum</option>
+                        <option value="min">Minimum</option>
+                        <option value="max">Maximum</option>
+                        <option value="std">Standard deviation</option>
+                        <option value="median">Median</option>
+                        <option value="majority">Majority</option>
+                        <option value="minority">Minority</option>
+                        <option value="unique">Unique</option>
+                        <option value="range">Range</option>
+                        <option value="percentile">Percentile</option>
+                    </param>
+                    <when value="mean"/>
+                    <when value="sum"/>
+                    <when value="min"/>
+                    <when value="max"/>
+                    <when value="std"/>
+                    <when value="median"/>
+                    <when value="majority"/>
+                    <when value="minority"/>
+                    <when value="unique"/>
+                    <when value="range"/>
+                    <when value="percentile">
+                        <param name="p_value" type="integer" value="0" min="0" max="100" label="percentile value (if percentile selected)" />
+                    </when>
+                </conditional>
+            </repeat>
+            <param name="indices" label="Indice to compute" type="select" multiple="true">
+                <option value="ndvi">ndvi</option>
+                <option value="rvi">rvi</option>
+                <option value="savi">savi</option>
+                <option value="nbr">nbr</option>
+                <option value="kndvi">kndvi</option>
+                <option value="ndmi">ndmi</option>
+                <option value="mndwi">mndwi</option>
+                <option value="evi">evi</option>
+                <option value="evi2">evi2</option>
+                <option value="dvi">dvi</option>
+                <option value="cvi">cvi</option>
+                <option value="mcar">mcar</option>
+                <option value="ndi45">ndi45</option>
+                <option value="tctb">tctb</option>
+                <option value="tctg">tctg</option>
+                <option value="tctw">tctw</option>
+                <option value="ndwi">ndwi</option>
+                <option value="B02">B02</option>
+                <option value="B03">B03</option>
+                <option value="B04">B04</option>
+                <option value="B05">B05</option>
+                <option value="B06">B06</option>
+                <option value="B07">B07</option>
+                <option value="B08">B08</option>
+                <option value="B8A">B8A</option>
+                <option value="B11">B11</option>
+                <option value="B12">B12</option>
+            </param>
+            <param name="exclude_splitshp" type="boolean" checked="false" label="exclude splitshp" help="Flag to indicate that splitshp has been run manually beforehand" truevalue="--exclude_splitshp" falsevalue="" />
+            <param name="exclude_border" type="boolean" checked="false" label="exclude border" help="Flag to indicate that border pixels (within the polygon) should be excluded from statistics calculations / array extraction" truevalue="--exclude_border" falsevalue="" />
+            <param name="geotiff_out" type="boolean" checked="false" label="generate geotiffs" help="flag to indicate that geotiffs shall be extracted" truevalue="--geotiff_out" falsevalue="" />
+        </section>
+    </inputs>
+    <outputs>
+        <data name="logfile" format="txt"/>
+        <collection name="csv_files" type="list" label="${tool.name} (statistics csv outputs)">
+            <discover_datasets pattern="__name__" directory="results_csv" visible="false" format="tabular"/>
+        </collection>
+    </outputs>
+    <tests>
+        <test>
+            <conditional name="input_type">
+                <param name="platform" value="tif" />
+                <param name="input_file" ftype="tiff" value="smaller_area_20100401.tif" />
+            </conditional>
+            <param name="input" value="test_polygons/test_polygons.html" ftype="shp">
+                <composite_data value="test_polygons/test_polygons.shp"/>
+                <composite_data value="test_polygons/test_polygons.shx"/>
+                <composite_data value="test_polygons/test_polygons.dbf"/>
+                <composite_data value="test_polygons/test_polygons.prj"/>
+            </param>
+            <param name="identifier" value="id"/>
+            <section name="adv_options">
+                <repeat name="statistics">
+                    <conditional name="stats_input">
+                        <param name="stats" value="mean"/>
+                    </conditional>
+                </repeat>
+                <repeat name="statistics">
+                    <conditional name="stats_input">
+                        <param name="stats" value="percentile"/>
+                        <param name="p_value" value="10"/>
+                    </conditional>
+                </repeat>
+                <param name="exclude_splitshp" value="true"/>
+            </section>
+            <output file="20211213-104427.log" name="logfile" compare="sim_size" delta="100"/>
+            <output_collection name="csv_files" type="list" count="1">
+                <element name="testrgb_20100401__statistics.csv" ftype="tabular" file="testrgb_20100401__statistics.csv" compare="diff" lines_diff="1">
+                    <assert_contents>
+                        <has_text text="percentile_10" />
+                        <has_text text="20508" />
+                        <has_text text="12049" />
+                        <has_text text="4508" />
+                        <has_text text="110." />
+                        <has_text text="147." />
+                        <has_text text="32." />
+                        <has_n_columns n="4" />
+                    </assert_contents>
+                </element>
+
+
+            </output_collection>
+        </test>
+        <test>
+            <conditional name="input_type">
+                <param name="platform" value="ls8" />
+                <param name="input_file" ftype="tar" value="LS8.tar" />
+                <param name="ls8_shp" ftype="shp" value="WRS2_descending/WRS2_descending.html">
+                    <composite_data value="WRS2_descending/WRS2_descending.shp"/>
+                    <composite_data value="WRS2_descending/WRS2_descending.shx"/>
+                    <composite_data value="WRS2_descending/WRS2_descending.dbf"/>
+                    <composite_data value="WRS2_descending/WRS2_descending.prj"/>
+                </param>
+            </conditional>
+            <param name="input" value="test_parcels_32635/test_parcels_32635.html" ftype="shp">
+                <composite_data value="test_parcels_32635/test_parcels_32635.shp"/>
+                <composite_data value="test_parcels_32635/test_parcels_32635.shx"/>
+                <composite_data value="test_parcels_32635/test_parcels_32635.dbf"/>
+                <composite_data value="test_parcels_32635/test_parcels_32635.prj"/>
+            </param>
+            <param name="identifier" value="ID"/>
+            <section name="adv_options">
+                <repeat name="statistics">
+                    <conditional name="stats_input">
+                        <param name="stats" value="mean"/>
+                    </conditional>
+                </repeat>
+                <repeat name="statistics">
+                    <conditional name="stats_input">
+                        <param name="stats" value="median"/>
+                    </conditional>
+                </repeat>
+                <repeat name="statistics">
+                    <conditional name="stats_input">
+                        <param name="stats" value="std"/>
+                    </conditional>
+                </repeat>
+                <param name="indices" value="ndvi"/>
+            </section>
+            <output file="20211218-102629.log" name="logfile" compare="sim_size" delta="100"/>
+            <output_collection name="csv_files" type="list" count="1">
+                <element name="ndvi_20190628_189017_statistics.csv" ftype="tabular" file="ndvi_20190628_189017_statistics.csv" compare="diff" lines_diff="1">
+                    <assert_contents>
+                        <has_text text="count" />
+                        <has_text text="32" />
+                        <has_text text="81" />
+                        <has_text text="48" />
+                        <has_text text=".384" />
+                        <has_text text=".304" />
+                        <has_text text=".424" />
+                        <has_text text=".387" />
+                        <has_text text=".295" />
+                        <has_text text=".432" />
+                        <has_text text=".033" />
+                        <has_text text=".078" />
+                        <has_text text=".031" />
+                        <has_n_columns n="5" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+        <test>
+            <conditional name="input_type">
+                <param name="platform" value="s2" />
+                <param name="input_file" ftype="tar" value="S2.tar" />
+                <param name="s2_shp" ftype="shp" value="sentinel2_tiles_world/sentinel2_tiles_world.html">
+                    <composite_data value="sentinel2_tiles_world/sentinel2_tiles_world.shp"/>
+                    <composite_data value="sentinel2_tiles_world/sentinel2_tiles_world.shx"/>
+                    <composite_data value="sentinel2_tiles_world/sentinel2_tiles_world.dbf"/>
+                    <composite_data value="sentinel2_tiles_world/sentinel2_tiles_world.prj"/>
+                </param>
+            </conditional>
+            <param name="input" value="test_parcels_32635/test_parcels_32635.html" ftype="shp">
+                <composite_data value="test_parcels_32635/test_parcels_32635.shp"/>
+                <composite_data value="test_parcels_32635/test_parcels_32635.shx"/>
+                <composite_data value="test_parcels_32635/test_parcels_32635.dbf"/>
+                <composite_data value="test_parcels_32635/test_parcels_32635.prj"/>
+            </param>
+            <param name="identifier" value="ID"/>
+            <section name="adv_options">
+                <repeat name="statistics">
+                    <conditional name="stats_input">
+                        <param name="stats" value="mean"/>
+                    </conditional>
+                </repeat>
+                <repeat name="statistics">
+                    <conditional name="stats_input">
+                        <param name="stats" value="median"/>
+                    </conditional>
+                </repeat>
+                <repeat name="statistics">
+                    <conditional name="stats_input">
+                        <param name="stats" value="std"/>
+                    </conditional>
+                </repeat>
+                <param name="indices" value="ndvi"/>
+            </section>
+            <output file="20211217-210343.log" name="logfile" compare="sim_size" delta="100"/>
+            <output_collection name="csv_files" type="list" count="1">
+                <element name="ndvi_20200626_34VFN_statistics.csv" ftype="tabular" file="ndvi_20200626_34VFN_statistics.csv" compare="diff" lines_diff="1">
+                    <assert_contents>
+                        <has_text text="204" />
+                        <has_text text="551" />
+                        <has_text text="335" />
+                        <has_text text=".321" />
+                        <has_text text=".293" />
+                        <has_text text=".661" />
+                        <has_text text=".302" />
+                        <has_text text=".294" />
+                        <has_text text=".686" />
+                        <has_text text=".091" />
+                        <has_text text=".088" />
+                        <has_text text=".091" />
+                        <has_n_columns n="5" />
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+**EODIE - Earth Observation Data Information Extractor**
+=======================================================================================================
+
+Toolkit to extract object based timeseries from Earth Observation data such as Copernicus Sentinel 2, Landsat 8 and more generally geotiff files. 
+
+EODIE takes the objects in as polygons in a shapefile as well as the timeframe of interest and the features (eg vegetation indices) to be extracted.
+The output is a per polygon timeseries of the selected features over the timeframe of interest.
+
+    ]]>    </help>
+    <expand macro="citations" />
+</tool>

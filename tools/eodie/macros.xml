@@ -1,0 +1,223 @@
+<macros>
+    <token name="@VERSION@">1.0.2</token>
+    <xml name="edam_ontology">
+        <edam_topics>
+            <edam_topic>topic_0610</edam_topic>
+            <edam_topic>topic_3050</edam_topic>
+        </edam_topics>
+    </xml>
+    <xml name="configfiles">
+        <configfiles>
+            <configfile name="config_tif"><![CDATA[
+platform: tif
+
+##the first that is found is used
+datepattern: '20[1-2][0-9][0-1][0-9][0-3][0-9]'
+
+##name to write into output statistics filename
+name: 'testrgb'
+        ]]>            </configfile>
+            <configfile name="config_s2"><![CDATA[
+####
+
+## Configuration file for the use of Sentinel-2 ##
+
+## Know what you do before you change anything here ##
+
+####
+
+platform: 's2'
+
+## Mask conditions are stored as values, not as bitflags
+bitmask: 0
+## Values to be to be included in cloudmask
+## default [9,8,3,10,0,1]
+tobemaskedlist: 
+  - 9 ## cloud high probability
+  - 8 ## cloud medium probability
+  - 3 ## cloud shadow
+  - 10 ## cirrus
+  - 0 ## no data
+  - 1 ## saturated and defective
+
+##pattern to find all data files
+filepattern: 'S2[A-C]_MSIL2A_\d{8}T\d{6}_N\d{4}_R\d{3}_T\d{2}[A-Z]{3}_\d{8}T\d{6}.SAFE$'
+
+## Sentinel-2 bands
+red : 'B04'
+green: 'B03'
+blue: 'B02'
+nir: 'B08'
+r_edge: 'B05'
+swir1: 'B11'
+swir2: 'B12'
+
+## some part of the products file name that identifies them as product to be used
+productnameidentifier: 'S2*.SAFE'
+
+## parts to build path towards bands
+bandlocation: ['.','*','*','IMG_DATA']
+
+## path building set after imgpath to get the bandfile
+pathbuildinglist: ['R', 'pixelsize' , 'm','*', 'bandname', '_' , 'pixelsize' ,'m.jp2']
+
+##indicator for cloudfile
+cloudfilename: 'SCL'
+
+tilepattern: '(?<=T)[0-9]{2}[A-Z]{3}'
+
+##the first that is found is used
+datepattern: '20[1-2][0-9][0-1][0-9][0-3][0-9]'
+
+band_designation: 'B[0-1]?\dA?'
+
+## Quantification value used to multiple the reflectance to get DN
+## This could be read from metadata but for now at least is here
+quantification_value: 10000
+
+## available resolutions per band
+B01: [60]
+B02: [10,20,60]
+B03: [10,20,60]
+B04: [10,20,60]
+B05: [20,60]
+B06: [20,60]
+B07: [20,60]
+B08: [10]
+B8A: [20,60]
+B09: [60]
+B11: [20,60]
+B12: [20,60]
+SCL: [20,60]
+AOT: [10,20,60]
+TCI: [10,20,60]
+WVP: [10,20,60]
+     ]]>            </configfile>
+            <configfile name="config_ls8"><![CDATA[
+platform: 'ls8'
+
+## Process only files with less than xx % cloudcover
+maxcloudcover: 10
+
+
+## Mask conditions are not stored as values, but as individual 0/1 flags in bits
+bitmask: 1
+## Bits to be to be included in cloudmask
+## https://prd-wret.s3.us-west-2.amazonaws.com/assets/palladium/production/atoms/files/LSDS-1328_Landsat8-9-OLI-TIRS-C2-L2-DFCB-v6.pdf
+tobemaskedlist: 
+  - 0 ## Fill data
+  - 1 ## Dilated cloud
+  - 2 ## Cirrus
+  - 3 ## Cloud
+  - 4 ## Cloud shadow
+  - 5 ## Snow 
+  - 9 ## Cloud medium to high confidence
+  - 11 ## Cloud shadow high confidence
+  - 13 ## Snow/Ice high confidence
+  - 15 ## Cirrus high confidence
+
+
+##pattern to find all data files
+filepattern: 'LC08_L\d.._\d{6}_\d{8}_\d{8}_02_[TR][12T]$'  
+
+##all bands are located in parent directory directly
+bandlocation: ['.']
+
+##indicator for cloudfile
+cloudfilename: 'QA_PIXEL'
+
+## LS8 bands
+## https://www.usgs.gov/media/images/landsat-8-band-designations
+red : 'B4'
+green: 'B3'
+blue: 'B2'
+nir: 'B5'
+swir1: 'B6'
+swir2: 'B7'
+
+tilepattern: '[0-9]{6}'
+
+## the first that is found is used
+datepattern: '20[1-2][0-9][0-1][0-9][0-3][0-9]'
+
+band_designation: 'B\d?\d'
+
+##???????????
+## Quantification value used to multiple the reflectance to get DN
+## This could be read from metadata but for now at least is here
+quantification_value: 65535
+
+## available resolutions per band
+B1: [30]
+B2: [30]
+B3: [30]
+B4: [30]
+B5: [30]
+B6: [30]
+B7: [30]
+QA_PIXEL: [30]
+## to be continued
+
+##upsampling (converting to higher resolution/smaller cells) / downsampling (converting to lower resolution/larger cellsize)
+##available: ‘nearest’, ‘bilinear’, ‘cubic’, ‘cubic_spline’, ‘lanczos’, ‘average’, ‘mode’, and ‘gauss’,
+## from https://rasterio.readthedocs.io/en/latest/api/rasterio.enums.html#rasterio.enums.Resampling
+
+resampling_method: 'bilinear'
+
+
+## path building set *after inpath* to get the bandfile
+
+pathbuildinglist: ['*', 'bandname', '*' , '.TIF']
+     ]]>            </configfile>
+            <configfile name="user_config"><![CDATA[
+####
+
+## Configuration file for adjusting the process/results and give paths ##
+
+####
+
+## Process only files with less than xx % cloudcover
+maxcloudcover: 99
+
+## Extract files with xx m pixel size 
+## options: 10,20 (for Sentinel-2)
+## options: 30 (for Landsat8)
+
+#if str($input_type.platform) == 'ls8'
+pixelsize: 30
+#else
+pixelsize: 10
+#end if
+
+##resampling (converting to higher/lower resolution/smaller cells)
+##available: 'biliner','nearest','cubic','average', ...
+## from https://rasterio.readthedocs.io/en/latest/api/rasterio.enums.html#rasterio.enums.Resampling
+
+resampling_method: 'bilinear'
+
+##location of the shapefile with tiles (Sentinel2-tiles-world in case of Sentinel-2, WRS2_descending in case of Landsat 8)
+#if str($input_type.platform) == 's2'
+tileshp: './sentinel2_tiles_world/sentinel2_tiles_world'
+#elif str($input_type.platform) == 'ls8'
+tileshp: './WRS2_descending/WRS2_descending'
+#end if
+
+##name of field where tilenames are stored in shapefile ('Name' in case of sentinel2_tiles_world, 'PR' in case of WRS2_descending )
+#if str($input_type.platform) == 'ls8'
+fieldname: 'PR'
+#else
+fieldname: 'Name'
+#end if
+
+## Lookup table for storing the tiles and the IDs they include for every tile processed by EODIE with --array_out
+## Table needed for array plotting
+lookup: './postprocesses/lookuptable.txt'
+    ]]>            </configfile>
+        </configfiles>
+    </xml>
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.5281/zenodo.4762323</citation>
+        </citations>
+    </xml>
+</macros>
