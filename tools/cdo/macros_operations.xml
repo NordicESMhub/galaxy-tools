@@ -113,6 +113,7 @@
                 <option value="year">Yearly statistics</option>
                 <option value="mon">Monthly statistics</option>
                 <option value="seas">Seasonal statistics</option>
+                <option value="fld">Statistical values over a field</option>
             </param>
             <when value="copy">
                 <param name="add_file" type="data" multiple="true" min="0" label="Additional input file" format="netcdf"/>
@@ -287,6 +288,10 @@
                 <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
             </when>
             <when value="seas">
+                <expand macro="stat_selection" />
+                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+            </when>
+            <when value="fld">
                 <expand macro="stat_selection" />
                 <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
             </when>

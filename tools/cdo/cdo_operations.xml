@@ -40,7 +40,7 @@
                 -'$cdo_oper.operator.opt',$cdo_oper.operator.ndup
             #elif $cdo_oper.operator.opt == 'addc' or $cdo_oper.operator.opt == 'subc' or $cdo_oper.operator.opt == 'mulc' or $cdo_oper.operator.opt == 'divc'
                 -'$cdo_oper.operator.opt',$cdo_oper.operator.const_value
-	    #elif $cdo_oper.operator.opt == 'ens' or $cdo_oper.operator.opt == 'zon' or  $cdo_oper.operator.opt == 'tim' or  $cdo_oper.operator.opt == 'vert' or  $cdo_oper.operator.opt == 'day' or  $cdo_oper.operator.opt == 'year' or  $cdo_oper.operator.opt == 'mon' or  $cdo_oper.operator.opt == 'seas'
+	    #elif $cdo_oper.operator.opt == 'ens' or $cdo_oper.operator.opt == 'zon' or  $cdo_oper.operator.opt == 'tim' or  $cdo_oper.operator.opt == 'vert' or  $cdo_oper.operator.opt == 'day' or  $cdo_oper.operator.opt == 'year' or  $cdo_oper.operator.opt == 'mon' or  $cdo_oper.operator.opt == 'seas' or $cdo_oper.operator.opt == 'fld'
                 -'${cdo_oper.operator.opt}${cdo_oper.operator.stat}'
 	    #elif $cdo_oper.operator.opt == 'sp2gp' or $cdo_oper.operator.opt == 'gp2sp'
                 #if $cdo_oper.operator.trunc > 0
