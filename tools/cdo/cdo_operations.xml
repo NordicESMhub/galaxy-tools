@@ -245,6 +245,24 @@
                 <element name="outfile.netcdf" ftype="netcdf" file="timeseries_timavg.nc" compare="sim_size" delta="50"/>
             </output_collection>
         </test>
+        <test>
+            <repeat name="section_operators">
+                <conditional name="operator">
+                    <param name="opt" value="sub" />
+                    <param name="add_file" value="timeseries.nc" ftype="netcdf" />
+                </conditional>
+            </repeat>
+            <repeat name="section_operators">
+                <conditional name="operator">
+                    <param name="opt" value="addc" />
+                    <param name="const_value" value="10.5" />
+                    <param name="add_file" value="timeseries.nc" ftype="netcdf" />
+                </conditional>
+            </repeat>
+            <output_collection name="output_files" type="list" count="1">
+                <element name="outfile.netcdf" ftype="netcdf" file="timeseries_sub.nc" compare="sim_size" delta="50"/>
+            </output_collection>
+        </test>
     </tests>
     <help><![CDATA[
 

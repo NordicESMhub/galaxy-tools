@@ -114,6 +114,12 @@
                 <option value="mon">Monthly statistics</option>
                 <option value="seas">Seasonal statistics</option>
                 <option value="fld">Statistical values over a field</option>
+                <option value="add">Add two fields </option>
+                <option value="sub">Subtract two fields </option>
+                <option value="mul">Multiply two fields </option>
+                <option value="div">Divide two fields </option>
+                <option value="min">Minimum of two fields </option>
+                <option value="max">Maximum of two fields </option>
             </param>
             <when value="copy">
                 <param name="add_file" type="data" multiple="true" min="0" label="Additional input file" format="netcdf"/>
@@ -293,6 +299,24 @@
             </when>
             <when value="fld">
                 <expand macro="stat_selection" />
+                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+            </when>
+            <when value="add">
+                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+            </when>
+            <when value="sub">
+                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+            </when>
+            <when value="mul">
+                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+            </when>
+            <when value="div">
+                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+            </when>
+            <when value="min">
+                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+            </when>
+            <when value="max">
                 <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
             </when>
         </conditional>
