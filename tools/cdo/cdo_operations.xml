@@ -72,6 +72,8 @@
                     #end if
             #elif $cdo_oper.operator.opt == 'select' or $cdo_oper.operator.opt == 'delete' or $cdo_oper.operator.opt == 'selname' or $cdo_oper.operator.opt == 'delname' or  $cdo_oper.operator.opt == 'seltimestep' or $cdo_oper.operator.opt == 'sellonlatbox' or $cdo_oper.operator.opt == 'expr' or $cdo_oper.operator.opt == 'ml2pl' or $cdo_oper.operator.opt == 'ml2hl' or $cdo_oper.operator.opt == 'intlevel'
                 -'$cdo_oper.operator.opt','$cdo_oper.operator.params'
+            #elif $cdo_oper.operator.opt == 'setattribute'
+                -'$cdo_oper.operator.opt',FILE='$cdo_oper.operator.attr_file'
             #else
                 -'$cdo_oper.operator.opt'
             #end if
@@ -261,6 +263,24 @@
             </repeat>
             <output_collection name="output_files" type="list" count="1">
                 <element name="outfile.netcdf" ftype="netcdf" file="timeseries_sub.nc" compare="sim_size" delta="50"/>
+            </output_collection>
+        </test>
+        <test>
+            <repeat name="section_operators">
+                <conditional name="operator">
+                    <param name="opt" value="sellonlatbox" />
+                    <param name="params" value="-10,10,60,70" />
+                </conditional>
+            </repeat>
+            <repeat name="section_operators">
+                <conditional name="operator">
+                    <param name="opt" value="setattribute" />
+                    <param name="attr_file" value="attributes.txt" />
+                    <param name="add_file" value="WMI_Lear.nc" ftype="netcdf" />
+                </conditional>
+            </repeat>
+            <output_collection name="output_files" type="list" count="1">
+                <element name="outfile.netcdf" ftype="netcdf" file="WMI_Lear_sellonlatbox_units.nc" compare="sim_size" delta="50"/>
             </output_collection>
         </test>
     </tests>

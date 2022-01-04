@@ -120,6 +120,7 @@
                 <option value="div">Divide two fields </option>
                 <option value="min">Minimum of two fields </option>
                 <option value="max">Maximum of two fields </option>
+		<option value="setattribute">Set/modifiy attributes</option>
             </param>
             <when value="copy">
                 <param name="add_file" type="data" multiple="true" min="0" label="Additional input file" format="netcdf"/>
@@ -317,6 +318,10 @@
                 <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
             </when>
             <when value="max">
+                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+            </when>
+            <when value="setattribute">
+                <param name="attr_file" type="data" format="txt" label="Text file containing the list of attributes (one per line)"/>
                 <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
             </when>
         </conditional>
