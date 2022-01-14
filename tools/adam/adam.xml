@@ -1,0 +1,79 @@
+<tool id="adam" name="Advanced geospatial Data Management Platform Tool" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>for retrieving global environment data from ADAM data cube</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="edam_ontology"/>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">adamapi</requirement>
+        <requirement type="package" version="3">python</requirement>
+        <requirement type="package" version="6.0">unzip</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        export HOME=`pwd`  &&
+	mkdir outputs      &&
+        #set $adam_apikey = $__user__.extra_preferences.get('adam_account|adam_apikey', "")
+        #if $adam_apikey == ''
+            echo 'Error. Set your ADAM credentials via: User -> Preferences -> Manage Information'  &&
+            echo 'Will try to use tool adamapi config file (used for testing)' &&
+            cp '$__tool_directory__/adamapi.cfg' adamapi.cfg &&
+        #end if
+        python3 '$__tool_directory__/adam_retrieve.py' 
+	        '$adam_key_file' 
+        #if str($selection.format).strip() == 'netcdf'
+            --format netcdf
+        #else
+            --format geotiff
+        #end if
+        #if str($area.geo).strip() == 'geojson'
+	    #if $area.rewind
+	        --rewind
+	    #end if
+        #end if
+        --output  outputs &&
+        echo "Data retrieval from ADAM data cube is done"
+    ]]>    </command>
+    <inputs>
+        <conditional name="area">
+            <param name="geo" type="select" label="Enter geographical area with">
+                <option value="paste">Paste geojson geometry</option>
+                <option value="geojson" selected="true">Geojson file</option>
+            </param>
+            <when value="paste"/>
+            <when value="geojson">
+                <param name="rewind" type="boolean" optional="true" label="Rearrange GeoJson to the counterclokwise winding order"/>
+            </when>
+        </conditional>
+        <conditional name="selection">
+            <param name="format" type="select" label="Select output format">
+                <option value="netcdf">netCDF</option>
+                <option value="tabular">Tabular</option>
+                <option value="geotiff" selected="true">GeoTIFF</option>
+            </param>
+            <when value="netcdf"/>
+            <when value="tabular"/>
+            <when value="geotiff"/>
+        </conditional>
+    </inputs>
+    <expand macro="config_files"/>
+    <outputs>
+        <data name="datasets" format="netcdf,tiff,tabular">
+            <discover_datasets pattern="__designation_and_ext__" directory="outputs" visible="true" />
+        </data>
+    </outputs>
+    <help><![CDATA[
+
+**The Advanced geospatial Data Management platform (ADAM)**
+=======================================================================================================
+
+This tool is a wrapper to retrieve data from the Advanced geospatial Data Management platform (ADAM).
+
+- It allows to retrieve data from ADAM data cubes;
+- Any user willing to use this tool needs to `create a new account <https://reliance.adamplatform.eu/>`_ (using EGI Check-in e.g. your ORCID identifier).
+- Set your ADAM API Key via: User -> Preferences -> Manage Information"
+- Your ADAM API key can be found in your profile (Api Key) on the ADAM platform itself.
+- Select your geographical area by copying/pasting the geometry of your selected area or directly via a shapefile.
+    ]]>    </help>
+    
+    <expand macro="citations"/>
+</tool>

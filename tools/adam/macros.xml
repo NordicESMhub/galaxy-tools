@@ -1,0 +1,28 @@
+<macros>
+    <token name="@TOOL_VERSION@">2.0.11</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+    <token name="@PROFILE@">20.05</token>
+    <xml name="config_files">
+        <configfiles>
+            <configfile name="adam_key_file"><![CDATA[
+#set $adam_apikey = $__user__.extra_preferences.get('adam_account|adam_apikey', "")
+key: $adam_apikey
+        ]]>            </configfile>
+        </configfiles>
+    </xml>
+    <xml name="edam_ontology">
+        <edam_topics>
+            <edam_topic>topic_3318</edam_topic>
+            <edam_topic>topic_3473</edam_topic>
+        </edam_topics>
+        <edam_operations>
+            <edam_operation>operation_0335</edam_operation>
+            <edam_operation>operation_2422</edam_operation>
+        </edam_operations>
+    </xml>
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.5194/egusphere-egu2020-17707</citation>
+        </citations>
+    </xml>
+</macros>
