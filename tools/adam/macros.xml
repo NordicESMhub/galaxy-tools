@@ -8,6 +8,22 @@
 #set $adam_apikey = $__user__.extra_preferences.get('adam_account|adam_apikey', "")
 key: $adam_apikey
         ]]>            </configfile>
+            <configfile name="geojson_config"><![CDATA[
+$area.geometry
+        ]]>            </configfile>
+            <configfile name="single_point_config"><![CDATA[
+{
+"type": "Feature",
+        "properties": {},
+        "geometry": {
+        "type": "Point",
+        "coordinates": [
+          $area.lon_point,
+          $area.lat_point
+        ]
+        }
+}
+        ]]>            </configfile>
         </configfiles>
     </xml>
     <xml name="edam_ontology">

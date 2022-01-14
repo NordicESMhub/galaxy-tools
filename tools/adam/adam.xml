@@ -1,5 +1,5 @@
-<tool id="adam" name="Advanced geospatial Data Management Platform Tool" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
-    <description>for retrieving global environment data from ADAM data cube</description>
+<tool id="adam" name="ADAM Tool" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>Advanced geospatial Data Management Platform Tool for retrieving global environment data from ADAM data cube</description>
     <macros>
         <import>macros.xml</import>
     </macros>
@@ -11,7 +11,7 @@
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         export HOME=`pwd`  &&
-	mkdir outputs      &&
+	    mkdir outputs      &&
         #set $adam_apikey = $__user__.extra_preferences.get('adam_account|adam_apikey', "")
         #if $adam_apikey == ''
             echo 'Error. Set your ADAM credentials via: User -> Preferences -> Manage Information'  &&
@@ -26,21 +26,37 @@
             --format geotiff
         #end if
         #if str($area.geo).strip() == 'geojson'
-	    #if $area.rewind
-	        --rewind
-	    #end if
+            --geometry '$area.geojson_file'
+	        #if $area.rewind
+	            --rewind
+	        #end if
+        #else
+            --geometry '$geojson_config'
         #end if
         --output  outputs &&
         echo "Data retrieval from ADAM data cube is done"
     ]]>    </command>
     <inputs>
         <conditional name="area">
-            <param name="geo" type="select" label="Enter geographical area with">
+            <param name="geo" type="select" label="Enter geographical area">
+                <option value="single">Single location</option>
                 <option value="paste">Paste geojson geometry</option>
                 <option value="geojson" selected="true">Geojson file</option>
             </param>
-            <when value="paste"/>
+            <when value="single">
+                <param name="lat_point" type="float" value="0" label="Latitude in degrees (-90, 90)">
+                    <validator type="in_range" min="-90" max="90" />
+                </param>
+                <param name="lon_point" type="float" value="0" label="Longitude in degrees (-180, 180)">
+                    <validator type="in_range" min="-180" max="180" />
+                </param>
+            </when>
+            <when value="paste">
+                <param name="geometry" type="text" area="true" label="Enter geometry object for ADAM selection"/>
+                <param name="rewind" type="boolean" optional="true" label="Rearrange GeoJson to the counterclokwise winding order"/>
+            </when>
             <when value="geojson">
+                <param name="geojson_file" type="data" format="geojson" label="GeoJSON file with area for selection"/>
                 <param name="rewind" type="boolean" optional="true" label="Rearrange GeoJson to the counterclokwise winding order"/>
             </when>
         </conditional>
@@ -74,6 +90,6 @@ This tool is a wrapper to retrieve data from the Advanced geospatial Data Manage
 - Your ADAM API key can be found in your profile (Api Key) on the ADAM platform itself.
 - Select your geographical area by copying/pasting the geometry of your selected area or directly via a shapefile.
     ]]>    </help>
-    
+
     <expand macro="citations"/>
 </tool>
