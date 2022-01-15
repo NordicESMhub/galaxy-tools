@@ -14,7 +14,7 @@
        #if str($information.opt) == 'diff' or str($information.opt) == 'diffn'
            '$information.secondary_infile'
        #end if
-       > $info
+       > '$info'
     ]]>    </command>
     <inputs>
         <expand macro="operator_information"/>
