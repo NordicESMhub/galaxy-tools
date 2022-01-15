@@ -10,6 +10,9 @@
             <option value="std">standard deviation</option>
         </param>
     </xml>
+    <xml name="add_cdo_input">
+        <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+    </xml>
     <xml name="cdo_option">
         <conditional name="option_type">
             <param name="add_opt" type="select" label="Provide cdo options" multiple="false">
@@ -30,7 +33,11 @@
             <when value="-a"/>
             <when value="--cmor"/>
             <when value="-f">
-                <param name="output_format" type="text" label="Output format"/>
+                <param name="output_format" type="select" label="Select output format" multiple="false">
+                    <option value="nc4">NetCDF-4 (HDF5)</option>
+                    <option value="nc4c">NetCDF-4 classic</option>
+                    <option value="nc5">NetCDF version 5</option>
+                </param>
             </when>
             <when value="-g">
                 <param name="grid" type="text" label="Grid" help="(option -g grid)"/>
@@ -120,7 +127,7 @@
                 <option value="div">Divide two fields </option>
                 <option value="min">Minimum of two fields </option>
                 <option value="max">Maximum of two fields </option>
-		<option value="setattribute">Set/modifiy attributes</option>
+                <option value="setattribute">Set/modify attributes</option>
             </param>
             <when value="copy">
                 <param name="add_file" type="data" multiple="true" min="0" label="Additional input file" format="netcdf"/>
@@ -132,11 +139,11 @@
                 <param name="add_file" type="data" multiple="true" min="0" max="2" label="Additional input file" format="netcdf"/>
             </when>
             <when value="duplicate">
-                <param name="ndup" type="integer" label="Number of duplicates, default is 2." value="2"/>
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <param name="ndup" type="integer" label="Number of duplicates" value="2"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="mergegrid">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="merge">
                 <param name="add_file" type="data" multiple="true" min="0" label="Additional input file" format="netcdf"/>
@@ -145,54 +152,54 @@
                 <param name="add_file" type="data" multiple="true" min="0" label="Additional input file" format="netcdf"/>
             </when>
             <when value="splitcode">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="splitparam">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="splitname">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="splitlevel">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="splitgrid">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="splitzaxis">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="splittabnum">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="splithour">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="splitday">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="splitseas">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="splityear">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="splityearmon">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="splitmon">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="splitsel">
                 <param name="nset" type="integer" value="0" label="Number of input timesteps for each output file"/>
                 <param name="noffset" type="integer" optional="true" label="Number of input timesteps skipped before the first timestep range (optional)"/>
                 <param name="nskip" type="integer" optional="true" label="Number of input timesteps skipped between timestep ranges (optional)"/>
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="distgrid">
                 <param name="nx" type="integer" value="1" label="Number of regions in x direction, or number of pieces for unstructured grids"/>
                 <param name="ny" type="integer" label="Number of regions in y direction" value="1"/>
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="collgrid">
                 <param name="nx" type="integer" label="Number of regions in x direction" optional="true"/>
@@ -209,120 +216,120 @@
             </when>
             <when value="selname">
                 <param name="params" type="text" value="" label="Parameters for selection"/>
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="delname">
                 <param name="params" type="text" value="" label="Parameters for selection"/>
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="seltimestep">
                 <param name="params" type="text" value="" label="Timesteps for selection"/>
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="sellonlatbox">
                 <param name="params" type="text" value="" label="Parameters for latitude/longitude box in the form of lon1,lon2,lat1,lat2)"/>
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="invertlat">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="addc">
-                <param name="const_value" type="float" label="Constant value" value="1"/>
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <param name="const_value" type="float" label="Constant value to add to the fields" value="1"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="subc">
-                <param name="const_value" type="float" label="Constant value" value="1"/>
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <param name="const_value" type="float" label="Constant value to substract to the fields" value="1"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="mulc">
-                <param name="const_value" type="float" label="Constant value" value="1"/>
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <param name="const_value" type="float" label="Constant value to scale the fields" value="1"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="divc">
-                <param name="const_value" type="float" label="Constant value" value="1"/>
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <param name="const_value" type="float" label="Constant value to scale the fields" value="1"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="expr">
                 <param name="params" type="text" value="" label="Expression for evaluation"/>
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="ml2pl">
                 <param name="params" type="text" value="" label="Pressure levels (comma separated)"/>
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="ml2hl">
                 <param name="params" type="text" value="" label="Height levels (comma separated)"/>
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="intlevel">
                 <param name="params" type="text" value="" label="Levels (comma separated)"/>
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="sp2gp">
                 <param name="trunc" type="integer" optional="true" value="" label="New spectral resolution"/>
-                <param name="add_file" type="data" optional="true" value="" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="gp2sp">
                 <param name="trunc" type="integer" optional="true" label="New spectral resolution"/>
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="ens">
                 <expand macro="stat_selection" />
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="zon">
                 <expand macro="stat_selection" />
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="tim">
                 <expand macro="stat_selection" />
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="vert">
                 <expand macro="stat_selection" />
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="day">
                 <expand macro="stat_selection" />
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="year">
                 <expand macro="stat_selection" />
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="mon">
                 <expand macro="stat_selection" />
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="seas">
                 <expand macro="stat_selection" />
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="fld">
                 <expand macro="stat_selection" />
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="add">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="sub">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="mul">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="div">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="min">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="max">
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
             <when value="setattribute">
                 <param name="attr_file" type="data" format="txt" label="Text file containing the list of attributes (one per line)"/>
-                <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+                <expand macro="add_cdo_input"/>
             </when>
         </conditional>
     </xml>
