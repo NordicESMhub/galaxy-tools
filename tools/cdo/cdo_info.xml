@@ -6,15 +6,7 @@
     </macros>
     <expand macro="edam_ontology"/>
     <expand macro="cdo_requirements"/>
-    <stdio>
-        <!-- Anything other than zero or one is an error -->
-        <exit_code range="2:" />
-        <exit_code range=":-1"/>
-        <!-- In case the return code has not been set propery check stderr too -->
-        <regex match="Error" />
-        <regex match="Exception" />
-        <regex match="Abort" />
-    </stdio>
+    <expand macro="cdo_stdio"/>
     <command><![CDATA[
        cdo 
        '$information.opt'
