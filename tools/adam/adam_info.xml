@@ -35,7 +35,7 @@
     <tests>
         <test>
             <param name="filter_products" value="EU_CAMS"/>
-            <output name="EU_CAMS_products.txt" compare="sim_size" delta="10"/>
+            <output name="dataset_info" file="EU_CAMS_products.txt" compare="sim_size" delta="10"/>
         </test>
     </tests>
     <help><![CDATA[
