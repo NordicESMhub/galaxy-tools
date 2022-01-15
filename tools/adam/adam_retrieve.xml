@@ -1,4 +1,4 @@
-<tool id="adam" name="ADAM Tool" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+<tool id="adam_retrieve" name="ADAM Data Retrieval Tool" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
     <description>Advanced geospatial Data Management Platform Tool for retrieving global environment data from ADAM data cube</description>
     <macros>
         <import>macros.xml</import>
@@ -37,7 +37,16 @@
         echo "Data retrieval from ADAM data cube is done"
     ]]>    </command>
     <inputs>
-        <conditional name="area">
+         <param name="dataset_id" type="text" value="" label="Enter dataset ID to retrieve from ADAM"/>
+        <section name="temporal" expanded="true" title="Temporal range for retrieval">
+            <param name="start_date" type="text" value="" optional="true" label="Enter a valid start date (YYYY-MM-DD)">
+                <validator type="regex" message="YYYY-MM-DD">^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$</validator>
+            </param>
+            <param name="end_date" type="text" value="" optional="true" label="Enter a valid end date (YYYY-MM-DD)">
+                <validator type="regex" message="YYYY-MM-DD">^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$</validator>
+            </param>
+        </section>
+           <conditional name="area">
             <param name="geo" type="select" label="Enter geographical area">
                 <option value="single">Single location</option>
                 <option value="paste">Paste geojson geometry</option>

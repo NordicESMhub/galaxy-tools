@@ -1,0 +1,56 @@
+<tool id="adam_info" name="ADAM Info Tool" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="@PROFILE@">
+    <description>Advanced geospatial Data Management Platform Info on available ADAM data cubes</description>
+    <macros>
+        <import>macros.xml</import>
+    </macros>
+    <expand macro="edam_ontology"/>
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">adamapi</requirement>
+        <requirement type="package" version="3">python</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        export HOME=`pwd`  &&
+	    mkdir outputs      &&
+        #set $adam_apikey = $__user__.extra_preferences.get('adam_account|adam_apikey', "")
+        #if $adam_apikey == ''
+            echo 'Error. Set your ADAM credentials via: User -> Preferences -> Manage Information'  &&
+            echo 'Will try to use tool adamapi config file (used for testing)' &&
+            cp '$__tool_directory__/adamapi.cfg' adamapi.cfg &&
+        #end if
+        python3 '$__tool_directory__/adam_info.py' 
+	        '$adam_key_file' 
+        #if str($filter_products).strip() != ''
+            --search '$filter_products'
+        #end if
+        --output  '$dataset_info' &&
+        echo "Data info from ADAM data cube is complete"
+    ]]>    </command>
+    <inputs>
+        <param name="filter_products" type="text" optional="true" label="Search and filter products"/>
+    </inputs>
+    <expand macro="config_files"/>
+    <outputs>
+        <data name="dataset_info" format="txt"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="filter_products" value="EU_CAMS"/>
+            <output name="EU_CAMS_products.txt" compare="sim_size" delta="10"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+**The Advanced geospatial Data Management platform (ADAM) Info Tool**
+=======================================================================================================
+
+This tool is a wrapper to get information on the data cubes available from the 
+Advanced geospatial Data Management platform (ADAM).
+
+- It allows to filter by products to only show a selection of products;
+- Any user willing to use this tool needs to `create a new account <https://reliance.adamplatform.eu/>`_ (using EGI Check-in e.g. your ORCID identifier).
+- Set your ADAM API Key via: User -> Preferences -> Manage Information"
+- Your ADAM API key can be found in your profile (Api Key) on the ADAM platform itself.
+    ]]>    </help>
+
+    <expand macro="citations"/>
+</tool>
