@@ -1,0 +1,78 @@
+<tool id="cdo_info" name="CDO get info" profile="20.05" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
+    <description>Climate Data Information Operators to get information on Climate and NWP model data</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>macros_info.xml</import>
+    </macros>
+    <expand macro="edam_ontology"/>
+    <expand macro="cdo_requirements"/>
+    <expand macro="cdo_stdio"/>
+    <command><![CDATA[
+       cdo 
+       '$information.opt'
+       '$main_infile'
+       #if str($information.opt) == 'diff' or str($information.opt) == 'diffn'
+           '$information.secondary_infile'
+       #end if
+       > '$info'
+    ]]>    </command>
+    <inputs>
+        <expand macro="operator_information"/>
+    </inputs>
+    <outputs>
+        <data name="info" format="txt"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="main_infile" ftype="netcdf" value="longitude.nc"/>
+            <conditional name="information">
+                <param name="opt" value="info" />
+            </conditional>
+            <output name="info" value="longitude.txt" compare="diff" lines_diff="2"/>
+        </test>
+        <test>
+            <param name="main_infile" ftype="netcdf" value="latitude.nc"/>
+            <conditional name="information">
+                <param name="diff" value="info" />
+                <param name="secondary_infile" ftype="netcdf" value="latitude_modified.nc"/>
+            </conditional>
+            <output name="info" value="latitude_diff.txt" compare="diff" lines_diff="2"/>
+        </test>
+        <test>
+            <param name="main_infile" ftype="netcdf" value="WMI_Lear.nc"/>
+            <conditional name="information">
+                <param name="opt" value="showdate" />
+            </conditional>
+            <output name="info" value="WMI_Lear_showdate.txt" compare="diff" lines_diff="2"/>
+        </test>
+        <test>
+            <param name="main_infile" ftype="netcdf" value="WMI_Lear.nc"/>
+            <conditional name="information">
+                <param name="opt" value="griddes" />
+            </conditional>
+            <output name="info" value="WMI_Lear_griddes.txt" compare="diff" lines_diff="2"/>
+        </test>
+        <test>
+            <param name="main_infile" ftype="netcdf" value="WMI_Lear.nc"/>
+            <conditional name="information">
+                <param name="opt" value="showname" />
+            </conditional>
+            <output name="info" value="WMI_Lear_names.txt" compare="diff" lines_diff="2"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+**CDO Climate Data Information Operators**
+=======================================================================================================
+
+This tool is a wrapper to the Climate Data Operators (CDO) for all Information Operators.
+
+- CDO Information operators return information about the input file(s). Output is written in a text file.
+- CDO is a collection of command line Operators to manipulate and analyse Climate and NWP model Data.
+- There are more than 600 operators available.
+
+- `CDO online documentation <https://code.mpimet.mpg.de/projects/cdo/>`_.
+
+    ]]>    </help>
+    <expand macro="citations"/>
+</tool>

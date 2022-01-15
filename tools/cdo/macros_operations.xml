@@ -1,0 +1,336 @@
+<macros>
+    <xml name="stat_selection">
+        <param name="stat" type="select" label="Select statistical function" multiple="false">
+            <option value="min">minimum</option>
+            <option value="max">maximum</option>
+            <option value="sum">sum</option>
+            <option value="mean">mean</option>
+            <option value="avg">average</option>
+            <option value="var">variance</option>
+            <option value="std">standard deviation</option>
+        </param>
+    </xml>
+    <xml name="add_cdo_input">
+        <param name="add_file" type="data" optional="true" label="Additional input file" format="netcdf"/>
+    </xml>
+    <xml name="cdo_option">
+        <conditional name="option_type">
+            <param name="add_opt" type="select" label="Provide cdo options" multiple="false">
+                <option value="-a">Generate an absolute time axis (-a)</option>
+                <option value="--cmor">CMOR conform NetCDF output (--cmor)</option>
+                <option value="-f">-Output format (-f format)</option>
+                <option value="-g">-g grid</option>
+                <option value="-gf">-g grid filename</option>
+                <option value="-M">-Indicate that the I/O streams have missing values (-M)</option>
+                <option value="-m">Set the default missing value. Default is-9e+33 (-m missval)</option>
+                <option value="--percentile">Percentile method (--percentile method)</option>
+                <option value="--reduce_dim">Reduce NetCDF dimensions (--reduce_dim)</option>
+                <option value="-R">Convert GRIB1 data from reduced to regular grid (-R)</option>
+                <option value="--seed">Seed for a new sequence of pseudo-random numbers (--seed seed)</option>
+                <option value="--sortname">Alphanumeric sorting of NetCDF parameter names (--sortname)</option>
+                <option value="-r">Generate a relative time axis (-r)</option>
+            </param>
+            <when value="-a"/>
+            <when value="--cmor"/>
+            <when value="-f">
+                <param name="output_format" type="select" label="Select output format" multiple="false">
+                    <option value="nc4">NetCDF-4 (HDF5)</option>
+                    <option value="nc4c">NetCDF-4 classic</option>
+                    <option value="nc5">NetCDF version 5</option>
+                </param>
+            </when>
+            <when value="-g">
+                <param name="grid" type="text" label="Grid" help="(option -g grid)"/>
+            </when>
+            <when value="-gf">
+                <param name="gridfile" type="data" label="Grid file" help="(option -g gridfile)" format="txt"/>
+            </when>
+            <when value="-M"/>
+            <when value="-m">
+                <param name="missval" type="float" value="-9e+33" label="Set the default missing value"/>
+            </when>
+            <when value="--percentile">
+                <param name="percentile" type="select" label="Percentile method">
+                    <option value="nrank">nrank</option>
+                    <option value="nist">nist</option>
+                    <option value="rtype8">rtype8</option>
+                    <option value="numpy">numpy</option>
+                    <option value="numpy_lower">numpy_lower</option>
+                    <option value="numpy_higher">numpy_higher</option>
+                    <option value="numpy_nearest">numpy_nearest</option>
+                </param>
+            </when>
+            <when value="--reduce_dim"/>
+            <when value="-R"/>
+            <when value="--seed">
+                <param name="seed" type="float" value="0.0" label="Seed for a new sequence of pseudo-random numbers"/>
+            </when>
+            <when value="--sortname"/>
+            <when value="-r"/>
+        </conditional>
+    </xml>
+    <xml name="cdo_operator">
+        <conditional name="operator">
+            <param name="opt" type="select" label="Select cdo operator" multiple="false">
+                <option value="copy">copy (Copy datasets)</option>
+                <option value="cat">cat (Concatenate datasets)</option>
+                <option value="replace">replace (Replace variables)</option>
+                <option value="duplicate">duplicate (Duplicates a dataset)</option>
+                <option value="mergegrid">mergegrid (Merge grid)</option>
+                <option value="merge">merge (Merge datasets with different fields)</option>
+                <option value="mergetime">mergetime (Merge datasets sorted by date and time)</option>
+                <option value="splitcode">splitcode (Split code numbers)</option>
+                <option value="splitparam">splitparam (Split parameter identifiers)</option>
+                <option value="splitname">splitname (Split variable names)</option>
+                <option value="splitlevel">splitlevel (Split levels)</option>
+                <option value="splitgrid">splitgrid (Split grids)</option>
+                <option value="splitzaxis">splitzaxis (Split z-axes)</option>
+                <option value="splittabnum">splittabnum (Split parameter table numbers)</option>
+                <option value="splithour">splithour (Split hours)</option>
+                <option value="splitday">splitday (Split days)</option>
+                <option value="splitseas">splitseas (Split seasons)</option>
+                <option value="splityear">splityear (Split years)</option>
+                <option value="splityearmon">splityearmon (Split in years and months)</option>
+                <option value="splitmon">splitmon (Split months)</option>
+                <option value="splitsel">splitsel (Split time selection)</option>
+                <option value="distgrid">distgrid (Distribute horizontal grid)</option>
+                <option value="collgrid">collgrid (Collect horizontal grid)</option>
+                <option value="select">select (Select all fields with parameters in a user given list.)</option>
+                <option value="delete">delete (Delete all fields with parameters in a user given list.)</option>
+                <option value="selname">selname (Select parameters by name)</option>
+                <option value="delname">delname (Delete parameters by name)</option>
+                <option value="seltimestep">seltimestep (Select timesteps)</option>
+                <option value="sellonlatbox">sellonlatbox (Select a latitude/longitude box)</option>
+                <option value="invertlat">invertlat (Invert latitudes)</option>
+                <option value="addc">addc (Add a constant)</option>
+                <option value="subc">subc (Substract a constant)</option>
+                <option value="mulc">mulc (Multiply with a constant)</option>
+                <option value="divc">divc (Divide with a constant)</option>
+                <option value="expr">expr (Evaluate expressions)</option>
+                <option value="ml2pl">ml2pl (Model to pressure level interpolation)</option>
+                <option value="ml2hl">ml2hl (Model to height level interpolation)</option>
+                <option value="intlevel">intlevel (Linear level interpolation)</option>
+                <option value="sp2gp">sp2gp (Spectral to gridpoint)</option>
+                <option value="gp2sp">gp2sp (Gridpoint to spectral)</option>
+                <option value="ens">Ensemble statistics</option>
+                <option value="zon">Zonal statistics</option>
+                <option value="tim">Time statistics</option>
+                <option value="vert">Vertical statistics</option>
+                <option value="day">Daily statistics</option>
+                <option value="year">Yearly statistics</option>
+                <option value="mon">Monthly statistics</option>
+                <option value="seas">Seasonal statistics</option>
+                <option value="fld">Statistical values over a field</option>
+                <option value="add">Add two fields </option>
+                <option value="sub">Subtract two fields </option>
+                <option value="mul">Multiply two fields </option>
+                <option value="div">Divide two fields </option>
+                <option value="min">Minimum of two fields </option>
+                <option value="max">Maximum of two fields </option>
+                <option value="setattribute">Set/modify attributes</option>
+            </param>
+            <when value="copy">
+                <param name="add_file" type="data" multiple="true" min="0" label="Additional input file" format="netcdf"/>
+            </when>
+            <when value="cat">
+                <param name="add_file" type="data" multiple="true" min="0" label="Additional input file" format="netcdf"/>
+            </when>
+            <when value="replace">
+                <param name="add_file" type="data" multiple="true" min="0" max="2" label="Additional input file" format="netcdf"/>
+            </when>
+            <when value="duplicate">
+                <param name="ndup" type="integer" label="Number of duplicates" value="2"/>
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="mergegrid">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="merge">
+                <param name="add_file" type="data" multiple="true" min="0" label="Additional input file" format="netcdf"/>
+            </when>
+            <when value="mergetime">
+                <param name="add_file" type="data" multiple="true" min="0" label="Additional input file" format="netcdf"/>
+            </when>
+            <when value="splitcode">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="splitparam">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="splitname">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="splitlevel">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="splitgrid">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="splitzaxis">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="splittabnum">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="splithour">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="splitday">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="splitseas">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="splityear">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="splityearmon">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="splitmon">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="splitsel">
+                <param name="nset" type="integer" value="0" label="Number of input timesteps for each output file"/>
+                <param name="noffset" type="integer" optional="true" label="Number of input timesteps skipped before the first timestep range (optional)"/>
+                <param name="nskip" type="integer" optional="true" label="Number of input timesteps skipped between timestep ranges (optional)"/>
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="distgrid">
+                <param name="nx" type="integer" value="1" label="Number of regions in x direction, or number of pieces for unstructured grids"/>
+                <param name="ny" type="integer" label="Number of regions in y direction" value="1"/>
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="collgrid">
+                <param name="nx" type="integer" label="Number of regions in x direction" optional="true"/>
+                <param name="names" type="text" label="Comma-separated list of variable names" optional="true"/>
+                <param name="add_file" type="data" multiple="true" min="0" label="Additional input file" format="netcdf"/>
+            </when>
+            <when value="select">
+                <param name="params" type="text" value="" label="Parameters for selection"/>
+                <param name="add_file" type="data" multiple="true" min="0" label="Additional input file" format="netcdf"/>
+            </when>
+            <when value="delete">
+                <param name="params" type="text" label="Parameters for deletion"/>
+                <param name="add_file" type="data" multiple="true" min="0" label="Additional input file" format="netcdf"/>
+            </when>
+            <when value="selname">
+                <param name="params" type="text" value="" label="Parameters for selection"/>
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="delname">
+                <param name="params" type="text" value="" label="Parameters for selection"/>
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="seltimestep">
+                <param name="params" type="text" value="" label="Timesteps for selection"/>
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="sellonlatbox">
+                <param name="params" type="text" value="" label="Parameters for latitude/longitude box in the form of lon1,lon2,lat1,lat2)"/>
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="invertlat">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="addc">
+                <param name="const_value" type="float" label="Constant value to add to the fields" value="1"/>
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="subc">
+                <param name="const_value" type="float" label="Constant value to substract to the fields" value="1"/>
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="mulc">
+                <param name="const_value" type="float" label="Constant value to scale the fields" value="1"/>
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="divc">
+                <param name="const_value" type="float" label="Constant value to scale the fields" value="1"/>
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="expr">
+                <param name="params" type="text" value="" label="Expression for evaluation"/>
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="ml2pl">
+                <param name="params" type="text" value="" label="Pressure levels (comma separated)"/>
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="ml2hl">
+                <param name="params" type="text" value="" label="Height levels (comma separated)"/>
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="intlevel">
+                <param name="params" type="text" value="" label="Levels (comma separated)"/>
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="sp2gp">
+                <param name="trunc" type="integer" optional="true" value="" label="New spectral resolution"/>
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="gp2sp">
+                <param name="trunc" type="integer" optional="true" label="New spectral resolution"/>
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="ens">
+                <expand macro="stat_selection" />
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="zon">
+                <expand macro="stat_selection" />
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="tim">
+                <expand macro="stat_selection" />
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="vert">
+                <expand macro="stat_selection" />
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="day">
+                <expand macro="stat_selection" />
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="year">
+                <expand macro="stat_selection" />
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="mon">
+                <expand macro="stat_selection" />
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="seas">
+                <expand macro="stat_selection" />
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="fld">
+                <expand macro="stat_selection" />
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="add">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="sub">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="mul">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="div">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="min">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="max">
+                <expand macro="add_cdo_input"/>
+            </when>
+            <when value="setattribute">
+                <param name="attr_file" type="data" format="txt" label="Text file containing the list of attributes (one per line)"/>
+                <expand macro="add_cdo_input"/>
+            </when>
+        </conditional>
+    </xml>
+</macros>

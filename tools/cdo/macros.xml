@@ -1,0 +1,33 @@
+<macros>
+    <token name="@TOOL_VERSION@">2.0.0</token>
+    <token name="@VERSION_SUFFIX@">0</token>
+    <xml name="cdo_requirements">
+        <requirements>
+            <requirement type="package" version="@TOOL_VERSION@">cdo</requirement>
+        </requirements>
+    </xml>
+    <xml name="edam_ontology">
+        <edam_topics>
+            <edam_topic>topic_3318</edam_topic>
+        </edam_topics>
+        <edam_operations>
+            <edam_operation>operation_3438</edam_operation>
+        </edam_operations>
+    </xml>
+    <xml name="cdo_stdio">
+        <stdio>
+            <!-- Anything other than zero or one is an error -->
+            <exit_code range="2:" />
+            <exit_code range=":-1"/>
+            <!-- In case the return code has not been set propery check stderr too -->
+            <regex match="Error" />
+            <regex match="Exception" />
+            <regex match="Abort" />
+        </stdio>
+    </xml>
+    <xml name="citations">
+        <citations>
+            <citation type="doi">10.5281/zenodo.3539275</citation>
+        </citations>
+    </xml>
+</macros>

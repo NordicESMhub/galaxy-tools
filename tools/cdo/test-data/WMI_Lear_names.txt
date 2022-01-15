@@ -1,0 +1,2 @@
+ altitude latitude longitude pressure tdry dp mr wspd wdir Drops
+cdo    showname: Processed 10 variables [0.00s 22MB].

@@ -1,0 +1,293 @@
+<tool id="cdo_operations" name="CDO Operations" profile="20.05" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@">
+    <description>Climate Data Manipulation Operators operations for standard processing of climate and NWP model output.</description>
+    <macros>
+        <import>macros.xml</import>
+        <import>macros_operations.xml</import>
+    </macros>
+    <expand macro="edam_ontology"/>
+    <expand macro="cdo_requirements"/>
+    <expand macro="cdo_stdio"/>
+    <command detect_errors="exit_code"><![CDATA[
+        mkdir output_dir &&
+        cdo 
+        #for $i, $cdo_option in enumerate( $section_option )
+            #if $cdo_option.option_type.add_opt == '-f'
+                $cdo_option.option_type.add_opt $cdo_option.option_type.output_format
+            #elif $cdo_option.option_type.add_opt == '-g'
+                $cdo_option.option_type.add_opt $cdo_option.option_type.grid
+            #elif $cdo_option.option_type.add_opt == '-gf'
+                $cdo_option.option_type.add_opt $cdo_option.option_type.gridfile
+            #elif $cdo_option.option_type.add_opt == '-m'
+                $cdo_option.option_type.add_opt $cdo_option.option_type.missval
+            #elif $cdo_option.option_type.add_opt == '--percentile'
+                $cdo_option.option_type.add_opt $cdo_option.option_type.percentile
+            #elif $cdo_option.option_type.add_opt == '--seed'
+                $cdo_option.option_type.add_opt $cdo_option.option_type.seed
+            #else
+                $cdo_option.option_type.add_opt
+            #end if
+        #end for
+        #for $i, $cdo_oper in enumerate( $section_operators )
+            #if $cdo_oper.operator.opt == 'duplicate'
+                -'$cdo_oper.operator.opt',$cdo_oper.operator.ndup
+            #elif $cdo_oper.operator.opt == 'addc' or $cdo_oper.operator.opt == 'subc' or $cdo_oper.operator.opt == 'mulc' or $cdo_oper.operator.opt == 'divc'
+                -'$cdo_oper.operator.opt',$cdo_oper.operator.const_value
+	    #elif $cdo_oper.operator.opt == 'ens' or $cdo_oper.operator.opt == 'zon' or  $cdo_oper.operator.opt == 'tim' or  $cdo_oper.operator.opt == 'vert' or  $cdo_oper.operator.opt == 'day' or  $cdo_oper.operator.opt == 'year' or  $cdo_oper.operator.opt == 'mon' or  $cdo_oper.operator.opt == 'seas' or $cdo_oper.operator.opt == 'fld'
+                -'${cdo_oper.operator.opt}${cdo_oper.operator.stat}'
+	    #elif $cdo_oper.operator.opt == 'sp2gp' or $cdo_oper.operator.opt == 'gp2sp'
+                #if $cdo_oper.operator.trunc > 0
+                    -'$cdo_oper.operator.opt',$cdo_oper.operator.trunc
+                #else
+                    -'$cdo_oper.operator.opt'
+                #end if
+            #elif $cdo_oper.operator.opt == 'collgrid'
+                #if str($cdo_oper.operator.nx)
+                    #if str($cdo_oper.operator.names)
+                        -'$cdo_oper.operator.opt',$cdo_oper.operator.nx,'$cdo_oper.operator.names'
+                    #else
+                        -'$cdo_oper.operator.opt',$cdo_oper.operator.nx
+                    #end if
+                #else
+                    -'$cdo_oper.operator.opt'
+                #end if
+            #elif $cdo_oper.operator.opt == 'distgrid'
+                -'$cdo_oper.operator.opt',$cdo_oper.operator.nx,$cdo_oper.operator.ny
+            #elif $cdo_oper.operator.opt == 'splitsel'
+                    #if str($cdo_oper.operator.noffset)
+                        #if str($cdo_oper.operator.nskip)
+                            -'$cdo_oper.operator.opt',$cdo_oper.operator.nsets,$cdo_oper.operator.noffset,$cdo_oper.operator.nskip
+                        #else
+                            -'$cdo_oper.operator.opt',$cdo_oper.operator.nsets,$cdo_oper.operator.noffset
+                        #end if
+                    #else
+                        -'$cdo_oper.operator.opt',$cdo_oper.operator.nsets
+                    #end if
+            #elif $cdo_oper.operator.opt == 'select' or $cdo_oper.operator.opt == 'delete' or $cdo_oper.operator.opt == 'selname' or $cdo_oper.operator.opt == 'delname' or  $cdo_oper.operator.opt == 'seltimestep' or $cdo_oper.operator.opt == 'sellonlatbox' or $cdo_oper.operator.opt == 'expr' or $cdo_oper.operator.opt == 'ml2pl' or $cdo_oper.operator.opt == 'ml2hl' or $cdo_oper.operator.opt == 'intlevel'
+                -'$cdo_oper.operator.opt','$cdo_oper.operator.params'
+            #elif $cdo_oper.operator.opt == 'setattribute'
+                -'$cdo_oper.operator.opt',FILE='$cdo_oper.operator.attr_file'
+            #else
+                -'$cdo_oper.operator.opt'
+            #end if
+            #if $cdo_oper.operator.opt == 'copy' or $cdo_oper.operator.opt == 'cat' or $cdo_oper.operator.opt == 'merge' or $cdo_oper.operator.opt == 'mergetime' or $cdo_oper.operator.opt == 'collgrid' or $cdo_oper.operator.opt == 'select' or $cdo_oper.operator.opt == 'delete' or $cdo_oper.operator.opt == 'replace'
+                #for $ifile in $cdo_oper.operator.add_file
+                    '${ifile}'
+                #end for
+            #elif $cdo_oper.operator.add_file and '$cdo_oper.operator.add_file' != '' and '$cdo_oper.operator.add_file' != 'None' and $cdo_oper.operator.add_file is not None
+                '$cdo_oper.operator.add_file'
+            #end if
+            #if $i == 0
+                #if $cdo_oper.operator.opt == 'splitcode' or $cdo_oper.operator.opt == 'splitparam' or $cdo_oper.operator.opt == 'splitname' or $cdo_oper.operator.opt == 'splitlevel' or $cdo_oper.operator.opt == 'splitgrid' or  $cdo_oper.operator.opt == 'splitzaxis' or $cdo_oper.operator.opt == 'splittabnum' or $cdo_oper.operator.opt == 'splithour' or $cdo_oper.operator.opt == 'splitday' or $cdo_oper.operator.opt == 'splitseas' or $cdo_oper.operator.opt == 'splityear' or $cdo_oper.operator.opt == 'splityearmon' or $cdo_oper.operator.opt == 'splitmon' 
+                    #set output = 'output_dir/outfile_'
+                #else
+                    #set output = 'output_dir/outfile.netcdf'
+                #end if
+            #end if
+        #end for
+        '${output}'
+    ]]>    </command>
+    <inputs>
+        <repeat name="section_operators" title="CDO Operators" min="1" max="10">
+            <expand macro="cdo_operator"/>
+        </repeat>
+        <repeat name="section_option" title="CDO Options" min="0" max="5">
+            <expand macro="cdo_option"/>
+        </repeat>
+    </inputs>
+    <outputs>
+        <collection name="output_files" type="list" label="${tool.name} outfiles">
+            <discover_datasets pattern="__name__" directory="output_dir" visible="true" format="netcdf"/>
+        </collection>
+    </outputs>
+    <tests>
+        <test>
+            <conditional name="operator">
+                <param name="opt" value="select" />
+                <param name="params" value="name=Drops" />
+                <param name="add_file" value="WMI_Lear.nc" ftype="netcdf" />
+            </conditional>
+            <output_collection name="output_files" type="list" count="1">
+                <element name="outfile.netcdf" ftype="netcdf" file="drops1.nc" compare="sim_size" delta="50"/>
+            </output_collection>
+        </test>
+        <test>
+            <conditional name="operator">
+                <param name="opt" value="copy" />
+                <param name="add_file" value="WMI_Lear.nc" ftype="netcdf" />
+            </conditional>
+            <output_collection name="output_files" type="list" count="1">
+                <element name="outfile.netcdf" ftype="netcdf" file="WMI_Lear_copy.nc" compare="sim_size" delta="50"/>
+            </output_collection>
+        </test>
+        <test>
+            <conditional name="operator">
+                <param name="opt" value="cat" />
+                <param name="add_file" value="drops1.nc,drops2.nc" ftype="netcdf" />
+            </conditional>
+            <output_collection name="output_files" type="list" count="1">
+                <element name="outfile.netcdf" ftype="netcdf" file="drops_cat.nc" compare="sim_size" delta="50"/>
+            </output_collection>
+        </test>
+        <test>
+            <conditional name="operator">
+                <param name="opt" value="splitname" />
+                <param name="add_file" value="lat_long.nc" ftype="netcdf" />
+            </conditional>
+            <output_collection name="output_files" type="list" count="2"/>
+        </test>
+        <test>
+            <conditional name="operator">
+                <param name="opt" value="replace" />
+                <param name="add_file" value="lat_long.nc,latitude_modified.nc" ftype="netcdf" />
+            </conditional>
+            <output_collection name="output_files" type="list" count="1">
+                <element name="outfile.netcdf" ftype="netcdf" file="lat_long_modified.nc" compare="sim_size" delta="50"/>
+            </output_collection>
+        </test>
+        <test>
+            <conditional name="operator">
+                <param name="opt" value="duplicate" />
+                <param name="ndup" value="3" ftype="integer" />
+                <param name="add_file" value="latitude.nc" ftype="netcdf" />
+            </conditional>
+            <output_collection name="output_files" type="list" count="1">
+                <element name="outfile.netcdf" ftype="netcdf" file="latitude3.nc" compare="sim_size" delta="50"/>
+            </output_collection>
+        </test>
+        <test>
+            <conditional name="operator">
+                <param name="opt" value="selname" />
+                <param name="add_file" value="WMI_Lear.nc" ftype="netcdf" />
+                <param name="params" value="Drops" />
+            </conditional>
+            <output_collection name="output_files" type="list" count="1">
+                <element name="outfile.netcdf" ftype="netcdf" file="drops1.nc" compare="sim_size" delta="50"/>
+            </output_collection>
+        </test>
+        <test>
+            <conditional name="operator">
+                <param name="opt" value="seltimestep" />
+                <param name="add_file" value="WMI_Lear.nc" ftype="netcdf" />
+                <param name="params" value="1,13,25" />
+            </conditional>
+            <output_collection name="output_files" type="list" count="1">
+                <element name="outfile.netcdf" ftype="netcdf" file="WMI_Lear_timesteps.nc" compare="sim_size" delta="50"/>
+            </output_collection>
+        </test>
+        <test>
+            <conditional name="operator">
+                <param name="opt" value="sellonlatbox" />
+                <param name="add_file" value="WMI_Lear.nc" ftype="netcdf" />
+                <param name="params" value="-10,10,60,70" />
+            </conditional>
+            <output_collection name="output_files" type="list" count="1">
+                <element name="outfile.netcdf" ftype="netcdf" file="WMI_Lear_sellonlatbox.nc" compare="sim_size" delta="50"/>
+            </output_collection>
+        </test>
+        <test>
+            <conditional name="operator">
+                <param name="opt" value="invertlat" />
+                <param name="add_file" value="WMI_Lear.nc" ftype="netcdf" />
+            </conditional>
+            <output_collection name="output_files" type="list" count="1">
+                <element name="outfile.netcdf" ftype="netcdf" file="WMI_Lear_invertlat.nc" compare="sim_size" delta="50"/>
+            </output_collection>
+        </test>
+        <test>
+            <repeat name="section_operators">
+                <conditional name="operator">
+                    <param name="opt" value="selname" />
+                    <param name="params" value="Drops" />
+                </conditional>
+            </repeat>
+            <repeat name="section_operators">
+                <conditional name="operator">
+                    <param name="opt" value="addc" />
+                    <param name="const_value" value="10.5" />
+                    <param name="add_file" value="WMI_Lear.nc" ftype="netcdf" />
+                </conditional>
+            </repeat>
+            <output_collection name="output_files" type="list" count="1">
+                <element name="outfile.netcdf" ftype="netcdf" file="WMI_Lear_addc.nc" compare="sim_size" delta="50"/>
+            </output_collection>
+        </test>
+        <test>
+            <conditional name="operator">
+                <param name="opt" value="expr" />
+                <param name="params" value="Drops2=1000*exp(1+Drops)" />
+                <param name="add_file" value="WMI_Lear.nc" ftype="netcdf" />
+            </conditional>
+            <output_collection name="output_files" type="list" count="1">
+                <element name="outfile.netcdf" ftype="netcdf" file="WMI_Lear_expr.nc" compare="sim_size" delta="50"/>
+            </output_collection>
+        </test>
+        <test>
+            <repeat name="section_operators">
+                <conditional name="operator">
+                    <param name="opt" value="selname" />
+                    <param name="params" value="CLEAR_SKY_BHI" />
+                </conditional>
+            </repeat>
+            <repeat name="section_operators">
+                <conditional name="operator">
+                    <param name="opt" value="tim" />
+                    <param name="stat" value="avg" />
+                    <param name="add_file" value="timeseries.nc" ftype="netcdf" />
+                </conditional>
+            </repeat>
+            <output_collection name="output_files" type="list" count="1">
+                <element name="outfile.netcdf" ftype="netcdf" file="timeseries_timavg.nc" compare="sim_size" delta="50"/>
+            </output_collection>
+        </test>
+        <test>
+            <repeat name="section_operators">
+                <conditional name="operator">
+                    <param name="opt" value="sub" />
+                    <param name="add_file" value="timeseries.nc" ftype="netcdf" />
+                </conditional>
+            </repeat>
+            <repeat name="section_operators">
+                <conditional name="operator">
+                    <param name="opt" value="addc" />
+                    <param name="const_value" value="10.5" />
+                    <param name="add_file" value="timeseries.nc" ftype="netcdf" />
+                </conditional>
+            </repeat>
+            <output_collection name="output_files" type="list" count="1">
+                <element name="outfile.netcdf" ftype="netcdf" file="timeseries_sub.nc" compare="sim_size" delta="50"/>
+            </output_collection>
+        </test>
+        <test>
+            <repeat name="section_operators">
+                <conditional name="operator">
+                    <param name="opt" value="sellonlatbox" />
+                    <param name="params" value="-10,10,60,70" />
+                </conditional>
+            </repeat>
+            <repeat name="section_operators">
+                <conditional name="operator">
+                    <param name="opt" value="setattribute" />
+                    <param name="attr_file" value="attributes.txt" />
+                    <param name="add_file" value="WMI_Lear.nc" ftype="netcdf" />
+                </conditional>
+            </repeat>
+            <output_collection name="output_files" type="list" count="1">
+                <element name="outfile.netcdf" ftype="netcdf" file="WMI_Lear_sellonlatbox_units.nc" compare="sim_size" delta="50"/>
+            </output_collection>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+**Climate Data Operators (CDO)**
+=======================================================================================================
+
+This tool is a wrapper to the Climate Data Operators (CDO) for all operators manipulating input files and creating a new output file.
+
+- CDO is a collection of command line Operators to manipulate and analyse Climate and NWP model Data.
+- There are more than 600 operators available.
+
+- `CDO online documentation <https://code.mpimet.mpg.de/projects/cdo/>`_.
+
+    ]]>    </help>
+    <expand macro="citations"/>
+</tool>

@@ -1,0 +1,17 @@
+categories:
+- Climate Analysis
+description:
+homepage_url: https://code.mpimet.mpg.de/projects/cdo/
+long_description: |
+  CDO (Climate Data Operators) is a collection of command line Operators to manipulate and analyse Climate and NWP model Data.
+  Supported data formats are GRIB 1/2, netCDF 3/4, SERVICE, EXTRA and IEG. There are more than 600 operators available.
+owner: climate
+remote_repository_url: https://github.com/NordicESMhub/galaxy-tools/tree/master/tools/cdo
+type: unrestricted
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "Wrapper for cdo tool: {{ tool_name }}."
+suite:
+  name: "suite_cdo"
+  description: "A suite of cdo tools"
+  type: repository_suite_definition
