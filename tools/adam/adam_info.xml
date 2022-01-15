@@ -18,17 +18,19 @@
             cp '$__tool_directory__/adamapi.cfg' adamapi.cfg &&
         #end if
         python3 '$__tool_directory__/adam_info.py' 
-	        '$adam_key_file' 
+	        --adamcfg '$adam_key_file' 
         #if str($filter_products).strip() != ''
             --search '$filter_products'
         #end if
         --output  '$dataset_info' &&
         echo "Data info from ADAM data cube is complete"
     ]]>    </command>
+    <configfiles>
+        <expand macro="adam_config"/>
+    </configfiles>
     <inputs>
         <param name="filter_products" type="text" optional="true" label="Search and filter products"/>
     </inputs>
-    <expand macro="config_files"/>
     <outputs>
         <data name="dataset_info" format="txt"/>
     </outputs>

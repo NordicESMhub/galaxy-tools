@@ -2,16 +2,18 @@
     <token name="@TOOL_VERSION@">2.0.11</token>
     <token name="@VERSION_SUFFIX@">0</token>
     <token name="@PROFILE@">20.05</token>
-    <xml name="config_files">
-        <configfiles>
-            <configfile name="adam_key_file"><![CDATA[
+    <xml name="adam_config">
+        <configfile name="adam_key_file"><![CDATA[
 #set $adam_apikey = $__user__.extra_preferences.get('adam_account|adam_apikey', "")
+server: https://reliance.adamplatform.eu
 key: $adam_apikey
-        ]]>            </configfile>
-            <configfile name="geojson_config"><![CDATA[
+        ]]>        </configfile>
+    </xml>
+    <xml name="adam_retrieve_config">
+        <configfile name="geojson_config"><![CDATA[
 $area.geometry
-        ]]>            </configfile>
-            <configfile name="single_point_config"><![CDATA[
+        ]]>        </configfile>
+        <configfile name="single_point_config"><![CDATA[
 {
 "type": "Feature",
         "properties": {},
@@ -23,8 +25,7 @@ $area.geometry
         ]
         }
 }
-        ]]>            </configfile>
-        </configfiles>
+        ]]>        </configfile>
     </xml>
     <xml name="edam_ontology">
         <edam_topics>

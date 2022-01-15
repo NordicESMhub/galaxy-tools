@@ -4,7 +4,13 @@ description: Advanced geospatial Data Management platform (ADAM)
 homepage_url: https://adamplatform.eu/
 long_description: |
   The Advanced geospatial Data Management platform (ADAM) is a tool to access a large variety and volume of global environmental data. User-friendly web viewer and Application Programming Interface (API) allow extracting global as well as local data, from the past, current time, to short term forecast and long-term projections. Most of the data are updated daily to allow users having always fresh data to play with.
-name: adam
 owner: climate
 remote_repository_url: https://pypi.org/project/adamapi/
 type: unrestricted
+auto_tool_repositories:
+  name_template: "{{ tool_id }}"
+  description_template: "Wrapper for ADAM tool: {{ tool_name }}."
+suite:
+  name: "suite_adam"
+  description: "A suite of ADAM tools"
+  type: repository_suite_definition

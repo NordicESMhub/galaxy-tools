@@ -19,7 +19,7 @@
             cp '$__tool_directory__/adamapi.cfg' adamapi.cfg &&
         #end if
         python3 '$__tool_directory__/adam_retrieve.py' 
-	        '$adam_key_file' 
+	        --adamcfg '$adam_key_file' 
         #if str($selection.format).strip() == 'netcdf'
             --format netcdf
         #else
@@ -36,8 +36,12 @@
         --output  outputs &&
         echo "Data retrieval from ADAM data cube is done"
     ]]>    </command>
+    <configfiles>
+        <expand macro="adam_config"/>
+        <expand macro="adam_retrieve_config"/>
+    </configfiles>
     <inputs>
-         <param name="dataset_id" type="text" value="" label="Enter dataset ID to retrieve from ADAM"/>
+        <param name="dataset_id" type="text" value="" label="Enter dataset ID to retrieve from ADAM"/>
         <section name="temporal" expanded="true" title="Temporal range for retrieval">
             <param name="start_date" type="text" value="" optional="true" label="Enter a valid start date (YYYY-MM-DD)">
                 <validator type="regex" message="YYYY-MM-DD">^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$</validator>
@@ -46,7 +50,7 @@
                 <validator type="regex" message="YYYY-MM-DD">^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$</validator>
             </param>
         </section>
-           <conditional name="area">
+        <conditional name="area">
             <param name="geo" type="select" label="Enter geographical area">
                 <option value="single">Single location</option>
                 <option value="paste">Paste geojson geometry</option>
@@ -80,7 +84,6 @@
             <when value="geotiff"/>
         </conditional>
     </inputs>
-    <expand macro="config_files"/>
     <outputs>
         <data name="datasets" format="netcdf,tiff,tabular">
             <discover_datasets pattern="__designation_and_ext__" directory="outputs" visible="true" />
