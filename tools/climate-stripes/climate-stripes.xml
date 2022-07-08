@@ -9,8 +9,8 @@
     </edam_operations>
     <requirements>
         <requirement type="package" version="3">python</requirement>
-        <requirement type="package" version="3.1.1">matplotlib</requirement>
-        <requirement type="package" version="1.0.0">pandas</requirement>
+        <requirement type="package" version="3.5.2">matplotlib</requirement>
+        <requirement type="package" version="1.4.3">pandas</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
        python3 '$__tool_directory__/climate_stripes.py'
@@ -28,6 +28,9 @@
             #if str($adv.format_plot).strip()
                 --format_plot '$adv.format_plot'
             #end if
+            #if $adv.nxsplit
+                --nxsplit '$adv.nxsplit'
+            #end if
             --output image.png
     ]]></command>
     <inputs>
@@ -35,6 +38,7 @@
         <param name="variable" type="text" value="global" label="column name to use for plotting" />
         <param name="title" type="text" value="" label="plot title" />
         <section name="adv" title="Advanced Options" expanded="false">
+            <param name="nxsplit" type="integer" optional="true" label="number of values per intervals" />
             <param name="xname" type="text" value="" label="column name to use for x-axis" />
             <param name="format_date" type="text" value="" label="format for input date/time column" />
             <param name="format_plot" type="text" value="" label="format for plotting dates on the x-axis" />
@@ -134,6 +138,7 @@
             <param name="variable" value="global" />
             <param name="title" value="Surface Temperature stripes (1979-2019)" />
             <param name="colormap" value="OrRd" />
+            <param name="nxsplit" value="50" />
             <param name="xname" value="Month" />
             <param name="format_date" value="XYXm" />
             <param name="format_plot" value="XY" />
