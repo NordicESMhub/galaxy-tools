@@ -72,7 +72,14 @@ class Stripes ():
             self.plot_format = plot_format.replace('X', '%')
 
     def read_data(self):
-        self.data = pd.read_csv(self.input, sep='\t')
+        if self.xname == "time":
+            self.data = pd.read_csv(self.input, sep='\t', index_col=self.xname, infer_datetime_format=True)
+        elif self.xname is not None:
+            self.data = pd.read_csv(self.input, sep='\t', index_col=self.xname)
+        else:
+            self.data = pd.read_csv(self.input, sep='\t')
+        
+        print(self.data.head())
 
     def create_stripes(self):
         data = np.zeros((2, self.data[self.valname].shape[0]), dtype='float')
@@ -86,15 +93,14 @@ class Stripes ():
                    vmax=self.data[self.valname].quantile(q=0.99))
         if self.title:
             plt.title(self.title)
-        if self.xname:
+        print(self.xname)
+        if self.xname == 'time':
             nrange = self.data.index.values
-            n = int(np.floor((nrange.max() - nrange.min()) / int(self.nxsplit)))
-            date_list = self.data[self.xname].loc[::n].apply(
-                lambda x: pd.to_datetime(str(x), format=self.format))
+            print(nrange[::int(self.nxsplit)])
+            date_list = pd.to_datetime(nrange[::int(self.nxsplit)], format=self.format)
+            dates_list = nrange[::int(self.nxsplit)]
             date_list = [i.strftime(self.plot_format) for i in date_list]
-            nval = int(self.data[self.xname].loc[::n].shape[0])
-            ax.xaxis.set_major_locator(plt.MaxNLocator(nval))
-            ax.xaxis.set_ticklabels(date_list)
+            ax.set_xticks(np.arange(0, len(nrange), int(self.nxsplit)), date_list)
             ax.xaxis.set_tick_params(rotation=45)
         else:
             ax.set_xticks([])
