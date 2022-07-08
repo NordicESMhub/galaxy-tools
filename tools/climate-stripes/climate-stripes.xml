@@ -1,4 +1,4 @@
-<tool id="climate_stripes" name="climate stripes" version="1.0.1">
+<tool id="climate_stripes" name="climate stripes" version="1.0.2">
     <description>from timeseries</description>
     <edam_topics>
       <edam_topic>topic_3855</edam_topic>
