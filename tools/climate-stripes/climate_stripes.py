@@ -72,10 +72,8 @@ class Stripes ():
             self.plot_format = plot_format.replace('X', '%')
 
     def read_data(self):
-        if self.xname == "time":
+        if self.xname is not None:
             self.data = pd.read_csv(self.input, sep='\t', index_col=self.xname, infer_datetime_format=True)
-        elif self.xname is not None:
-            self.data = pd.read_csv(self.input, sep='\t', index_col=self.xname)
         else:
             self.data = pd.read_csv(self.input, sep='\t')
 
@@ -91,7 +89,7 @@ class Stripes ():
                    vmax=self.data[self.valname].quantile(q=0.99))
         if self.title:
             plt.title(self.title)
-        if self.xname == 'time':
+        if self.xname is not None:
             nrange = self.data.index.values
             date_list = pd.to_datetime(nrange[::int(self.nxsplit)], format=self.format)
             date_list = [i.strftime(self.plot_format) for i in date_list]
