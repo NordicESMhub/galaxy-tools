@@ -78,8 +78,7 @@ class Stripes ():
             self.data = pd.read_csv(self.input, sep='\t', index_col=self.xname)
         else:
             self.data = pd.read_csv(self.input, sep='\t')
-        
-        print(self.data.head())
+
 
     def create_stripes(self):
         data = np.zeros((2, self.data[self.valname].shape[0]), dtype='float')
@@ -93,10 +92,8 @@ class Stripes ():
                    vmax=self.data[self.valname].quantile(q=0.99))
         if self.title:
             plt.title(self.title)
-        print(self.xname)
         if self.xname == 'time':
             nrange = self.data.index.values
-            print(nrange[::int(self.nxsplit)])
             date_list = pd.to_datetime(nrange[::int(self.nxsplit)], format=self.format)
             dates_list = nrange[::int(self.nxsplit)]
             date_list = [i.strftime(self.plot_format) for i in date_list]
