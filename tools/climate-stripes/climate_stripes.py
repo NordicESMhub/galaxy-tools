@@ -79,7 +79,6 @@ class Stripes ():
         else:
             self.data = pd.read_csv(self.input, sep='\t')
 
-
     def create_stripes(self):
         data = np.zeros((2, self.data[self.valname].shape[0]), dtype='float')
         data[:] = np.NaN
@@ -95,7 +94,6 @@ class Stripes ():
         if self.xname == 'time':
             nrange = self.data.index.values
             date_list = pd.to_datetime(nrange[::int(self.nxsplit)], format=self.format)
-            dates_list = nrange[::int(self.nxsplit)]
             date_list = [i.strftime(self.plot_format) for i in date_list]
             ax.set_xticks(np.arange(0, len(nrange), int(self.nxsplit)), date_list)
             ax.xaxis.set_tick_params(rotation=45)
