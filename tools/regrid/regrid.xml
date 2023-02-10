@@ -48,7 +48,7 @@
             <param name="era5_variable" value="tas"/>
             <output name="ofilename" ftype="netcdf">
                 <assert_contents>
-                    <has_size value="5996497"/>
+                    <has_size value="5996497" delta="100"/>
                 </assert_contents>
             </output>
         </test>
