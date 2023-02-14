@@ -1,3 +1,8 @@
+"""
+Code taken from https://github.com/tom-andersson/icenet-paper and slightly 
+adjusted to fit the galaxy interface. 
+
+"""
 import os
 import sys
 import numpy as np

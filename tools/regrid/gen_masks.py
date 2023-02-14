@@ -1,6 +1,11 @@
+"""
+Code taken from https://github.com/tom-andersson/icenet-paper and slightly 
+adjusted to fit the galaxy interface. 
+
+"""
 import sys
 import os
-#sys.path.insert(0, os.path.join(os.getcwd(), 'icenet'))  # if using jupyter kernel
+sys.path.insert(0, os.path.join(os.getcwd(), 'icenet'))  # if using jupyter kernel
 import numpy as np
 import xarray as xr
 import os

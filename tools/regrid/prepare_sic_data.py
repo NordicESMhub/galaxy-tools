@@ -1,3 +1,8 @@
+"""
+Code taken from https://github.com/tom-andersson/icenet-paper and slightly 
+adjusted to fit the galaxy interface. 
+
+"""
 import os
 import sys
 sys.path.insert(0, os.path.join(os.getcwd(), 'icenet'))
