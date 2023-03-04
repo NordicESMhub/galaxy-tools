@@ -1,0 +1,221 @@
+<tool id="preprocess" name="preprocess_icenet_data" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+    <description>for regridding and normalizing icenet data</description>
+        <requirements>
+            <requirement type="package">python</requirement>
+            <requirement type="package">xarray</requirement>
+            <requirement type="package">numpy</requirement>
+            <requirement type="package">pandas</requirement>
+            <requirement type="package">scipy</requirement>
+            <requirement type="package">iris</requirement>
+            <requirement type="package">netcdf4</requirement>
+            <requirement type="package">imageio</requirement>
+            <requirement type="package">matplotlib</requirement>
+            <requirement type="package">tqdm</requirement>
+            <requirement type="package">cdsapi</requirement>
+            <requirement type="package" version="2.10">tensorflow</requirement>
+        </requirements>
+        <command detect_errors="exit_code"><![CDATA[
+            python3 '$__tool_directory__/gen_masks.py' &&
+            python3 '$__tool_directory__/prepare_sic_data.py' --input $siconca_file       &&
+            python3 '$__tool_directory__/prepare_era5_data.py' --input $tas_file --var "tas"             &&
+            python3 '$__tool_directory__/prepare_era5_data.py' --input $ta500_file --var "ta500"             &&
+            python3 '$__tool_directory__/prepare_era5_data.py' --input $tos_file --var "tos"             &&
+            python3 '$__tool_directory__/prepare_era5_data.py' --input $rsus_file $rsds_file --var "rsds_and_rsus"             &&
+            python3 '$__tool_directory__/prepare_era5_data.py' --input $psl_file --var "psl"             &&
+            python3 '$__tool_directory__/prepare_era5_data.py' --input $zg500_file --var "zg500"             &&
+            python3 '$__tool_directory__/prepare_era5_data.py' --input $zg250_file --var "zg250"             &&
+            python3 '$__tool_directory__/prepare_era5_data.py' --input $ua10_file --var "ua10"             &&
+            python3 '$__tool_directory__/prepare_era5_data.py' --input $uas_file --var "uas"           &&
+            python3 '$__tool_directory__/prepare_era5_data.py' --input $vas_file --var "vas"               &&  
+            echo "regridding is done"                                                                         &&
+            mkdir "data/network_datasets" && 
+            mkdir "data/network_datasets/dataset1"     && 
+            mv $norm_file "data/network_datasets/norm_params.json" && 
+            echo "moved file" &&
+            python3 '$__tool_directory__/preproc_icenet_data.py' --input $config_file &&
+            echo "preprocessing is done"
+        ]]></command>
+        <inputs>
+            <param name="config_file" type="data" label="config file" format="json"/>
+            <param name="norm_file" type="data" label="normalization parameters" format="json"/>
+            <param name="siconca_file" type="data" label="siconca netcdf file" format="netcdf"/>
+            <param name="tas_file" type="data" label="tas netcdf file" format="netcdf"/>
+            <param name="ta500_file" type="data" label="ta500 netcdf file" format="netcdf"/>
+            <param name="tos_file" type="data" label="tos netcdf file" format="netcdf"/>
+            <param name="rsds_file" type="data" label="rsds netcdf file" format="netcdf"/>
+            <param name="rsus_file" type="data" label="rsus netcdf file" format="netcdf"/>
+            <param name="psl_file" type="data" label="psl netcdf file" format="netcdf"/>
+            <param name="zg500_file" type="data" label="zg500 netcdf file" format="netcdf"/>
+            <param name="zg250_file" type="data" label="zg250 netcdf file" format="netcdf"/>
+            <param name="ua10_file" type="data" label="ua10 netcdf file" format="netcdf"/>
+            <param name="uas_file" type="data" label="uas netcdf file" format="netcdf"/>
+            <param name="vas_file" type="data" label="vas netcdf file" format="netcdf"/>  
+        </inputs>
+        <outputs>
+            <collection name="collection1" type="list">
+                <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/meta"/>
+	    </collection>
+            <collection name="siconca_dataset" type="list">
+    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/siconca/abs"/>
+	    </collection>
+	    <collection name="tas_dataset" type="list">
+    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/tas/anom"/>
+	    </collection>
+	    <collection name="ta500_dataset" type="list">
+    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/ta500/anom"/>
+	    </collection>
+	    <collection name="tos_dataset" type="list">
+    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/tos/anom"/>
+	    </collection>
+	    <collection name="rsds_dataset" type="list">
+    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/rsds/anom"/>
+	    </collection>
+	    <collection name="rsus_dataset" type="list">
+    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/rsus/anom"/>
+	    </collection>
+	    <collection name="psl_dataset" type="list">
+    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/psl/anom"/>
+	    </collection>
+	    <collection name="zg500_dataset" type="list">
+    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/zg500/anom"/>
+	    </collection>
+	    <collection name="zg250_dataset" type="list">
+    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/zg250/anom"/>
+	    </collection>
+	    <collection name="ua10_dataset" type="list">
+    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/ua10/abs" />
+	    </collection>
+	    <collection name="uas_dataset" type="list">
+    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/uas/abs" />
+	    </collection>
+	    <collection name="vas_dataset" type="list">
+    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/vas/abs"/>
+	    </collection>
+    </outputs>
+    <tests>
+        <test>
+            <param name="norm_file" value="norm_params.json"/>
+            <param name="config_file" value="2021_09_03_1300_icenet_demo.json"/>
+            <param name="siconca_file" value="siconca.nc"/>
+            <param name="tas_file" value="tas_latlon.nc"/>
+            <param name="ta500_file" value="ta500_latlon.nc"/>
+            <param name="tos_file" value="tos_latlon.nc"/>
+            <param name="rsds_file" value="rsds_latlon.nc"/>
+            <param name="rsus_file" value="rss_latlon.nc"/>
+            <param name="psl_file" value="psl_latlon.nc"/>
+            <param name="zg500_file" value="zg500_latlon.nc"/>
+            <param name="zg250_file" value="zg250_latlon.nc"/>
+            <param name="ua10_file" value="ua10_latlon.nc"/>
+            <param name="uas_file" value="uas_latlon.nc"/>
+            <param name="vas_file" value="vas_latlon.nc"/> 
+            <output_collection name="collection1">
+                <element name="land">
+                    <assert_contents>
+                        <has_size value="746624" delta="100"/>
+                    </assert_contents>
+                </element>
+            </output_collection>
+            <output_collection name="siconca_dataset">
+                <element name="1979_01">
+                    <assert_contents>
+                        <has_size value="746624" delta="100"/>
+                    </assert_contents>
+                </element>
+            </output_collection>
+            <output_collection name="tas_dataset">
+                <element name="1979_01">
+                    <assert_contents>
+                        <has_size value="746624" delta="100"/>
+                    </assert_contents>
+                </element>
+            </output_collection>
+            <output_collection name="ta500_dataset">
+                <element name="1979_01">
+                    <assert_contents>
+                        <has_size value="746624" delta="100"/>
+                    </assert_contents>
+                </element>
+            </output_collection>
+            <output_collection name="tos_dataset">
+                <element name="1979_01">
+                    <assert_contents>
+                        <has_size value="746624" delta="100"/>
+                    </assert_contents>
+                </element>
+            </output_collection>
+            <output_collection name="rsds_dataset">
+                <element name="1979_01">
+                    <assert_contents>
+                        <has_size value="746624" delta="100"/>
+                    </assert_contents>
+                </element>
+            </output_collection>
+            <output_collection name="rsus_dataset">
+                <element name="1979_01">
+                    <assert_contents>
+                        <has_size value="746624" delta="100"/>
+                    </assert_contents>
+                </element>
+            </output_collection>
+            <output_collection name="psl_dataset">
+                <element name="1979_01">
+                    <assert_contents>
+                        <has_size value="746624" delta="100"/>
+                    </assert_contents>
+                </element>
+            </output_collection>
+            <output_collection name="zg500_dataset">
+                <element name="1979_01">
+                    <assert_contents>
+                        <has_size value="746624" delta="100"/>
+                    </assert_contents>
+                </element>
+            </output_collection>
+            <output_collection name="zg250_dataset">
+                <element name="1979_01">
+                    <assert_contents>
+                        <has_size value="746624" delta="100"/>
+                    </assert_contents>
+                </element>
+            </output_collection>
+            <output_collection name="ua10_dataset">
+                <element name="1979_01">
+                    <assert_contents>
+                        <has_size value="746624" delta="100"/>
+                    </assert_contents>
+                </element>
+            </output_collection>
+            <output_collection name="uas_dataset">
+                <element name="1979_01">
+                    <assert_contents>
+                        <has_size value="746624" delta="100"/>
+                    </assert_contents>
+                </element>
+            </output_collection>
+            <output_collection name="vas_dataset">
+                <element name="1979_01">
+                    <assert_contents>
+                        <has_size value="746624" delta="100"/>
+                    </assert_contents>
+                </element>
+            </output_collection>
+        </test>
+    </tests>
+        <help><![CDATA[
+    
+            This tool is a wrapper to preprocess icenet data (netcdf files).
+        ]]></help>
+        <citations>
+            <citation type="bibtex"> 
+                @misc{https://doi.org/10.5281/zenodo.5176573,
+                    doi = {10.5281/ZENODO.5176573},
+                    url = {https://zenodo.org/record/5176573},
+                    author = {Andersson,  Tom R.},
+                    title = {Code associated with the paper: 'Seasonal Arctic sea ice forecasting with probabilistic deep learning'},
+                    publisher = {Zenodo},
+                    year = {2021},
+                    copyright = {Open Access}
+                  }
+            </citation>
+        </citations>
+    </tool>
