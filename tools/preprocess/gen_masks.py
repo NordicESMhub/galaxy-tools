@@ -1,14 +1,12 @@
 """
-Code taken from https://github.com/tom-andersson/icenet-paper and slightly adjusted 
-to fit the galaxy interface. 
+Code taken from https://github.com/tom-andersson/icenet-paper and slightly adjusted
+to fit the galaxy interface.
 """
 
 import sys
 import os
-sys.path.insert(0, os.path.join(os.getcwd(), 'icenet'))  # if using jupyter kernel
 import numpy as np
 import xarray as xr
-import os
 import shutil
 import config
 import iris
@@ -16,6 +14,7 @@ import warnings
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 from mpl_toolkits.axes_grid1 import make_axes_locatable
+sys.path.insert(0, os.path.join(os.getcwd(), 'icenet'))  # if using jupyter kernel
 
 '''
 Obtains masks for land, the polar holes, OSI-SAF monthly maximum ice extent (the 'active
@@ -34,7 +33,7 @@ save_active_grid_cell_masks = True  # Save the monthly land-lake-ocean masks for
 save_land_mask = True  # Save the land mask (constant across months)
 save_arctic_region_mask = True  # Save Arctic region mask from NSIDC, with coastline cells
 save_polarhole_masks = True  # Save the polarhole masks
-save_figures = False # Figures of the max extent/region masks
+save_figures = False  # Figures of the max extent/region masks
 
 temp_ice_data_folder = os.path.join(config.mask_data_folder, 'temp')
 
@@ -45,8 +44,8 @@ retrieve_cmd_template_osi450 = 'wget --quiet -m -nH --cut-dirs=4 -P ' + temp_ice
     ' ftp://osisaf.met.no/reprocessed/ice/conc/v2p0/{:04d}/{:02d}/' + '{}'
 filename_template_osi450 = 'ice_conc_nh_ease2-250_cdr-v2p0_{:04d}{:02d}021200.nc'
 
-#### Generate the land-lake-sea mask using the second day from each month of
-#### the year 2000 (chosen arbitrarily as the mask is fixed within a calendar month)
+# Generate the land-lake-sea mask using the second day from each month of
+# the year 2000 (chosen arbitrarily as the mask is fixed within a calendar month)
 ###############################################################################
 
 print("Generating active grid cell region & and masks\n")
@@ -58,7 +57,7 @@ if save_figures:
     if not os.path.exists(fig_folder):
         os.makedirs(fig_folder)
 
-#### Active grid cell masks and land mask
+# Active grid cell masks and land mask
 ###############################################################################
 
 for month in range(1, 13):
@@ -111,11 +110,11 @@ for month in range(1, 13):
     # Delete the downloaded daily data
     shutil.rmtree(temp_ice_data_folder)
 
-#### Arctic region mask
+# Arctic region mask
 ###############################################################################
 
 if save_arctic_region_mask:
-    ### Authors: Tony Phillips (BAS), Tom Andersson (BAS)
+    # Authors: Tony Phillips (BAS), Tom Andersson (BAS)
 
     print("Generating NSIDC Arctic sea region array\n")
 
@@ -146,7 +145,7 @@ if save_arctic_region_mask:
     # ellipsoid -- see http://nsidc.org/data/polar-stereo/ps_grids.html
     a = 6378273.0
     e = 0.081816153
-    b = a * ((1.0 - e*e) ** 0.5)
+    b = a * ((1.0 - e * e) ** 0.5)
     ellipsoid = iris.coord_systems.GeogCS(semi_major_axis=a, semi_minor_axis=b)
 
     # coordinate system -- see ftp://sidads.colorado.edu/pub/tools/mapx/nsidc_maps/Nps.mpp
@@ -163,8 +162,8 @@ if save_arctic_region_mask:
     cy = 233.5
 
     # derive X and Y coordinates of pixel centres -- Y reversed so it starts at the bottom-left
-    x = np.linspace(-cx, (nx-1)-cx, num=nx) * grid_length
-    y = np.linspace(cy-(ny-1), cy, num=ny) * grid_length
+    x = np.linspace(-cx, (nx - 1) - cx, num=nx) * grid_length
+    y = np.linspace(cy - (ny - 1), cy, num=ny) * grid_length
 
     # read region data
     region_file_path = os.path.join(config.mask_data_folder, 'region_n.msk')
@@ -187,7 +186,7 @@ if save_arctic_region_mask:
     # Save the mask as a Numpy array and remove the temporary files
     arctic_region_mask = regions_ease.data.data
 
-    ###### Extract the coastline properly using numpy
+    # Extract the coastline properly using numpy
     land_mask_path = os.path.join(config.mask_data_folder, config.land_mask_filename)
     land_mask = np.load(land_mask_path)
 
@@ -250,12 +249,12 @@ if save_arctic_region_mask:
                         'Greenland Sea', 'Barents and Kara Seas', 'Arctic Ocean',
                         'Canadian Archipelago', 'Gulf of St. Lawrence', 'Land', 'Coast']
         formatter = mpl.ticker.FuncFormatter(lambda val, loc: region_names[loc])
-        plt.colorbar(im, cax, ticks=[0,1,2,3,4,5,6,7,8,9,10,11,12,13], format=formatter)
+        plt.colorbar(im, cax, ticks=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], format=formatter)
         axes[0].set_title('Arctic region segmentation', fontsize=20)
         getattr(mpl.cm, 'Blues_r').set_bad(color='black')
         axes[1].imshow(sic_EASE_cube.data[0, :], cmap='Blues_r')
         axes[1].contour(land_map, levels=[0.5], colors='k', linewidths=0.5)
-        axes[1].contour(regions_ease.data.data, levels=np.arange(0,13,1), colors='r', linewidths=2)
+        axes[1].contour(regions_ease.data.data, levels=np.arange(0, 13, 1), colors='r', linewidths=2)
         axes[1].set_title('SIC day map with Arctic region segmentation', fontsize=20)
         plt.savefig(os.path.join(fig_folder, 'all_regions.pdf'))
         plt.savefig(os.path.join(fig_folder, 'all_regions.png'))
@@ -266,7 +265,7 @@ if save_arctic_region_mask:
 
             ax.contour(land_map, levels=[0.5], colors='k', linewidths=0.5)
             ax.imshow(sic_EASE_cube.data[0, :], cmap='Blues_r')
-            ax.contour(regions_ease.data.data == i, levels=np.arange(0,13,1), colors='r', linewidths=2)
+            ax.contour(regions_ease.data.data == i, levels=np.arange(0, 13, 1), colors='r', linewidths=2)
 
             plt.savefig(os.path.join(fig_folder, region_str + '.pdf'))
             plt.savefig(os.path.join(fig_folder, region_str + '.png'))
@@ -275,14 +274,14 @@ if save_arctic_region_mask:
     os.remove(sic_day_fpath)
     os.remove(region_file_path)
 
-#### Polar hole masks
+# Polar hole masks
 ###############################################################################
 
 if save_polarhole_masks:
 
     print("Generating polar hole masks\n")
 
-    #### Generate the polar hole masks
+    # Generate the polar hole masks
     x = np.tile(np.arange(0, 432).reshape(432, 1), (1, 432)).astype(np.float32) - 215.5
     y = np.tile(np.arange(0, 432).reshape(1, 432), (432, 1)).astype(np.float32) - 215.5
     squaresum = np.square(x) + np.square(y)

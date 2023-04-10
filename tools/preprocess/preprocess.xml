@@ -1,4 +1,4 @@
-<tool id="preprocess" name="Preprocess Icenet Data" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+<tool id="preprocess_icenet_data" name="Preprocess Icenet Data" version="0.1.0+galaxy0" profile="21.05">
     <description>for regridding and normalizing icenet data</description>
         <requirements>
             <requirement type="package" version= "3.10.9">python</requirement>
@@ -16,43 +16,46 @@
         </requirements>
         <command detect_errors="exit_code"><![CDATA[
             python3 '$__tool_directory__/gen_masks.py' &&
-            python3 '$__tool_directory__/prepare_sic_data.py' --input $siconca_file       &&
-            python3 '$__tool_directory__/prepare_era5_data.py' --input $tas_file --var "tas"             &&
-            python3 '$__tool_directory__/prepare_era5_data.py' --input $ta500_file --var "ta500"             &&
-            python3 '$__tool_directory__/prepare_era5_data.py' --input $tos_file --var "tos"             &&
-            python3 '$__tool_directory__/prepare_era5_data.py' --input $rsus_file $rsds_file --var "rsds_and_rsus"             &&
-            python3 '$__tool_directory__/prepare_era5_data.py' --input $psl_file --var "psl"             &&
-            python3 '$__tool_directory__/prepare_era5_data.py' --input $zg500_file --var "zg500"             &&
-            python3 '$__tool_directory__/prepare_era5_data.py' --input $zg250_file --var "zg250"             &&
-            python3 '$__tool_directory__/prepare_era5_data.py' --input $ua10_file --var "ua10"             &&
-            python3 '$__tool_directory__/prepare_era5_data.py' --input $uas_file --var "uas"           &&
-            python3 '$__tool_directory__/prepare_era5_data.py' --input $vas_file --var "vas"               &&  
+            python3 '$__tool_directory__/prepare_sic_data.py' --input '$siconca_file'       &&
+            python3 '$__tool_directory__/prepare_era5_data.py' --input '$tas_file' --var "tas"             &&
+            python3 '$__tool_directory__/prepare_era5_data.py' --input '$ta500_file' --var "ta500"             &&
+            python3 '$__tool_directory__/prepare_era5_data.py' --input '$tos_file' --var "tos"             &&
+            python3 '$__tool_directory__/prepare_era5_data.py' --input '$rsus_file' '$rsds_file' --var "rsds_and_rsus"             &&
+            python3 '$__tool_directory__/prepare_era5_data.py' --input '$psl_file' --var "psl"             &&
+            python3 '$__tool_directory__/prepare_era5_data.py' --input '$zg500_file' --var "zg500"             &&
+            python3 '$__tool_directory__/prepare_era5_data.py' --input '$zg250_file' --var "zg250"             &&
+            python3 '$__tool_directory__/prepare_era5_data.py' --input '$ua10_file' --var "ua10"             &&
+            python3 '$__tool_directory__/prepare_era5_data.py' --input '$uas_file' --var "uas"           &&
+            python3 '$__tool_directory__/prepare_era5_data.py' --input '$vas_file' --var "vas"               &&  
             echo "regridding is done"                                                                         &&
             mkdir "data/network_datasets" && 
             mkdir "data/network_datasets/dataset1"     && 
-            mv $norm_file "data/network_datasets/norm_params.json" && 
+            cp '$__tool_directory__/norm_params.json' "data/network_datasets/norm_params.json" && 
             echo "moved file" &&
-            python3 '$__tool_directory__/preproc_icenet_data.py' --input $config_file &&
+            #if ($config_file)
+               python3 '$__tool_directory__/preproc_icenet_data.py' --input '$config_file' &&
+            #else 
+               python3 '$__tool_directory__/preproc_icenet_data.py' --input '$__tool_directory__/2021_09_03_1300_icenet_demo.json' && 
+            #end if 
             echo "preprocessing is done"
         ]]></command>
         <inputs>
-            <param name="config_file" type="data" label="config file" format="json"/>
-            <param name="norm_file" type="data" label="normalization parameters" format="json"/>
-            <param name="siconca_file" type="data" label="siconca netcdf file" format="netcdf"/>
-            <param name="tas_file" type="data" label="tas netcdf file" format="netcdf"/>
-            <param name="ta500_file" type="data" label="ta500 netcdf file" format="netcdf"/>
-            <param name="tos_file" type="data" label="tos netcdf file" format="netcdf"/>
-            <param name="rsds_file" type="data" label="rsds netcdf file" format="netcdf"/>
-            <param name="rsus_file" type="data" label="rsus netcdf file" format="netcdf"/>
-            <param name="psl_file" type="data" label="psl netcdf file" format="netcdf"/>
-            <param name="zg500_file" type="data" label="zg500 netcdf file" format="netcdf"/>
-            <param name="zg250_file" type="data" label="zg250 netcdf file" format="netcdf"/>
-            <param name="ua10_file" type="data" label="ua10 netcdf file" format="netcdf"/>
-            <param name="uas_file" type="data" label="uas netcdf file" format="netcdf"/>
-            <param name="vas_file" type="data" label="vas netcdf file" format="netcdf"/>  
+            <param name="config_file" type="data" label="Config file containing all of the variables needed for the IceNet forecast" format="json" optional="true" help="default file is provided"/>
+            <param name="siconca_file" type="data" label="Monthly averaged OSI-SAF sea ice concentration data" format="netcdf" help="preceding 12 months of the forecast initialization month are needed for optimal results"/>
+            <param name="tas_file" type="data" label="Monthly averaged ERA5 2m temperature data" format="netcdf" help= "preceding 3 months of the forecast initialization month are needed for optimal results, can be downloaded from the Climate Data Store https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels-monthly-means?tab=overview"/>
+            <param name="ta500_file" type="data" label="Monthly averaged ERA5 pressure level 500 temperature data" format="netcdf" help= "preceding 3 months of the forecast initialization month are needed for optimal results, can be downloaded from the Climate Data Store https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels-monthly-means?tab=overview"/>
+            <param name="tos_file" type="data" label="Monthly averaged ERA5 sea surface temperature data" format="netcdf" help= "preceding 3 months of the forecast initialization month are needed for optimal results, can be downloaded from the Climate Data Store https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels-monthly-means?tab=overview"/>
+            <param name="rsds_file" type="data" label="Monthly averaged ERA5 surface solar radiation downwards data" format="netcdf" help= "preceding 3 months of the forecast initialization month are needed for optimal results, can be downloaded from the Climate Data Store https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels-monthly-means?tab=overview"/>
+            <param name="rsus_file" type="data" label="Monthly averaged ERA5 surface net solar radiation data" format="netcdf" help= "preceding 3 months of the forecast initialization month are needed for optimal results, can be downloaded from the Climate Data Store https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels-monthly-means?tab=overview"/>
+            <param name="psl_file" type="data" label="Monthly averaged ERA5 mean sea level pressure data" format="netcdf" help= "preceding 3 months of the forecast initialization month are needed for optimal results, can be downloaded from the Climate Data Store https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels-monthly-means?tab=overview"/>
+            <param name="zg500_file" type="data" label="Monthly averaged pressure level 500 geopotential data" format="netcdf" help= "preceding 3 months of the forecast initialization month are needed for optimal results, can be downloaded from the Climate Data Store https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels-monthly-means?tab=overview"/>
+            <param name="zg250_file" type="data" label="Monthly averaged ERA5 pressure level 250 geopotential data" format="netcdf" help= "preceding 3 months of the forecast initialization month are needed for optimal results, can be downloaded from the Climate Data Store https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels-monthly-means?tab=overview"/>
+            <param name="ua10_file" type="data" label="Monthly averaged ERA5 pressure level 10 u component of wind data" format="netcdf" help= "preceding 3 months of the forecast initialization month are needed for optimal results, can be downloaded from the Climate Data Store https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-pressure-levels-monthly-means?tab=overview"/>
+            <param name="uas_file" type="data" label="Monthly averaged ERA5 10m u component of wind data" format="netcdf" help= "preceding month of the forecast initialization month is needed for optimal results, can be downloaded from the Climate Data Store https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels-monthly-means?tab=overview"/>
+            <param name="vas_file" type="data" label="Monthly averaged ERA5 10m v component of wind data" format="netcdf" help= "preceding month of the forecast initialization month is needed for optimal results, can be downloaded from the Climate Data Store https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels-monthly-means?tab=overview"/>  
         </inputs>
         <outputs>
-            <collection name="collection1" type="list">
+            <collection name="metadata" type="list">
                 <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/meta"/>
 	    </collection>
             <collection name="siconca_dataset" type="list">
@@ -95,8 +98,6 @@
     <tests>
     <!--
         <test>
-            <param name="norm_file" value="norm_params.json"/>
-            <param name="config_file" value="2021_09_03_1300_icenet_demo.json"/>
             <param name="siconca_file" value="siconca.nc"/>
             <param name="tas_file" value="tas_latlon.nc"/>
             <param name="ta500_file" value="ta500_latlon.nc"/>
@@ -109,7 +110,7 @@
             <param name="ua10_file" value="ua10_latlon.nc"/>
             <param name="uas_file" value="uas_latlon.nc"/>
             <param name="vas_file" value="vas_latlon.nc"/> 
-            <output_collection name="collection1">
+            <output_collection name="metadata">
                 <element name="land">
                     <assert_contents>
                         <has_size value="746624" delta="100"/>
@@ -200,23 +201,15 @@
                     </assert_contents>
                 </element>
             </output_collection>
-        </test> -->
+        </test>
+        -->
     </tests>
         <help><![CDATA[
-    
-            This tool is a wrapper to preprocess icenet data (netcdf files).
+            This tool is a wrapper to regrid and normalize data from the input variables for the icenet network which can forecast arctic sea ice up to 6 months.
+            It creates numpy files, which can be used as an input for the icenet forecast tool.
         ]]></help>
         <citations>
-            <citation type="bibtex"> 
-                @misc{https://doi.org/10.5281/zenodo.5176573,
-                    doi = {10.5281/ZENODO.5176573},
-                    url = {https://zenodo.org/record/5176573},
-                    author = {Andersson,  Tom R.},
-                    title = {Code associated with the paper: 'Seasonal Arctic sea ice forecasting with probabilistic deep learning'},
-                    publisher = {Zenodo},
-                    year = {2021},
-                    copyright = {Open Access}
-                  }
+            <citation type="doi">10.5281/zenodo.5176573
             </citation>
         </citations>
     </tool>

@@ -1,12 +1,11 @@
 """
-Code taken from https://github.com/tom-andersson/icenet-paper and slightly adjusted 
-to fit the galaxy interface. 
+Code taken from https://github.com/tom-andersson/icenet-paper and slightly adjusted
+to fit the galaxy interface.
 """
 import os
 import sys
 import numpy as np
 import tensorflow as tf
-sys.path.insert(0, os.path.join(os.getcwd(), 'icenet'))  # if using jupyter kernel
 from models import linear_trend_forecast
 import config
 import itertools
@@ -23,10 +22,10 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import imageio
 from tqdm import tqdm
-
+sys.path.insert(0, os.path.join(os.getcwd(), 'icenet'))  # if using jupyter kernel
 
 ###############################################################################
-############### DATA PROCESSING & LOADING
+# DATA PROCESSING & LOADING
 ###############################################################################
 
 
@@ -455,7 +454,7 @@ class IceNetDataPreProcessor(object):
                 dates = self.obs_train_dates
 
         ########################################################################
-        ################# Observational variable
+        # Observational variable
         ########################################################################
 
         if self.preproc_obs_data:
@@ -488,7 +487,7 @@ class IceNetDataPreProcessor(object):
                 da = da.groupby("time.month", restore_coord_dims=True) - climatology
 
             elif data_format == 'linear_trend':
-               da = self.build_linear_trend_da(da, dataset='obs')
+                da = self.build_linear_trend_da(da, dataset='obs')
 
             # Realise the array
             da.data = np.asarray(da.data, dtype=np.float32)
@@ -548,7 +547,7 @@ class IceNetDataPreProcessor(object):
                 print("Done in {:.0f}s.\n".format(time.time() - tic))
 
         ########################################################################
-        ################# Transfer variable
+        # Transfer variable
         ########################################################################
 
         if self.preproc_transfer_data:
@@ -600,7 +599,7 @@ class IceNetDataPreProcessor(object):
                         da = da.groupby("time.month", restore_coord_dims=True) - climatology
 
                     elif data_format == 'linear_trend':
-                       da = self.build_linear_trend_da(da, dataset='cmip6')
+                        da = self.build_linear_trend_da(da, dataset='cmip6')
 
                     # Normalise the array
                     if varname != 'siconca':
@@ -839,11 +838,11 @@ class IceNetDataLoader(tf.keras.utils.Sequence):
                 for data_format in vardict.keys():
                     if vardict[data_format]['include']:
                         if data_format != 'linear_trend':
-                            for lag in np.arange(1, vardict[data_format]['max_lag']+1):
-                                variable_names.append(varname+'_{}_{}'.format(data_format, lag))
+                            for lag in np.arange(1, vardict[data_format]['max_lag'] + 1):
+                                variable_names.append(varname + '_{}_{}'.format(data_format, lag))
                         elif data_format == 'linear_trend':
-                            for leadtime in np.arange(1, self.config['n_forecast_months']+1):
-                                variable_names.append(varname+'_{}_{}'.format(data_format, leadtime))
+                            for leadtime in np.arange(1, self.config['n_forecast_months'] + 1):
+                                variable_names.append(varname + '_{}_{}'.format(data_format, leadtime))
 
             # Metadata input variables that don't span time
             elif 'metadata' in vardict.keys() and vardict['include']:
@@ -872,7 +871,7 @@ class IceNetDataLoader(tf.keras.utils.Sequence):
                 # Variables that span time
                 for data_format in vardict.keys():
                     if vardict[data_format]['include']:
-                        varname_format = varname+'_{}'.format(data_format)
+                        varname_format = varname + '_{}'.format(data_format)
                         if data_format != 'linear_trend':
                             self.num_input_channels_dict[varname_format] = vardict[data_format]['max_lag']
                         elif data_format == 'linear_trend':
@@ -910,7 +909,7 @@ class IceNetDataLoader(tf.keras.utils.Sequence):
         max_lag = np.max(max_lags)
 
         input_dates = [
-            forecast_start_date - pd.DateOffset(months=int(lag)) for lag in np.arange(1, max_lag+1)
+            forecast_start_date - pd.DateOffset(months=int(lag)) for lag in np.arange(1, max_lag + 1)
         ]
 
         return input_dates
@@ -1272,7 +1271,7 @@ class IceNetDataLoader(tf.keras.utils.Sequence):
                                 input_months = [present_date - relativedelta(months=lb) for lb in lbs]
                             elif data_format == 'linear_trend':
                                 input_months = [present_date + relativedelta(months=forecast_leadtime)
-                                                for forecast_leadtime in np.arange(1, self.config['n_forecast_months']+1)]
+                                                for forecast_leadtime in np.arange(1, self.config['n_forecast_months'] + 1)]
 
                             variable_idx2 += self.num_input_channels_dict[varname_format]
 
@@ -1337,7 +1336,7 @@ class IceNetDataLoader(tf.keras.utils.Sequence):
         self.rng.shuffle(self.all_forecast_IDs)
 
 
-################## MISC FUNCTIONS
+# MISC FUNCTIONS
 ################################################################################
 
 
@@ -1502,7 +1501,7 @@ def make_varname_verbose_any_leadtime(varname):
 
 
 ################################################################################
-################## FUNCTIONS
+# FUNCTIONS
 ################################################################################
 
 
@@ -1545,7 +1544,7 @@ def fix_near_real_time_era5_func(latlon_path):
 
 
 ###############################################################################
-############### LEARNING RATE SCHEDULER
+# LEARNING RATE SCHEDULER
 ###############################################################################
 
 
@@ -1570,7 +1569,7 @@ def make_exp_decay_lr_schedule(rate, start_epoch=1, end_epoch=np.inf, verbose=Fa
 
 
 ###############################################################################
-############### REGRIDDING VECTOR DATA
+# REGRIDDING VECTOR DATA
 ###############################################################################
 
 
@@ -1645,8 +1644,8 @@ def gridcell_angles_from_dim_coords(cube):
     for yi in [0, 1]:
         for xi in [0, 1]:
             xy = np.meshgrid(x_bounds[:, xi], y_bounds[:, yi])
-            x[:,:,c[cind]] = xy[0]
-            y[:,:,c[cind]] = xy[1]
+            x[:, :, c[cind]] = xy[0]
+            y[:, :, c[cind]] = xy[1]
             cind += 1
 
     # convert the X and Y coordinates to longitudes and latitudes
@@ -1687,7 +1686,7 @@ def invert_gridcell_angles(angles):
 
 
 ###############################################################################
-############### CMIP6
+# CMIP6
 ###############################################################################
 
 
@@ -1699,7 +1698,7 @@ def esgf_search(server="https://esgf-node.llnl.gov/esg-search/search",
     client = requests.session()
     payload = search
     payload["project"] = project
-    payload["type"]= "File"
+    payload["type"] = "File"
     if latest:
         payload["latest"] = "true"
     if local_node:
@@ -1738,7 +1737,7 @@ def esgf_search(server="https://esgf-node.llnl.gov/esg-search/search",
         for d in resp:
             if verbose2:
                 for k in d:
-                    print("{}: {}".format(k,d[k]))
+                    print("{}: {}".format(k, d[k]))
             url = d["url"]
             for f in d["url"]:
                 sp = f.split("|")
@@ -1785,7 +1784,7 @@ def save_cmip6(cmip6_ease, fpath, compress=True, verbose=False):
 
 
 ###############################################################################
-############### PLOTTING
+# PLOTTING
 ###############################################################################
 
 
@@ -1853,7 +1852,7 @@ def arr_to_ice_edge_rgba_arr(arr, thresh, land_mask, region_mask, rgb):
 
 
 ###############################################################################
-############### VIDEOS
+# VIDEOS
 ###############################################################################
 
 
@@ -1922,7 +1921,7 @@ def xarray_to_video(da, video_path, fps, mask=None, mask_type='contour', clim=No
         ax.axes.xaxis.set_visible(False)
         ax.axes.yaxis.set_visible(False)
 
-        ax.set_title('{:04d}/{:02d}/{:02d}'.format(date.year, date.month, date.day), fontsize=figsize*4)
+        ax.set_title('{:04d}/{:02d}/{:02d}'.format(date.year, date.month, date.day), fontsize=figsize * 4)
 
         divider = make_axes_locatable(ax)
         cax = divider.append_axes('right', size='5%', pad=0.05)

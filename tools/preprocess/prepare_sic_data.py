@@ -1,11 +1,7 @@
 """
-Code taken from https://github.com/tom-andersson/icenet-paper and slightly adjusted 
-to fit the galaxy interface. 
+Code taken from https://github.com/tom-andersson/icenet-paper and slightly adjusted
+to fit the galaxy interface.
 """
-
-import os
-import sys
-sys.path.insert(0, os.path.join(os.getcwd(), 'icenet'))
 import config
 from tqdm import tqdm
 import pandas as pd
@@ -14,6 +10,9 @@ import time
 import argparse
 import numpy as np
 from scipy import interpolate
+import os
+import sys
+sys.path.insert(0, os.path.join(os.getcwd(), 'icenet'))
 
 '''
 Downloads OSI-SAF SIC data from 1979-present using OpenDAP.
@@ -34,10 +33,10 @@ if not os.path.exists(config.obs_data_folder):
 
 print('Downloading OSI-450 monthly averages... ', end='', flush=True)
 da = xr.open_dataarray(args.input)
-#da = da.resample(time='1MS').mean()
+# da = da.resample(time='1MS').mean()
 
 
-### Preprocess the data
+# Preprocess the data
 da /= 100.  # Convert from SIC % to fraction
 
 mask_fpath_format = os.path.join(config.mask_data_folder,
@@ -46,7 +45,7 @@ mask_fpath_format = os.path.join(config.mask_data_folder,
 # Load grid cell mask
 mask_dict = {
     month: np.load(mask_fpath_format.format('{:02d}'.format(month))) for
-    month in np.arange(1, 12+1)
+    month in np.arange(1, 12 + 1)
 }
 
 dates = [pd.Timestamp(date) for date in da.time.values]

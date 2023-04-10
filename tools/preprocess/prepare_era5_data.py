@@ -1,22 +1,18 @@
 """
-Code taken from https://github.com/tom-andersson/icenet-paper and slightly adjusted 
-to fit the galaxy interface. 
+Code taken from https://github.com/tom-andersson/icenet-paper and slightly adjusted
+to fit the galaxy interface.
 """
-
-import sys
-import os
-sys.path.insert(0, os.path.join(os.getcwd(), 'icenet'))  # if using jupyter kernel
 import config
-import cdsapi
 import xarray as xr
 import argparse
 import iris
 import time
 import warnings
-import sys
-import os
 import numpy as np
 from utils import assignLatLonCoordSystem, fix_near_real_time_era5_func
+import sys
+import os
+sys.path.insert(0, os.path.join(os.getcwd(), 'icenet'))  # if using jupyter kernel
 """
 Script to download monthly-averaged ERA5 reanalysis variables from the Climate
 Data Store (CDS) and regrid them from latitude/longitude to the same EASE grid
@@ -47,7 +43,7 @@ README.
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-i", "--input", type=str, nargs='+', help="input file")
-parser.add_argument("-v", "--var", type=str, help="variable from the input file" )
+parser.add_argument("-v", "--var", type=str, help="variable from the input file")
 args = parser.parse_args()
 variable = args.var
 
@@ -158,7 +154,7 @@ land_mask = np.load(os.path.join(config.mask_data_folder, config.land_mask_filen
 ################################################################################
 
 
-def retrieve_CDS_data(var_cdi_name, latlon_path, plevel=None):
+"""def retrieve_CDS_data(var_cdi_name, latlon_path, plevel=None):
 
     print("\nDownloading data for {}...\n".format(var_cdi_name))
     tic = time.time()
@@ -191,6 +187,8 @@ def retrieve_CDS_data(var_cdi_name, latlon_path, plevel=None):
     toc = time.time()
     print("Done in {:.3f}s.".format(toc - tic))
 
+"""
+
 
 def regrid_var(variable, EASE_path, count=0):
 
@@ -198,9 +196,9 @@ def regrid_var(variable, EASE_path, count=0):
     print("\nRegridding and saving {} reanalysis data... ".format(variable), end='', flush=True)
     tic = time.time()
     if variable != 'rsds' and variable != 'rsus':
-    	latlon_path = args.input[count]
-    else :
-    	latlon_path = os.path.join(config.obs_data_folder, '{}_latlon.nc'.format(variable))
+        latlon_path = args.input[count]
+    else:
+        latlon_path = os.path.join(config.obs_data_folder, '{}_latlon.nc'.format(variable))
 
     if os.path.exists(EASE_path) and overwrite:
         print("Removing existing file: {}". format(EASE_path))
@@ -242,6 +240,7 @@ def regrid_var(variable, EASE_path, count=0):
 # Download and regrid
 ################################################################################
 
+# cds = cdsapi.Client()
 
 if variable != 'rsds_and_rsus':
 
@@ -252,15 +251,13 @@ if variable != 'rsds_and_rsus':
     else:
         plevel = var_dict['plevel']
 
-
     if do_regrid:
         # Regrid to EASE
         EASE_path = os.path.join(config.obs_data_folder, '{}_EASE.nc'.format(variable))
         regrid_var(variable, EASE_path, 0)
 
         # Delete lat-lon data
-        #os.remove(latlon_path)
-
+        # os.remove(latlon_path)
 
 elif variable == 'rsds_and_rsus':
 
@@ -292,7 +289,6 @@ elif variable == 'rsds_and_rsus':
         EASE_path = os.path.join(config.obs_data_folder, '{}_EASE.nc'.format(radiation_variable))
         regrid_var(radiation_variable, EASE_path, count)
 
-
         # Delete lat-lon data
-        #latlon_path = args.input[count]
-        #os.remove(latlon_path)
+        # latlon_path = args.input[count]
+        # os.remove(latlon_path)

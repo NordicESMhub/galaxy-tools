@@ -1,12 +1,12 @@
 """
-Code taken from https://github.com/tom-andersson/icenet-paper and slightly adjusted 
-to fit the galaxy interface. 
+Code taken from https://github.com/tom-andersson/icenet-paper and slightly adjusted
+to fit the galaxy interface.
 """
 import os
 import sys
 import argparse
-sys.path.insert(0, os.path.join(os.getcwd(), 'icenet'))  # if using jupyter kernel
 from utils import IceNetDataPreProcessor
+sys.path.insert(0, os.path.join(os.getcwd(), 'icenet'))  # if using jupyter kernel
 
 '''
 Use the IceNetDataPreProcessor class to normalise and save climate variables in
@@ -35,7 +35,7 @@ preproc_obs_data = True
 
 # If True, normalisation parameters must have been computed for each variable
 #   by running this with `preproc_obs_data` equal to True
-preproc_transfer_data = False # changed to false
+preproc_transfer_data = False  # changed to false
 
 # False: Normalise data to have mean=0 and standard deviation=1 or min=-1 and max=+1.
 # True: Normalise data to have min=-1 and max=+1.
@@ -44,7 +44,7 @@ minmax = False
 # If 'anom' is True, compute and process anomaly from the climatology over
 #   the training years. If 'abs' is True, process the absolute data.
 preproc_vars = {
-    'siconca': {'anom': False, 'abs': True, 'linear_trend': False}, #changed linear trend to false
+    'siconca': {'anom': False, 'abs': True, 'linear_trend': False},  # changed linear trend to false
     'tas': {'anom': True, 'abs': False},
     'ta500': {'anom': True, 'abs': False},
     'tos': {'anom': True, 'abs': False},
