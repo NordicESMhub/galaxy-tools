@@ -1,17 +1,16 @@
 """
-Code taken from https://github.com/tom-andersson/icenet-paper and slightly adjusted 
-to fit the galaxy interface. 
+Code taken from https://github.com/tom-andersson/icenet-paper and slightly adjusted
+to fit the galaxy interface.
 """
 
 import os
 import pandas as pd
-
 '''
 Defines globals used throughout the codebase.
 '''
 
 ###############################################################################
-### Folder structure naming system
+# Folder structure naming system
 ###############################################################################
 
 data_folder = 'data'
@@ -39,7 +38,7 @@ land_mask_filename = 'land_mask.npy'
 region_mask_filename = 'region_mask.npy'
 
 ###############################################################################
-### Polar hole/missing months
+# Polar hole/missing months
 ###############################################################################
 
 # Pre-defined polar hole radii (in number of 25km x 25km grid cells)
@@ -70,7 +69,7 @@ missing_dates = [pd.Timestamp('1986-4-1'), pd.Timestamp('1986-5-1'),
                  pd.Timestamp('1986-6-1'), pd.Timestamp('1987-12-1')]
 
 ###############################################################################
-### Weights and biases config (https://docs.wandb.ai/guides/track/advanced/environment-variables)
+# Weights and biases config (https://docs.wandb.ai/guides/track/advanced/environment-variables)
 ###############################################################################
 
 # Get API key from https://wandb.ai/authorize
@@ -83,7 +82,7 @@ WANDB_CONFIG_DIR = '/path/to/wandb/config/dir'
 WANDB_CACHE_DIR = '/path/to/wandb/cache/dir'
 
 ###############################################################################
-### ECMWF details
+# ECMWF details
 ###############################################################################
 
 ECMWF_API_KEY = 'YOUR-KEY-HERE'

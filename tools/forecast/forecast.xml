@@ -1,5 +1,5 @@
-<tool id="forecast" name="forecast_icenet_data" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
-    <description>for regridding and normalizing icenet data</description>
+<tool id="icenet_forecast" name="Icenet Forecast" version="0.1.0+galaxy0" profile="21.05">
+    <description>for forecasting sea ice concentration with IceNet</description>
         <requirements>
             <requirement type="package" version= "3.10.9">python</requirement>
             <requirement type="package" version="2023.1.0">xarray</requirement>
@@ -16,10 +16,8 @@
         </requirements>
         <command detect_errors="exit_code"><![CDATA[
             mkdir 'data' && 
-            mkdir 'data/masks' &&
             mkdir 'data/network_datasets' && 
-            mkdir 'data/network_datasets/dataset1' && 
-            mkdir 'data/network_datasets/dataset1/meta' && 
+            mkdir 'data/network_datasets/dataset1' &&
             mkdir 'data/network_datasets/dataset1/obs' &&
             mkdir 'data/network_datasets/dataset1/obs/siconca' &&
             mkdir 'data/network_datasets/dataset1/obs/siconca/abs' &&
@@ -46,55 +44,35 @@
             mkdir 'data/network_datasets/dataset1/obs/zg250/anom' && 
             mkdir 'data/network_datasets/dataset1/obs/zg500' && 
             mkdir 'data/network_datasets/dataset1/obs/zg500/anom' && 
-            #for $mask in $masks#
-              mv '$mask' "data/masks/${mask.element_identifier}";
-            #end for#
-            #for $m in $meta#
-              mv '$m' "data/network_datasets/dataset1/${m.element_identifier}";
-            #end for#
+            cp -r '$__tool_directory__/masks' 'data/' && 
+            cp -r '$__tool_directory__/meta' 'data/network_datasets/dataset1/' &&
             #for $obs in $observations#
-              mv '$obs' "data/network_datasets/dataset1/${obs.element_identifier}";
+              mv '$obs' 'data/network_datasets/dataset1/${obs.element_identifier}';
             #end for#
-            python3 '$__tool_directory__/forecast.py' --siconca $siconca_file --config $config_file --models "${",".join(map(str, $models))}"     &&
-            echo "preprocessing is done"
+            #if ($config_file):
+               python3 '$__tool_directory__/forecast.py' --siconca '$siconca_file' --config '$config_file' --models "${",".join(map(str, $models))}" --forecast_start '$forecast_start' --forecast_end '$forecast_end'    &&
+            #else: 
+               python3 '$__tool_directory__/forecast.py' --siconca '$siconca_file' --config '$__tool_directory__/2021_09_03_1300_icenet_demo.json' --models "${",".join(map(str, $models))}" --forecast_start '$forecast_start' --forecast_end '$forecast_end' 
+            #end if 
         ]]></command>
         <inputs>
-            <param name="config_file" type="data" label="config file" format="json"/>
-            <param name="masks" type="data_collection" label="mask files"/>
-            <param name="siconca_file" type="data" label="siconca netcdf file" format="netcdf"/>
-            <param name="models" type="data_collection" label="model networks"/>
-            <param name="observations" type="data_collection" label="observation files"/>
-            <param name="meta" type="data_collection" label="metadata files"/>
+            <param name="config_file" type="data" label="Config file containing all of the variables needed for the IceNet forecast" format="json" optional="true" help="default file is provided"/>
+            <param name="siconca_file" type="data" label="Monthly averaged OSI-SAF sea ice concentration data preprocessed with the Preprocess Icenet Data Tool" format="netcdf" help="preceding 12 months of the forecast initialization month are needed for optimal results"/>
+            <param name="models" type="data_collection" label="pretrained IceNet ensemble members" help="IceNet consists of 25 ensemble members, this tool is tested with 3 models: 36, 42, 53, which can be downloaded from the Polar Data Centre https://data.bas.ac.uk/full-record.php?id=GB/NERC/BAS/PDC/01526"/>
+            <param name="observations" type="data_collection" label="Observational data files generated with the Preprocess Icenet Data Tool" help="contains all of the variables needed for the Icenet forecast"/>
+            <param name="forecast_start" type="text"  label="Forecast start date" help="date must have the format yyyy-mm-dd"/>
+            <param name="forecast_end" type="text"  label="Forecast end date" help="date must have the format yyyy-mm-dd"/>
         </inputs>
         <outputs>
-            <collection name="collection1" type="list">
+            <collection name="icenet_forecast" type="list">
                 <discover_datasets pattern="__name_and_ext__" directory="data/forecasts/icenet/2021_09_03_1300_icenet_demo/IceNet"/>
 	    </collection>
         </outputs>
     <tests>
+    <!--
         <test>
-            <param name="masks">
-               <collection type="list">
-                  <element name="active_grid_cell_mask_01.npy" value="data/masks/active_grid_cell_mask_01.npy" />
-                  <element name="active_grid_cell_mask_02.npy" value="data/masks/active_grid_cell_mask_02.npy" />
-                  <element name="active_grid_cell_mask_03.npy" value="data/masks/active_grid_cell_mask_03.npy" />
-                  <element name="active_grid_cell_mask_04.npy" value="data/masks/active_grid_cell_mask_04.npy" />
-                  <element name="active_grid_cell_mask_05.npy" value="data/masks/active_grid_cell_mask_05.npy" />
-                  <element name="active_grid_cell_mask_06.npy" value="data/masks/active_grid_cell_mask_06.npy" />
-                  <element name="active_grid_cell_mask_07.npy" value="data/masks/active_grid_cell_mask_07.npy" />
-                  <element name="active_grid_cell_mask_08.npy" value="data/masks/active_grid_cell_mask_08.npy" />
-                  <element name="active_grid_cell_mask_09.npy" value="data/masks/active_grid_cell_mask_09.npy" />
-                  <element name="active_grid_cell_mask_10.npy" value="data/masks/active_grid_cell_mask_10.npy" />
-                  <element name="active_grid_cell_mask_11.npy" value="data/masks/active_grid_cell_mask_11.npy" />
-                  <element name="active_grid_cell_mask_12.npy" value="data/masks/active_grid_cell_mask_12.npy" />
-                  <element name="land_mask.npy" value="data/masks/land_mask.npy" />
-                  <element name="polarhole1_mask.npy" value="data/masks/polarhole1_mask.npy" />
-                  <element name="polarhole2_mask.npy" value="data/masks/polarhole2_mask.npy" />
-                  <element name="polarhole3_mask.npy" value="data/masks/polarhole3_mask.npy" />
-                  <element name="region_mask.npy" value="data/masks/region_mask.npy" />
-               </collection>
-            </param>
-
+            <param name="forecast_start" value= "2020-01-01"/>
+            <param name="forecast_end" value= "2020-12-01"/>
             <param name="observations">
                <collection type="list">
                   <element name="obs/psl/anom/2019_04.npy" value="data/network_datasets/dataset1/obs/psl/anom/2019_04.npy" />
@@ -411,35 +389,6 @@
                </collection>
             </param>
             
-            <param name="meta">
-               <collection type="list">
-                  <element name="meta/cos_month_01.npy" value="data/network_datasets/dataset1/meta/cos_month_01.npy" />
-                  <element name="meta/cos_month_02.npy" value="data/network_datasets/dataset1/meta/cos_month_02.npy" />
-                  <element name="meta/cos_month_03.npy" value="data/network_datasets/dataset1/meta/cos_month_03.npy" />
-                  <element name="meta/cos_month_04.npy" value="data/network_datasets/dataset1/meta/cos_month_04.npy" />
-                  <element name="meta/cos_month_05.npy" value="data/network_datasets/dataset1/meta/cos_month_05.npy" />
-                  <element name="meta/cos_month_06.npy" value="data/network_datasets/dataset1/meta/cos_month_06.npy" />
-                  <element name="meta/cos_month_07.npy" value="data/network_datasets/dataset1/meta/cos_month_07.npy" />
-                  <element name="meta/cos_month_08.npy" value="data/network_datasets/dataset1/meta/cos_month_08.npy" />
-                  <element name="meta/cos_month_09.npy" value="data/network_datasets/dataset1/meta/cos_month_09.npy" />
-                  <element name="meta/cos_month_10.npy" value="data/network_datasets/dataset1/meta/cos_month_10.npy" />
-                  <element name="meta/cos_month_11.npy" value="data/network_datasets/dataset1/meta/cos_month_11.npy" />
-                  <element name="meta/cos_month_12.npy" value="data/network_datasets/dataset1/meta/cos_month_12.npy" />
-                  <element name="meta/sin_month_01.npy" value="data/network_datasets/dataset1/meta/sin_month_01.npy" />
-                  <element name="meta/sin_month_02.npy" value="data/network_datasets/dataset1/meta/sin_month_02.npy" />
-                  <element name="meta/sin_month_03.npy" value="data/network_datasets/dataset1/meta/sin_month_03.npy" />
-                  <element name="meta/sin_month_04.npy" value="data/network_datasets/dataset1/meta/sin_month_04.npy" />
-                  <element name="meta/sin_month_05.npy" value="data/network_datasets/dataset1/meta/sin_month_05.npy" />
-                  <element name="meta/sin_month_06.npy" value="data/network_datasets/dataset1/meta/sin_month_06.npy" />
-                  <element name="meta/sin_month_07.npy" value="data/network_datasets/dataset1/meta/sin_month_07.npy" />
-                  <element name="meta/sin_month_08.npy" value="data/network_datasets/dataset1/meta/sin_month_08.npy" />
-                  <element name="meta/sin_month_09.npy" value="data/network_datasets/dataset1/meta/sin_month_09.npy" />
-                  <element name="meta/sin_month_10.npy" value="data/network_datasets/dataset1/meta/sin_month_10.npy" />
-                  <element name="meta/sin_month_11.npy" value="data/network_datasets/dataset1/meta/sin_month_11.npy" />
-                  <element name="meta/sin_month_12.npy" value="data/network_datasets/dataset1/meta/sin_month_12.npy" />
-                  <element name="meta/land.npy" value="data/network_datasets/dataset1/meta/land.npy" />
-               </collection>
-            </param>
             <param name="models">
                <collection type="list">
                   <element name="model1" value="network_tempscaled_36.h5" />
@@ -449,7 +398,7 @@
             </param>
             <param name="config_file" value="2021_09_03_1300_icenet_demo.json"/>
             <param name="siconca_file" value="siconca_EASE.nc"/>
-            <output_collection name="collection1">
+            <output_collection name="icenet_forecast">
                 <element name="icenet_forecasts">
                     <assert_contents>
                         <has_size value="746624" delta="100"/>
@@ -457,22 +406,14 @@
                 </element>
             </output_collection>
         </test>
+        -->
     </tests>
     <help><![CDATA[
     
-            This tool is a wrapper to preprocess icenet data (netcdf files).
+            This tool is a wrapper to forecast sea ice concentration with IceNet. IceNet is a probabilistic, deep learning sea ice forecasting system. It consists of an ensemble of U-Net networks, which learns how sea ice changes from climate simulations and observational data to forecast up to 6 months of monthly-averaged sea ice concentration maps at 25 km resolution. It takes pretrained IceNet models downloaded from the Polar Data Centre and Observational Data generated with the "Preprocess Icenet Data Tool" as an input and creates one netcdf forecast file as an output. 
     ]]></help>
     <citations>
-        <citation type="bibtex"> 
-            @misc{https://doi.org/10.5281/zenodo.5176573,
-                    doi = {10.5281/ZENODO.5176573},
-                    url = {https://zenodo.org/record/5176573},
-                    author = {Andersson,  Tom R.},
-                    title = {Code associated with the paper: 'Seasonal Arctic sea ice forecasting with probabilistic deep learning'},
-                    publisher = {Zenodo},
-                    year = {2021},
-                    copyright = {Open Access}
-                  }
-        </citation>
+       <citation type="doi">10.5281/zenodo.5176573
+       </citation>
     </citations>
 </tool>

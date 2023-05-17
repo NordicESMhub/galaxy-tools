@@ -1,11 +1,10 @@
 """
-Code taken from https://github.com/tom-andersson/icenet-paper and slightly adjusted 
-to fit the galaxy interface. 
+Code taken from https://github.com/tom-andersson/icenet-paper and slightly adjusted
+to fit the galaxy interface.
 """
 import os
 import sys
 import argparse
-sys.path.insert(0, os.path.join(os.getcwd(), 'icenet'))
 from utils import IceNetDataLoader
 import pandas as pd
 import xarray as xr
@@ -13,14 +12,16 @@ import numpy as np
 from tqdm import tqdm
 import re
 from tensorflow.keras.models import load_model
-import time
 import config
+sys.path.insert(0, os.path.join(os.getcwd(), 'icenet'))
 
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--config", type=str, help="config file")
-parser.add_argument("--models", type=str, help="network models" )
-parser.add_argument("--siconca", type=str, help="siconca netcdf file" )
+parser.add_argument("--models", type=str, help="network models")
+parser.add_argument("--siconca", type=str, help="siconca netcdf file")
+parser.add_argument("--forecast_start", type=str, help="forecast start date")
+parser.add_argument("--forecast_end", type=str, help="forecast end date")
 args = parser.parse_args()
 
 # Load dataloader
@@ -28,18 +29,18 @@ dataloader_ID = '2021_09_03_1300_icenet_demo'
 dataloader_config_fpath = args.config
 
 # Data loader
-#print("\nSetting up the data loader with config file: {}\n\n".format(dataloader_ID))
+# print("\nSetting up the data loader with config file: {}\n\n".format(dataloader_ID))
 dataloader = IceNetDataLoader(dataloader_config_fpath)
 print('\n\nDone.\n')
 
-#load networks
+# load networks
 network_regex = re.compile('^network_tempscaled_([0-9]*).h5$')
 
 network_fpaths = args.models.split(",")
 
-#ensemble_seeds = [36, 42, 53]
+# ensemble_seeds = [36, 42, 53]
 ensemble_seeds = [network_regex.match(f)[1] for f in
-                 ["network_tempscaled_36.h5", "network_tempscaled_42.h5", "network_tempscaled_53.h5"] if network_regex.match(f)]
+                  ["network_tempscaled_36.h5", "network_tempscaled_42.h5", "network_tempscaled_53.h5"] if network_regex.match(f)]
 print(ensemble_seeds)
 networks = []
 for network_fpath in network_fpaths:
@@ -49,8 +50,8 @@ for network_fpath in network_fpaths:
 
 model = 'IceNet'
 
-forecast_start = pd.Timestamp('2020-01-01')
-forecast_end = pd.Timestamp('2020-12-01')
+forecast_start = pd.Timestamp(args.forecast_start)
+forecast_end = pd.Timestamp(args.forecast_end)
 
 n_forecast_months = dataloader.config['n_forecast_months']
 
@@ -60,17 +61,17 @@ forecast_folder = os.path.join(config.forecast_data_folder, 'icenet', dataloader
 if not os.path.exists(forecast_folder):
     os.makedirs(forecast_folder)
 
-#load ground truth 
+# load ground truth
 print('Loading ground truth SIC... ', end='', flush=True)
 true_sic_fpath = args.siconca
 true_sic_da = xr.open_dataarray(true_sic_fpath)
 print('Done.')
 
 
-#set up forecast folder
+# set up forecast folder
 
 # define list of lead times
-leadtimes = np.arange(1, n_forecast_months+1)
+leadtimes = np.arange(1, n_forecast_months + 1)
 
 # add ensemble to the list of models
 ensemble_seeds_and_mean = ensemble_seeds.copy()
@@ -83,7 +84,7 @@ all_target_dates = pd.date_range(
 )
 
 all_start_dates = pd.date_range(
-    start=forecast_start - pd.DateOffset(months=n_forecast_months-1),
+    start=forecast_start - pd.DateOffset(months=n_forecast_months - 1),
     end=forecast_end,
     freq='MS'
 )
@@ -119,7 +120,7 @@ for start_date in tqdm(all_start_dates):
     # Target forecast dates for the forecast beginning at this `start_date`
     target_dates = pd.date_range(
         start=start_date,
-        end=start_date + pd.DateOffset(months=n_forecast_months-1),
+        end=start_date + pd.DateOffset(months=n_forecast_months - 1),
         freq='MS'
     )
 
@@ -133,12 +134,12 @@ for start_date in tqdm(all_start_dates):
 
     for i, (target_date, leadtime) in enumerate(zip(target_dates, leadtimes)):
         if target_date in all_target_dates:
-                model_forecast.\
-                    loc[:, target_date, :, :, leadtime] = pred[..., i]
-                
+            model_forecast.\
+                loc[:, target_date, :, :, leadtime] = pred[..., i]
+
 print('Saving forecast NetCDF for {}... '.format(model), end='', flush=True)
 
 forecast_fpath = os.path.join(forecast_folder, f'{model.lower()}_forecasts.nc'.format(model.lower()))
-model_forecast.to_netcdf(forecast_fpath) #export file as Net
+model_forecast.to_netcdf(forecast_fpath)  # export file as Net
 
 print('Done.')
