@@ -1,4 +1,4 @@
-<tool id="visualize_icenet_forecast" name="visualize Icenet Forecast" version="0.1.0+galaxy0" profile="21.05">
+<tool id="visualize_icenet_forecast" name="Visualize Icenet Forecast" version="0.1.0+galaxy0" profile="21.05">
     <description>for visualizing and analyzing the Icenet forecast</description>
         <requirements>
             <requirement type="package" version= "3.10.9">python</requirement>
@@ -16,17 +16,16 @@
             <requirement type="package" version="0.14.3" >panel</requirement>
         </requirements>
         <command detect_errors="exit_code"><![CDATA[
-            mkdir 'results' && 
-            mkdir 'results/forecast_results' &&
+            mkdir -p "results/forecast_results" &&
             mkdir 'data' && 
-            cp -r '$__tool_directory__/masks' 'data/' &&
+            cp -r '$__tool_directory__/masks' "data/" &&
             python3 '$__tool_directory__/visualize.py' --siconca '$siconca_file' --forecast '$forecast_file' --forecast_start '$forecast_start' --forecast_end '$forecast_end' --old_results '$__tool_directory__/2021_07_01_183913_forecast_results.csv'
         ]]></command>
         <inputs>
-            <param name="siconca_file" type="data"  label="Monthly averaged OSI-SAF sea ice concentration data preprocessed with the Preprocess Icenet Data Tool" format="netcdf" help="all forecast months are needed to visualize the binary accuracy of the Icenet Model"/>
-            <param name="forecast_file" type="data" label="Sea ice concentration forecast generated with the Icenet Forecast Tool" format="netcdf" help="the forecast months in this file must match the forecast start and end date and the forecast months in the sea ice concentration file"/>
             <param name="forecast_start" type="text" label="Forecast start date" help="date must have the format yyyy-mm-dd"/>
             <param name="forecast_end" type="text"  label="Forecast end date" help="date must have the format yyyy-mm-dd"/>
+            <param name="siconca_file" type="data"  label="Monthly averaged OSI-SAF sea ice concentration data preprocessed with the Preprocess Icenet Data Tool" format="netcdf" help="all forecast months are needed to visualize the binary accuracy of the Icenet Model"/>
+            <param name="forecast_file" type="data" label="Sea ice concentration forecast generated with the Icenet Forecast Tool" format="netcdf" help="the forecast months in this file must match the forecast start and end date and the forecast months in the sea ice concentration file"/>
         </inputs>
         <outputs>
             <data name="forecast_visualization" format="html" from_work_dir="forecast_visualization.html"/>
@@ -47,7 +46,6 @@
         -->
     </tests>
     <help><![CDATA[
-    
             This tool is a wrapper to plot an interactive figure which shows the observed sea ice concentration ground truth data and the predicted sea ice concentration for each month from "Forecast start date" till "Forecast end date" with a lead time up to 4 months.
     ]]></help>
     <citations>

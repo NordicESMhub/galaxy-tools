@@ -44,7 +44,7 @@ minmax = False
 # If 'anom' is True, compute and process anomaly from the climatology over
 #   the training years. If 'abs' is True, process the absolute data.
 preproc_vars = {
-    'siconca': {'anom': False, 'abs': True, 'linear_trend': False},  # changed linear trend to false
+    'siconca': {'anom': False, 'abs': True, 'linear_trend': True},
     'tas': {'anom': True, 'abs': False},
     'ta500': {'anom': True, 'abs': False},
     'tos': {'anom': True, 'abs': False},

@@ -183,7 +183,7 @@ month_name = [f'{calendar.month_name[m]} {year}' for m in list(range(1, 13))]
 
 month_slider = pn.widgets.DiscreteSlider(name="Month", options=month_name[months[0]:months[len(months) - 1] + 1], value=month_name[months[0]], width=200)
 
-lead_slider = pn.widgets.IntSlider(name="Lead time (months)", start=1, end=4, step=1, value=4, direction='rtl', width=200)
+lead_slider = pn.widgets.IntSlider(name="Lead time (months)", start=1, end=4, step=1, value=1, direction='rtl', width=200)
 
 # set boundaries
 mask = np.load(os.path.join(config.mask_data_folder,
@@ -226,6 +226,7 @@ true_ice_edge_rgb = 'black'
 def plot_forecast(month, leadtime):
     print(month)
     print(months)
+    print(leadtime)
     print(forecast_month_names)
     tdate = pd.Timestamp(year, month_name.index(month) + 1, 1)
 
