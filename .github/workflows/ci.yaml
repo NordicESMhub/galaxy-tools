@@ -153,15 +153,10 @@ jobs:
     - name: Clean dotnet folder for space
       run: rm -Rf /usr/share/dotnet
     - name: Create Copernicus Climate Change Config file
-    - name: Get number of CPU cores
       uses: jwsi/secret-parser@v1
-      uses: SimenB/github-actions-cpu-cores@v1
       with:
-      id: cpu-cores
         filename: tools/essential_climate_variables/cdsapirc.cfg
-    - name: Clean dotnet folder for space
         secret-name: GALAXY_COPERNICUS_CDSAPIRC_KEY
-      run: rm -Rf /usr/share/dotnet
         secret-value: ${{ secrets.GALAXY_COPERNICUS_CDSAPIRC_KEY }}
     - name: Create Copernicus Atmosphere Monitoring Config file
       uses: jwsi/secret-parser@v1
