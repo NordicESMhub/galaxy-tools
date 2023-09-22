@@ -1,9 +1,10 @@
 """
 Code taken from https://github.com/tom-andersson/icenet-paper and adjusted to fit the galaxy interface.
 """
-import pandas as pd
-import json
 import argparse
+import json
+
+import pandas as pd
 """
 Creates API request text files for downloading Icenet Data with the Copernicus Climate Data Store according to the config file.
 """
@@ -131,7 +132,7 @@ def retrieve_CDS_data(var_cdi_name, plevel=None):
     else:
         dataset = 'reanalysis-era5-single-levels-monthly-means'
 
-    return "c.retrieve({}, \n {}, \n '{}_latlon.nc')".format(dataset, cds_dict, variable[0])
+    return "c.retrieve({}, \n {}, \n 'download.nc')".format(dataset, cds_dict)
 
 
 filename = '{}_request.txt'.format(variable[0])
