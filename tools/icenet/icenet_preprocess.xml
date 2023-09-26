@@ -57,43 +57,43 @@
         <outputs>
             <data name="siconca_EASE_file" format="netcdf" from_work_dir="data/obs/siconca_EASE.nc"/>
             <collection name="siconca_dataset" type="list">
-    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/siconca/abs"/>
+    	        <discover_datasets pattern="__name__" format="binary" directory="data/network_datasets/dataset1/obs/siconca/abs"/>
 	    </collection>
 	    <collection name="linear_trend_dataset" type="list">
-    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/siconca/linear_trend"/>
+    	        <discover_datasets pattern="__name__" format="binary" directory="data/network_datasets/dataset1/obs/siconca/linear_trend"/>
 	    </collection>
 	    <collection name="tas_dataset" type="list">
-    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/tas/anom"/>
+    	        <discover_datasets pattern="__name__" format="binary" directory="data/network_datasets/dataset1/obs/tas/anom"/>
 	    </collection>
 	    <collection name="ta500_dataset" type="list">
-    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/ta500/anom"/>
+    	        <discover_datasets pattern="__name__" format="binary" directory="data/network_datasets/dataset1/obs/ta500/anom"/>
 	    </collection>
 	    <collection name="tos_dataset" type="list">
-    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/tos/anom"/>
+    	        <discover_datasets pattern="__name__" format="binary" directory="data/network_datasets/dataset1/obs/tos/anom"/>
 	    </collection>
 	    <collection name="rsds_dataset" type="list">
-    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/rsds/anom"/>
+    	        <discover_datasets pattern="__name__" format="binary" directory="data/network_datasets/dataset1/obs/rsds/anom"/>
 	    </collection>
 	    <collection name="rsus_dataset" type="list">
-    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/rsus/anom"/>
+    	        <discover_datasets pattern="__name__" format="binary" directory="data/network_datasets/dataset1/obs/rsus/anom"/>
 	    </collection>
 	    <collection name="psl_dataset" type="list">
-    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/psl/anom"/>
+    	        <discover_datasets pattern="__name__" format="binary" directory="data/network_datasets/dataset1/obs/psl/anom"/>
 	    </collection>
 	    <collection name="zg500_dataset" type="list">
-    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/zg500/anom"/>
+    	        <discover_datasets pattern="__name__" format="binary" directory="data/network_datasets/dataset1/obs/zg500/anom"/>
 	    </collection>
 	    <collection name="zg250_dataset" type="list">
-    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/zg250/anom"/>
+    	        <discover_datasets pattern="__name__" format="binary" directory="data/network_datasets/dataset1/obs/zg250/anom"/>
 	    </collection>
 	    <collection name="ua10_dataset" type="list">
-    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/ua10/abs" />
+    	        <discover_datasets pattern="__name__" format="binary" directory="data/network_datasets/dataset1/obs/ua10/abs" />
 	    </collection>
 	    <collection name="uas_dataset" type="list">
-    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/uas/abs" />
+    	        <discover_datasets pattern="__name__" format="binary" directory="data/network_datasets/dataset1/obs/uas/abs" />
 	    </collection>
 	    <collection name="vas_dataset" type="list">
-    	        <discover_datasets pattern="__name_and_ext__" directory="data/network_datasets/dataset1/obs/vas/abs"/>
+    	        <discover_datasets pattern="__name__" format="binary" directory="data/network_datasets/dataset1/obs/vas/abs"/>
 	    </collection>
     </outputs>
     <tests>
