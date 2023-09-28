@@ -91,7 +91,7 @@
             <param name="vas_dataset" type="data_collection" label="Monthly averaged ERA5 10m v component of wind data" help= "generated with the Preprocess Icenet Data Tool"/>  
         </inputs>
         <outputs>
-            <data name="icenet_forecast" format="netcdf" from_work_dir="data/forecasts/icenet/2021_09_03_1300_icenet_config/IceNet/icenet_forecasts.nc"/>
+            <data name="icenet_forecast" format="netcdf" from_work_dir="data/forecasts/icenet/2021_09_03_1300_icenet_demo/IceNet/icenet_forecasts.nc"/>
         </outputs>
     <tests>
     <!--
