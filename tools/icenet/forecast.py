@@ -2,17 +2,18 @@
 Code taken from https://github.com/tom-andersson/icenet-paper and slightly adjusted
 to fit the galaxy interface.
 """
-import os
-import sys
 import argparse
-from utils import IceNetDataLoader
+import os
+import re
+import sys
+
+import config
+import numpy as np
 import pandas as pd
 import xarray as xr
-import numpy as np
-from tqdm import tqdm
-import re
 from tensorflow.keras.models import load_model
-import config
+from tqdm import tqdm
+from utils import IceNetDataLoader
 sys.path.insert(0, os.path.join(os.getcwd(), 'icenet'))
 
 
@@ -39,9 +40,9 @@ network_regex = re.compile('^network_tempscaled_([0-9]*).h5$')
 network_fpaths = args.models.split(",")
 
 # ensemble_seeds = [36, 42, 53]
-ensemble_seeds = [network_regex.match(f)[1] for f in
-                  ["network_tempscaled_36.h5", "network_tempscaled_42.h5", "network_tempscaled_53.h5"] if network_regex.match(f)]
+ensemble_seeds = network_fpaths
 print(ensemble_seeds)
+
 networks = []
 for network_fpath in network_fpaths:
     print('Loading model from {}... '.format(network_fpath), end='', flush=True)
