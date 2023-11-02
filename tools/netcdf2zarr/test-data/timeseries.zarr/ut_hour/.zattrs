@@ -1,0 +1,10 @@
+{
+    "_ARRAY_DIMENSIONS": [
+        "time",
+        "altitude",
+        "latitude",
+        "longitude"
+    ],
+    "comments": "UT hours",
+    "units": "h"
+}

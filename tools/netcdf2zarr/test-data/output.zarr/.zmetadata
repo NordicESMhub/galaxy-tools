@@ -1,0 +1,163 @@
+{
+    "metadata": {
+        ".zattrs": {
+            "ANALYSIS": "Europe, 20210616+[0H_0H]",
+            "history": "Model ENSEMBLE ANALYSIS",
+            "institution": "Data produced by Meteo France",
+            "project": "MACC-RAQ (http://macc-raq.gmes-atmosphere.eu)",
+            "source": "Data from ENSEMBLE model",
+            "summary": "ENSEMBLE model hourly ANALYSIS of NO2 concentration at the Surface from 20210616+[0H_0H] on Europe",
+            "title": "NO2 Air Pollutant ANALYSIS at the Surface"
+        },
+        ".zgroup": {
+            "zarr_format": 2
+        },
+        "latitude/.zarray": {
+            "chunks": [
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f4",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                1
+            ],
+            "zarr_format": 2
+        },
+        "latitude/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "latitude"
+            ],
+            "long_name": "latitude",
+            "units": "degrees_north"
+        },
+        "level/.zarray": {
+            "chunks": [
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f4",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                1
+            ],
+            "zarr_format": 2
+        },
+        "level/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "level"
+            ],
+            "long_name": "level",
+            "units": "m"
+        },
+        "longitude/.zarray": {
+            "chunks": [
+                2
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f4",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                2
+            ],
+            "zarr_format": 2
+        },
+        "longitude/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "longitude"
+            ],
+            "long_name": "longitude",
+            "units": "degrees_east"
+        },
+        "no2_conc/.zarray": {
+            "chunks": [
+                1,
+                1,
+                1,
+                2
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f4",
+            "fill_value": -999.0,
+            "filters": null,
+            "order": "C",
+            "shape": [
+                1,
+                1,
+                1,
+                2
+            ],
+            "zarr_format": 2
+        },
+        "no2_conc/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "level",
+                "latitude",
+                "longitude"
+            ],
+            "species": "Nitrogen Dioxide",
+            "standard_name": "mass_concentration_of_nitrogen_dioxide_in_air",
+            "units": "\u00b5g/m3",
+            "value": "hourly values"
+        },
+        "time/.zarray": {
+            "chunks": [
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f4",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                1
+            ],
+            "zarr_format": 2
+        },
+        "time/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time"
+            ],
+            "long_name": "ANALYSIS time from 20210616",
+            "units": "hours"
+        }
+    },
+    "zarr_consolidated_format": 1
+}

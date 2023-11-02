@@ -1,0 +1,10 @@
+{
+    "_ARRAY_DIMENSIONS": [
+        "time",
+        "altitude",
+        "latitude",
+        "longitude"
+    ],
+    "comments": "Clear Sky Beam irradiation on mobile surface following the sun at normal incidence BNI (Wh/m2)",
+    "units": "Wh/m2"
+}

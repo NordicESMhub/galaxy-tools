@@ -1,0 +1,10 @@
+{
+    "_ARRAY_DIMENSIONS": [
+        "time",
+        "altitude",
+        "latitude",
+        "longitude"
+    ],
+    "comments": "Irradiation on horizontal plane at the top of the atmosphere (Wh/m2)",
+    "units": "Wh/m2"
+}
