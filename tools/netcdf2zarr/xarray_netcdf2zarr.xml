@@ -22,6 +22,12 @@
     </outputs>
     <tests>
         <test>
+            <param name="netcdf_file" value="timeseries.nc"/>
+            <output name="zarr_file" value="timeseries.zarr">
+        </test>
+        <test>
+            <param name="netcdf_file" value="output.nc"/>
+            <output name="zarr_file" value="output.zarr">
         </test>
     </tests>
     <help><![CDATA[
