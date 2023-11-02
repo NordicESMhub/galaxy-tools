@@ -1,5 +1,11 @@
 <tool id="netcdf2zarr" name="NetCDF to Zarr" version="0.1.0" profile="23.1">
     <description>Rewrite a netCDF to Zarr</description>
+    <edam_topics>
+      <edam_topic>topic_3318</edam_topic>
+    </edam_topics>
+    <edam_operations>
+      <edam_operation>operation_0335</edam_operation>
+    </edam_operations>
     <requirements>
         <requirement type="package" version="3">python</requirement>
         <requirement type="package" version="2.16.1">zarr</requirement>
@@ -39,11 +45,19 @@ This tool is a wrapper to convert a netCDF data to Zarr using xarray.
 
     ]]></help>
     <citations>
+
+            <citation type="bibtex">
+                @article{hoyer2017xarray,
+                    title     = {xarray: {N-D} labeled arrays and datasets in {Python}},
+                    author    = {Hoyer, S. and J. Hamman},
+                    journal   = {Journal of Open Research Software},
+                    volume    = {5},
+                    number    = {1},
+                    year      = {2017},
+                    publisher = {Ubiquity Press},
+                    doi       = {10.5334/jors.148},
+                    url       = {http://doi.org/10.5334/jors.148}
+                }
+            </citation>
     </citations>
-    <edam_topics>
-      <edam_topic>topic_3318</edam_topic>
-    </edam_topics>
-    <edam_operations>
-      <edam_operation>operation_0335</edam_operation>
-    </edam_operations>
 </tool>

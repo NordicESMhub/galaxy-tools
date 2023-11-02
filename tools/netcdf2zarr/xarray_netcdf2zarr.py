@@ -1,12 +1,9 @@
 import argparse
-import ast
-import warnings
 
 import cftime  # noqa: F401
 
 import xarray as xr  # noqa: I202,E402
 
-import zarr # noqa: I202,E402
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-i", "--input", type=str, help="input file in netCDF format")
