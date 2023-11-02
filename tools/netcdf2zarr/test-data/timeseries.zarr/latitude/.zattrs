@@ -1,0 +1,7 @@
+{
+    "_ARRAY_DIMENSIONS": [
+        "latitude"
+    ],
+    "comments": "Site latitude (positive means North)",
+    "units": "degrees_north"
+}

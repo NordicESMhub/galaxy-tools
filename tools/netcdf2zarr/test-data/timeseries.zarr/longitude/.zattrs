@@ -1,0 +1,7 @@
+{
+    "_ARRAY_DIMENSIONS": [
+        "longitude"
+    ],
+    "comments": "Site longitude (positive means East)",
+    "units": "degrees_east"
+}

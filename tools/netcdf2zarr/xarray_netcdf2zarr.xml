@@ -1,0 +1,43 @@
+<tool id="netcdf2zarr" name="NetCDF to Zarr" version="0.1.0" profile="23.1">
+    <description>Rewrite a netCDF to Zarr</description>
+    <requirements>
+        <requirement type="package" version="3">python</requirement>
+        <requirement type="package" version="2.16.1">zarr</requirement>
+        <requirement type="package" version="2023.10.1">xarray</requirement>
+        <requirement type="package" version="1.6.5">netcdf4</requirement>
+        <requirement type="package" version="2023.10.1">dask</requirement>
+        <requirement type="package" version="1.6.3">cftime</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+
+        python3 '$__tool_directory__/xarray_netcdf2zarr.py' 
+                 --input ${netcdf_file}
+                 --output ${zarr_file.files_path}
+    ]]></command>
+    <inputs>
+       <param type="data" name="netcdf_file" label="Input netcdf file" format="netcdf"  help="Select the input netCDF file."/>
+    </inputs>
+    <outputs>
+        <data format="zarr" name="zarr_file" label="${tool.name} on ${on_string}: ZARR" />
+    </outputs>
+    <tests>
+        <test>
+        </test>
+    </tests>
+    <help><![CDATA[
+
+** NetCDF to zarr converter with Xarray**
+=======================================================================================================
+
+This tool is a wrapper to convert a netCDF data to Zarr using xarray.
+
+    ]]></help>
+    <citations>
+    </citations>
+    <edam_topics>
+      <edam_topic>topic_3318</edam_topic>
+    </edam_topics>
+    <edam_operations>
+      <edam_operation>operation_0335</edam_operation>
+    </edam_operations>
+</tool>

@@ -1,0 +1,10 @@
+{
+    "_ARRAY_DIMENSIONS": [
+        "time",
+        "altitude",
+        "latitude",
+        "longitude"
+    ],
+    "comments": "Clear Sky Diffuse irradiation on horizontal plane at ground level DHI (Wh/m2)",
+    "units": "Wh/m2"
+}

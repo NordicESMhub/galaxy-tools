@@ -1,0 +1,9 @@
+{
+    "ANALYSIS": "Europe, 20210616+[0H_0H]",
+    "history": "Model ENSEMBLE ANALYSIS",
+    "institution": "Data produced by Meteo France",
+    "project": "MACC-RAQ (http://macc-raq.gmes-atmosphere.eu)",
+    "source": "Data from ENSEMBLE model",
+    "summary": "ENSEMBLE model hourly ANALYSIS of NO2 concentration at the Surface from 20210616+[0H_0H] on Europe",
+    "title": "NO2 Air Pollutant ANALYSIS at the Surface"
+}
