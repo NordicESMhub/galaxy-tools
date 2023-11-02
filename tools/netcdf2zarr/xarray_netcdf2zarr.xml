@@ -29,11 +29,11 @@
     <tests>
         <test>
             <param name="netcdf_file" value="timeseries.nc" ftype="netcdf" />
-            <output name="zarr_file" value="timeseries.zarr" ftype="zarr" />
+            <output name="zarr_file" value="timeseries.dat" ftype="zarr" />
         </test>
         <test>
             <param name="netcdf_file" value="output.nc" ftype="netcdf" />
-            <output name="zarr_file" value="output.zarr" ftype="zarr" />
+            <output name="zarr_file" value="output.dat" ftype="zarr" />
         </test>
     </tests>
     <help><![CDATA[
