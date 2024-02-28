@@ -4,6 +4,7 @@
 # usage: psymap_simple.py [-h] [--proj PROJ]
 #                              [--cmap CMAP]
 #                              [--output OUTPUT]
+#                              [-l]
 #                              [-v]
 #                              input varname
 #
@@ -14,6 +15,7 @@
 #
 # optional arguments:
 #  -h, --help       show this help message and exit
+#  -l, --logscale   log scale the data
 #  --proj PROJ      Specify the projection on which we draw
 #  --cmap CMAP      Specify which colormap to use for plotting
 #  --output OUTPUT  output filename to store resulting image (png format)
@@ -38,14 +40,18 @@ from psyplot import rcParams   # noqa: I202,E402
 
 
 class PsyPlot ():
-    def __init__(self, input, proj, varname, cmap, output, verbose=False,
-                 time=[], nrow=1, ncol=1, format="%B %e, %Y",
-                 title=""):
+    def __init__(self, input, varname, output, logscale, cmap="jet",
+                 proj="PlateCarree", verbose=False, time=[], nrow=1, ncol=1,
+                 format="%B %e, %Y", title=""):
         self.input = input
         self.proj = proj
         self.varname = varname
         self.cmap = cmap
         self.time = time
+        if logscale is None:
+            self.bounds = None
+        else:
+            self.bounds = ['log', 2]
         if format is None:
             self.format = ""
         else:
@@ -89,25 +95,11 @@ class PsyPlot ():
         else:
             title = '%(long_name)s'
 
-        if self.cmap is None and self.proj is None:
-            psy.plot.mapplot(self.input, name=self.varname,
-                             title=title,
-                             clabel='{desc}')
-        elif self.proj is None or not self.proj:
-            psy.plot.mapplot(self.input, name=self.varname,
-                             title=title,
-                             cmap=self.cmap, clabel='{desc}')
-        elif self.cmap is None or not self.cmap:
-            psy.plot.mapplot(self.input, name=self.varname,
-                             projection=self.proj,
-                             title=title,
-                             clabel='{desc}')
-        else:
-            psy.plot.mapplot(self.input, name=self.varname,
-                             cmap=self.cmap,
-                             projection=self.proj,
-                             title=title,
-                             clabel='{desc}')
+        psy.plot.mapplot(self.input, name=self.varname,
+                         cmap=self.cmap, bounds = self.bounds,
+                         projection=self.proj,
+                         title=title,
+                         clabel='{desc}')
 
         pyplot.savefig(self.output)
 
@@ -122,47 +114,27 @@ class PsyPlot ():
         mpl.rcParams['figure.figsize'] = [20, 8]
         mpl.rcParams.update({'font.size': 8})
         rcParams.update({'plotter.maps.grid_labelsize': 8.0})
-        if self.cmap is None and self.proj is None:
-            m = psy.plot.mapplot(self.input, name=self.varname,
-                                 title=title,
-                                 ax=(self.nrow, self.ncol),
-                                 time=self.time, sort=['time'],
-                                 clabel='{desc}')
-            m.share(keys='bounds')
-        elif self.proj is None or not self.proj:
-            m = psy.plot.mapplot(self.input, name=self.varname,
-                                 title=title,
-                                 ax=(self.nrow, self.ncol),
-                                 time=self.time, sort=['time'],
-                                 cmap=self.cmap, clabel='{desc}')
-            m.share(keys='bounds')
-        elif self.cmap is None or not self.cmap:
-            m = psy.plot.mapplot(self.input, name=self.varname,
-                                 projection=self.proj,
-                                 ax=(self.nrow, self.ncol),
-                                 time=self.time, sort=['time'],
-                                 title=title,
-                                 clabel='{desc}')
-            m.share(keys='bounds')
-        else:
-            m = psy.plot.mapplot(self.input, name=self.varname,
-                                 cmap=self.cmap,
-                                 projection=self.proj,
-                                 ax=(self.nrow, self.ncol),
-                                 time=self.time, sort=['time'],
-                                 title=title,
-                                 clabel='{desc}')
-            m.share(keys='bounds')
+
+        # Plot using options
+        m = psy.plot.mapplot(self.input, name=self.varname,
+                             cmap=self.cmap, bounds=self.bounds,
+                             projection=self.proj,
+                             ax=(self.nrow, self.ncol),
+                             time=self.time, sort=['time'],
+                             title=title,
+                             clabel='{desc}')
+        m.share(keys='bounds')
 
         pyplot.savefig(self.output)
 
 
-def psymap_plot(input, proj, varname, cmap, output, verbose, time,
+def psymap_plot(input, proj, varname, logscale, cmap, output, verbose, time,
                 nrow, ncol, format, title):
     """Generate plot from input filename"""
 
-    p = PsyPlot(input, proj, varname, cmap, output, verbose, time,
+    p = PsyPlot(input, varname, output, logscale, cmap, proj, verbose, time,
                 nrow, ncol, format, title)
+
     if len(time) == 0:
         p.plot()
     else:
@@ -184,6 +156,11 @@ if __name__ == '__main__':
     parser.add_argument(
         'varname',
         help='Specify which variable to plot (case sensitive)'
+    )
+    parser.add_argument(
+        "-l", "--logscale",
+        help='Plot the log scaled data',
+        action="store_true"
     )
     parser.add_argument(
         '--cmap',
@@ -223,6 +200,6 @@ if __name__ == '__main__':
         time = []
     else:
         time = list(map(int, args.time.split(",")))
-    psymap_plot(args.input, args.proj, args.varname, args.cmap,
+    psymap_plot(args.input, args.proj, args.varname, args.logscale, args.cmap,
                 args.output, args.verbose, time,
                 args.nrow, args.ncol, args.format, args.title)

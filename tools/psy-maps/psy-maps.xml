@@ -1,4 +1,4 @@
-<tool id="psy_maps" name="map plot" version="1.2.1">
+<tool id="psy_maps" name="map plot" version="1.3.0">
     <description>gridded (lat/lon) netCDF data</description>
     <edam_topics>
       <edam_topic>topic_3855</edam_topic>
@@ -18,6 +18,7 @@
        HOME=`pwd`  &&
        python3 '$__tool_directory__/psymap_simple.py'
             '$ifilename' '$variable'
+            --logscale '$adv.logscale'
             --proj '$adv.projection'
             --cmap '$adv.colormap'
             --output image.png
@@ -51,6 +52,10 @@
                     <param name="title" type="text" value="" label="plot title" />
                 </when>
             </conditional>
+            <param name="logscale" type="select" label="log scale the data">
+                <option value="yes">yes</option>
+                <option value="no" selected="true">no</option>
+            </param>
             <param name="projection" type="select">
                 <option value="" selected="true">PlateCarree</option>
                 <option value="robin">Robinson</option>
@@ -190,21 +195,22 @@ netCDF file (input file). By default, the projection is ``PlateCarree`` and colo
 ::
 
   usage: psymap_simple.py [-h] [--proj PROJ] [--cmap CMAP] [--output OUTPUT] [--time TIME]
-                          [--format FORMAT] [--title TITLE] [--ncol NCOL] [--nrow NROW] [-v] input varname
+                          [--format FORMAT] [--title TITLE] [--ncol NCOL] [--nrow NROW] [-l] [-v] input varname
 
 
 Positional arguments:
 ~~~~~~~~~~~~~~~~~~~~~
 
 - **input**:            input filename with geographical coordinates (netCDF format)
-- **varname**:          Specify which variable to plot (case sensitive)
+- **varname**:          specify which variable to plot (case sensitive)
 
 Optional arguments:
 ~~~~~~~~~~~~~~~~~~~~~
 
   -h, --help       show this help message and exit
-  --proj PROJ      Specify the projection on which we draw
-  --cmap CMAP      Specify which colormap to use for plotting
+  -l, --logscale   log scale the data
+  --proj PROJ      specify the projection on which we draw
+  --cmap CMAP      specify which colormap to use for plotting
   --output OUTPUT  output filename to store resulting image (png format)
   -v, --verbose    switch on verbose mode
   --time TIME      list of times to plot for multiple plots
