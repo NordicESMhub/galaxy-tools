@@ -1,0 +1,10 @@
+categories:
+- Climate Analysis
+description: netCDF to Zarr conversion
+homepage_url: https://docs.xarray.dev/en/latest/generated/xarray.Dataset.to_zarr.html
+long_description: |
+  This tool is a wrapper for converting netCDF data into Zarr.
+name: netcdf2zarr
+owner: climate
+remote_repository_url: https://github.com/NordicESMhub/galaxy-tools/tree/master/tools/netcdf2zarr
+type: unrestricted
