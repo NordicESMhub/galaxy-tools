@@ -40,39 +40,29 @@ from psyplot import rcParams   # noqa: I202,E402
 
 
 class PsyPlot ():
-    def __init__(self, input, varname, output, logscale, cmap="jet",
-                 proj="PlateCarree", verbose=False, time=[], nrow=1, ncol=1,
-                 format="%B %e, %Y", title=""):
+    def __init__(self, input, varname, output=None, logscale=False, cmap=None,
+                 proj=None, verbose=False, time=None, nrow=None, ncol=None,
+                 format=None, title=None):
         self.input = input
-        self.proj = proj
         self.varname = varname
-        self.cmap = cmap
-        self.time = time
-        if logscale is None:
-            self.bounds = None
-        else:
+        self.proj = proj if proj is not None else "cyl"
+        self.cmap = cmap if cmap is not None else "jet"
+        self.time = time if time is not None else []
+        self.title = title if title is not None else ""
+        self.ncol = int(ncol) if ncol is not None else int(1)
+        self.nrow = int(nrow) if nrow is not None else int(1)
+        if logscale:
             self.bounds = ['log', 2]
+        else:
+            self.bounds = None
         if format is None:
             self.format = ""
         else:
-            self.format = format.replace('X', '%')
-        if title is None:
-            self.title = ""
-        else:
-            self.title = title
-        if ncol is None:
-            self.ncol = 1
-        else:
-            self.ncol = int(ncol)
-        if nrow is None:
-            self.nrow = 1
-        else:
-            self.nrow = int(nrow)
+            self.format = "%B %e, %Y"
         if output is None:
             self.output = Path(input).stem + '.png'
         else:
             self.output = output
-        self.verbose = verbose
         if verbose:
             print("input: ", self.input)
             print("proj: ", self.proj)
@@ -95,11 +85,19 @@ class PsyPlot ():
         else:
             title = '%(long_name)s'
 
-        psy.plot.mapplot(self.input, name=self.varname,
-                         cmap=self.cmap, bounds = self.bounds,
-                         projection=self.proj,
-                         title=title,
-                         clabel='{desc}')
+        if self.bounds is None:
+            psy.plot.mapplot(self.input, name=self.varname,
+                             cmap=self.cmap,
+                             projection=self.proj,
+                             title=title,
+                             clabel='{desc}')
+        else:
+            psy.plot.mapplot(self.input, name=self.varname,
+                             cmap=self.cmap, bounds = self.bounds,
+                             projection=self.proj,
+                             title=title,
+                             clabel='{desc}')
+
 
         pyplot.savefig(self.output)
 
@@ -116,13 +114,23 @@ class PsyPlot ():
         rcParams.update({'plotter.maps.grid_labelsize': 8.0})
 
         # Plot using options
-        m = psy.plot.mapplot(self.input, name=self.varname,
-                             cmap=self.cmap, bounds=self.bounds,
-                             projection=self.proj,
-                             ax=(self.nrow, self.ncol),
-                             time=self.time, sort=['time'],
-                             title=title,
-                             clabel='{desc}')
+        if self.bounds is None:
+            m = psy.plot.mapplot(self.input, name=self.varname,
+                                 cmap=self.cmap,
+                                 projection=self.proj,
+                                 ax=(self.nrow, self.ncol),
+                                 time=self.time, sort=['time'],
+                                 title=title,
+                                 clabel='{desc}')
+        else:
+            m = psy.plot.mapplot(self.input, name=self.varname,
+                                 cmap=self.cmap, bounds=self.bounds,
+                                 projection=self.proj,
+                                 ax=(self.nrow, self.ncol),
+                                 time=self.time, sort=['time'],
+                                 title=title,
+                                 clabel='{desc}')
+
         m.share(keys='bounds')
 
         pyplot.savefig(self.output)
@@ -200,6 +208,7 @@ if __name__ == '__main__':
         time = []
     else:
         time = list(map(int, args.time.split(",")))
+
     psymap_plot(args.input, args.proj, args.varname, args.logscale, args.cmap,
                 args.output, args.verbose, time,
                 args.nrow, args.ncol, args.format, args.title)
