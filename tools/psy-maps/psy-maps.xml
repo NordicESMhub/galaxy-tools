@@ -53,8 +53,8 @@
                 </when>
             </conditional>
             <param name="logscale" type="select" label="log scale the data">
-                <option value="yes">yes</option>
-                <option value="no" selected="true">no</option>
+                <option value="True">yes</option>
+                <option value="False" selected="true">no</option>
             </param>
             <param name="projection" type="select">
                 <option value="" selected="true">PlateCarree</option>
