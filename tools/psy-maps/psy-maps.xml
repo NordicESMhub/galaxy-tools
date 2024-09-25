@@ -15,7 +15,6 @@
         <requirement type="package" version="1.6.5">netcdf4</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-       HOME=`pwd`  &&
        python3 '$__tool_directory__/psymap_simple.py'
             '$ifilename' '$variable'
             --logscale '$adv.logscale'
