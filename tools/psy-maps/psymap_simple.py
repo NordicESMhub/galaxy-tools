@@ -32,12 +32,12 @@ import warnings
 from pathlib import Path
 import math
 import xarray
-
 import matplotlib as mpl
+
 mpl.use('Agg')
 from matplotlib import pyplot  # noqa: I202,E402
 
-import psyplot
+
 import psyplot.project as psy  # noqa: I202,E402
 from psyplot import rcParams   # noqa: I202,E402
 
@@ -47,7 +47,6 @@ class PsyPlot ():
                  proj=None, verbose=False, time=None, nrow=None, ncol=None,
                  format=None, title=None):
         self.input = input
-                
         self.varname = varname
         if proj is None or proj == "":
             self.proj = "cyl"
@@ -63,7 +62,7 @@ class PsyPlot ():
         minv = math.log2(ds.data.min())
         maxv = math.log2(ds.data.max())
         if title is not None:
-            self.title = title 
+            self.title = title
         else:
             self.title = ds.long_name
             if len(self.title) > 60:
@@ -97,7 +96,7 @@ class PsyPlot ():
             print("nrow: ", self.nrow)
             print("title: ", self.title)
             print("date format: ", self.format)
-            print("logscale: ",self.bounds)
+            print("logscale: ", self.bounds)
             print("output: ", self.output)
 
     def plot(self):
@@ -109,7 +108,7 @@ class PsyPlot ():
         elif self.title and not self.format:
             title = self.title
             clabel = self.title
-            
+
         # Plot with chosen options
         if self.bounds is None:
             psy.plot.mapplot(self.input, name=self.varname,
@@ -119,11 +118,10 @@ class PsyPlot ():
                              clabel=clabel)
         else:
             psy.plot.mapplot(self.input, name=self.varname,
-                             cmap=self.cmap, bounds = self.bounds,
+                             cmap=self.cmap, bounds=self.bounds,
                              projection=self.proj,
                              title=title,
                              clabel=clabel)
-
 
         pyplot.savefig(self.output)
 
@@ -135,7 +133,7 @@ class PsyPlot ():
             title = self.format
         else:
             title = self.title + "\n" + self.format
-             
+
         mpl.rcParams['figure.figsize'] = [20, 8]
         mpl.rcParams.update({'font.size': 8})
         rcParams.update({'plotter.maps.grid_labelsize': 8.0})
@@ -234,7 +232,7 @@ if __name__ == '__main__':
         time = []
     else:
         time = list(map(int, args.time.split(",")))
-        
+
     if args.logscale == 'no':
         logscale = False
     else:
