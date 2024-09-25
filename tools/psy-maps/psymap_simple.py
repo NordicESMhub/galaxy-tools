@@ -28,15 +28,15 @@
 #
 
 import argparse
-import warnings
 import math
+import warnings
 from pathlib import Path
 
 import matplotlib as mpl
+import psyplot.project as psy  # noqa: I202,E402
 import xarray
 
 mpl.use('Agg')
-import psyplot.project as psy  # noqa: I202,E402
 from matplotlib import pyplot  # noqa: I202,E402
 from psyplot import rcParams   # noqa: I202,E402
 
