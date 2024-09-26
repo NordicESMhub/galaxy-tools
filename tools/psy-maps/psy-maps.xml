@@ -187,7 +187,7 @@ This tool wraps the functionality of ``psyplot.plot.mapplot``.
 
         The wrappers aims at providing the same functionality as ``psyplot.plot.mapplot`` but it has some limitations.
         The input file must be in netCDF format and must contain 2D arrays with geographical coordinatates 
-		(latitudes, longitudes) given in degrees.
+	(latitudes, longitudes) given in degrees.
         The code may fail when the data is significantly different from what has been tested.
 
 **What it does**
