@@ -186,15 +186,17 @@ This tool wraps the functionality of ``psyplot.plot.mapplot``.
 .. class:: infomark
 
         The wrappers aims at providing the same functionality as ``psyplot.plot.mapplot`` but it has some limitations.
-        The input file must be in netCDF format and must contain 2D arrays with geographical coordinatates
-        (latitudes, longitudes) given in degrees.
-        TODO: Fill in help.
+        The input file must be in netCDF format and must contain 2D arrays with geographical coordinatates 
+		(latitudes, longitudes) given in degrees.
+        The code may fail when the data is significantly different from what has been tested.
 
 **What it does**
 ----------------
 
 This tools creates an image (png format) corresponding to the visualization on a geographical map of a variable extracted from a
-netCDF file (input file). By default, the projection is ``PlateCarree`` and colormap is ``jet``. These settings can be changed in *Advanced settings*.
+netCDF file (input file). 
+By default, the projection is ``PlateCarree`` and colormap is ``jet``. 
+These settings can be changed in *Advanced settings* alongside an option to log scale the plot.
 
 
 **Usage**
