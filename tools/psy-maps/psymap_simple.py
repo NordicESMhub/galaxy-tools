@@ -4,6 +4,7 @@
 # usage: psymap_simple.py [-h] [--proj PROJ]
 #                              [--cmap CMAP]
 #                              [--output OUTPUT]
+#                              [-l]
 #                              [-v]
 #                              input varname
 #
@@ -14,6 +15,7 @@
 #
 # optional arguments:
 #  -h, --help       show this help message and exit
+#  -l, --logscale   log scale the data
 #  --proj PROJ      Specify the projection on which we draw
 #  --cmap CMAP      Specify which colormap to use for plotting
 #  --output OUTPUT  output filename to store resulting image (png format)
@@ -26,47 +28,63 @@
 #
 
 import argparse
+import math
 import warnings
 from pathlib import Path
 
 import matplotlib as mpl
+import psyplot.project as psy  # noqa: I202,E402
+import xarray
+
 mpl.use('Agg')
 from matplotlib import pyplot  # noqa: I202,E402
-
-import psyplot.project as psy  # noqa: I202,E402
 from psyplot import rcParams   # noqa: I202,E402
 
 
 class PsyPlot ():
-    def __init__(self, input, proj, varname, cmap, output, verbose=False,
-                 time=[], nrow=1, ncol=1, format="%B %e, %Y",
-                 title=""):
+    def __init__(self, input, varname, output=None, logscale=False, cmap=None,
+                 proj=None, verbose=False, time=None, nrow=None, ncol=None,
+                 format=None, title=None):
         self.input = input
-        self.proj = proj
         self.varname = varname
-        self.cmap = cmap
-        self.time = time
+        if proj is None or proj == "":
+            self.proj = "cyl"
+        else:
+            self.proj = proj
+        self.cmap = cmap if cmap is not None else "jet"
+        self.time = time if time is not None else []
+        self.ncol = int(ncol) if ncol is not None else int(1)
+        self.nrow = int(nrow) if nrow is not None else int(1)
+
+        # Open dataset
+        ds = xarray.open_dataset(input)[varname]
+        minv = math.log2(ds.data.min())
+        maxv = math.log2(ds.data.max())
+        if title is not None:
+            self.title = title
+        else:
+            self.title = ds.long_name
+            if len(self.title) > 60:
+                self.title = ds.standard_name
+        del ds
+
+        if logscale:
+            # Check that data range is sufficient for log scaling
+            if maxv < (minv * (10.0 ** 2.0)):
+                print("Not possible to log scale, switching to linear scale")
+                self.bounds = None
+            else:
+                self.bounds = ['log', 2]
+        else:
+            self.bounds = None
         if format is None:
             self.format = ""
         else:
-            self.format = format.replace('X', '%')
-        if title is None:
-            self.title = ""
-        else:
-            self.title = title
-        if ncol is None:
-            self.ncol = 1
-        else:
-            self.ncol = int(ncol)
-        if nrow is None:
-            self.nrow = 1
-        else:
-            self.nrow = int(nrow)
+            self.format = "%B %e, %Y"
         if output is None:
             self.output = Path(input).stem + '.png'
         else:
             self.output = output
-        self.verbose = verbose
         if verbose:
             print("input: ", self.input)
             print("proj: ", self.proj)
@@ -77,37 +95,32 @@ class PsyPlot ():
             print("nrow: ", self.nrow)
             print("title: ", self.title)
             print("date format: ", self.format)
+            print("logscale: ", self.bounds)
             print("output: ", self.output)
 
     def plot(self):
+        clabel = '{desc}'
         if self.title and self.format:
             title = self.title + "\n" + self.format
         elif not self.title and self.format:
             title = self.format
         elif self.title and not self.format:
             title = self.title
-        else:
-            title = '%(long_name)s'
+            clabel = self.title
 
-        if self.cmap is None and self.proj is None:
-            psy.plot.mapplot(self.input, name=self.varname,
-                             title=title,
-                             clabel='{desc}')
-        elif self.proj is None or not self.proj:
-            psy.plot.mapplot(self.input, name=self.varname,
-                             title=title,
-                             cmap=self.cmap, clabel='{desc}')
-        elif self.cmap is None or not self.cmap:
-            psy.plot.mapplot(self.input, name=self.varname,
-                             projection=self.proj,
-                             title=title,
-                             clabel='{desc}')
-        else:
+        # Plot with chosen options
+        if self.bounds is None:
             psy.plot.mapplot(self.input, name=self.varname,
                              cmap=self.cmap,
                              projection=self.proj,
                              title=title,
-                             clabel='{desc}')
+                             clabel=clabel)
+        else:
+            psy.plot.mapplot(self.input, name=self.varname,
+                             cmap=self.cmap, bounds=self.bounds,
+                             projection=self.proj,
+                             title=title,
+                             clabel=clabel)
 
         pyplot.savefig(self.output)
 
@@ -119,32 +132,13 @@ class PsyPlot ():
             title = self.format
         else:
             title = self.title + "\n" + self.format
+
         mpl.rcParams['figure.figsize'] = [20, 8]
         mpl.rcParams.update({'font.size': 8})
         rcParams.update({'plotter.maps.grid_labelsize': 8.0})
-        if self.cmap is None and self.proj is None:
-            m = psy.plot.mapplot(self.input, name=self.varname,
-                                 title=title,
-                                 ax=(self.nrow, self.ncol),
-                                 time=self.time, sort=['time'],
-                                 clabel='{desc}')
-            m.share(keys='bounds')
-        elif self.proj is None or not self.proj:
-            m = psy.plot.mapplot(self.input, name=self.varname,
-                                 title=title,
-                                 ax=(self.nrow, self.ncol),
-                                 time=self.time, sort=['time'],
-                                 cmap=self.cmap, clabel='{desc}')
-            m.share(keys='bounds')
-        elif self.cmap is None or not self.cmap:
-            m = psy.plot.mapplot(self.input, name=self.varname,
-                                 projection=self.proj,
-                                 ax=(self.nrow, self.ncol),
-                                 time=self.time, sort=['time'],
-                                 title=title,
-                                 clabel='{desc}')
-            m.share(keys='bounds')
-        else:
+
+        # Plot using options
+        if self.bounds is None:
             m = psy.plot.mapplot(self.input, name=self.varname,
                                  cmap=self.cmap,
                                  projection=self.proj,
@@ -152,17 +146,27 @@ class PsyPlot ():
                                  time=self.time, sort=['time'],
                                  title=title,
                                  clabel='{desc}')
-            m.share(keys='bounds')
+        else:
+            m = psy.plot.mapplot(self.input, name=self.varname,
+                                 cmap=self.cmap, bounds=self.bounds,
+                                 projection=self.proj,
+                                 ax=(self.nrow, self.ncol),
+                                 time=self.time, sort=['time'],
+                                 title=title,
+                                 clabel='{desc}')
+
+        m.share(keys='bounds')
 
         pyplot.savefig(self.output)
 
 
-def psymap_plot(input, proj, varname, cmap, output, verbose, time,
+def psymap_plot(input, proj, varname, logscale, cmap, output, verbose, time,
                 nrow, ncol, format, title):
     """Generate plot from input filename"""
 
-    p = PsyPlot(input, proj, varname, cmap, output, verbose, time,
+    p = PsyPlot(input, varname, output, logscale, cmap, proj, verbose, time,
                 nrow, ncol, format, title)
+
     if len(time) == 0:
         p.plot()
     else:
@@ -184,6 +188,10 @@ if __name__ == '__main__':
     parser.add_argument(
         'varname',
         help='Specify which variable to plot (case sensitive)'
+    )
+    parser.add_argument(
+        "--logscale",
+        help='Plot the log scaled data'
     )
     parser.add_argument(
         '--cmap',
@@ -223,6 +231,12 @@ if __name__ == '__main__':
         time = []
     else:
         time = list(map(int, args.time.split(",")))
-    psymap_plot(args.input, args.proj, args.varname, args.cmap,
+
+    if args.logscale == 'no':
+        logscale = False
+    else:
+        logscale = True
+
+    psymap_plot(args.input, args.proj, args.varname, logscale, args.cmap,
                 args.output, args.verbose, time,
                 args.nrow, args.ncol, args.format, args.title)

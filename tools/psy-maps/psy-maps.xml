@@ -1,4 +1,4 @@
-<tool id="psy_maps" name="map plot" version="1.2.1">
+<tool id="psy_maps" name="map plot" version="1.3.0" profile="23.0">
     <description>gridded (lat/lon) netCDF data</description>
     <edam_topics>
       <edam_topic>topic_3855</edam_topic>
@@ -9,15 +9,15 @@
     </edam_operations>
     <requirements>
         <requirement type="package" version="3">python</requirement>
-        <requirement type="package" version="1.2.1">psyplot</requirement>
-        <requirement type="package" version="1.2.0">psy-maps</requirement>
-        <requirement type="package" version="1.2.0">psy-reg</requirement>
-        <requirement type="package" version="1.4.2">netcdf4</requirement>
+        <requirement type="package" version="1.4.3">psyplot</requirement>
+        <requirement type="package" version="1.4.2">psy-maps</requirement>
+        <requirement type="package" version="1.4.0">psy-reg</requirement>
+        <requirement type="package" version="1.6.5">netcdf4</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
-       HOME=`pwd`  &&
        python3 '$__tool_directory__/psymap_simple.py'
             '$ifilename' '$variable'
+            --logscale '$adv.logscale'
             --proj '$adv.projection'
             --cmap '$adv.colormap'
             --output image.png
@@ -51,6 +51,10 @@
                     <param name="title" type="text" value="" label="plot title" />
                 </when>
             </conditional>
+            <param name="logscale" type="select" label="log scale the data">
+                <option value="yes">yes</option>
+                <option value="no" selected="true">no</option>
+            </param>
             <param name="projection" type="select">
                 <option value="" selected="true">PlateCarree</option>
                 <option value="robin">Robinson</option>
@@ -162,6 +166,14 @@
             <param name="colormap" value="RdBu_r" />
             <output name="ofilename" ftype="png" file="TS.f2000.T31T31.control.cam.h0.0014-12_ortho.png" compare="sim_size" delta="500"/>
         </test>
+        <test>
+            <param name="ifilename" value="ESACCI-OC-L3S-CHLOR_A-20220601-RESIZED-fv6.0.nc" />
+            <param name="variable" value="chlor_a" />
+            <param name="projection" value="" />
+            <param name="colormap" value="jet" />
+            <param name="logscale" value="yes" />
+            <output name="ofilename" ftype="png" file="ESACCI-OC-L3S-CHLOR_A-20220601-RESIZED-fv6.0.png" compare="sim_size" delta="1500"/>
+        </test>
     </tests>
     <help><![CDATA[
 
@@ -174,15 +186,17 @@ This tool wraps the functionality of ``psyplot.plot.mapplot``.
 .. class:: infomark
 
         The wrappers aims at providing the same functionality as ``psyplot.plot.mapplot`` but it has some limitations.
-        The input file must be in netCDF format and must contain 2D arrays with geographical coordinatates
-        (latitudes, longitudes) given in degrees.
-        TODO: Fill in help.
+        The input file must be in netCDF format and must contain 2D arrays with geographical coordinatates 
+	(latitudes, longitudes) given in degrees.
+        The code may fail when the data is significantly different from what has been tested.
 
 **What it does**
 ----------------
 
 This tools creates an image (png format) corresponding to the visualization on a geographical map of a variable extracted from a
-netCDF file (input file). By default, the projection is ``PlateCarree`` and colormap is ``jet``. These settings can be changed in *Advanced settings*.
+netCDF file (input file). 
+By default, the projection is ``PlateCarree`` and colormap is ``jet``. 
+These settings can be changed in *Advanced settings* alongside an option to log scale the plot.
 
 
 **Usage**
@@ -190,21 +204,22 @@ netCDF file (input file). By default, the projection is ``PlateCarree`` and colo
 ::
 
   usage: psymap_simple.py [-h] [--proj PROJ] [--cmap CMAP] [--output OUTPUT] [--time TIME]
-                          [--format FORMAT] [--title TITLE] [--ncol NCOL] [--nrow NROW] [-v] input varname
+                          [--format FORMAT] [--title TITLE] [--ncol NCOL] [--nrow NROW] [-l] [-v] input varname
 
 
 Positional arguments:
 ~~~~~~~~~~~~~~~~~~~~~
 
 - **input**:            input filename with geographical coordinates (netCDF format)
-- **varname**:          Specify which variable to plot (case sensitive)
+- **varname**:          specify which variable to plot (case sensitive)
 
 Optional arguments:
 ~~~~~~~~~~~~~~~~~~~~~
 
   -h, --help       show this help message and exit
-  --proj PROJ      Specify the projection on which we draw
-  --cmap CMAP      Specify which colormap to use for plotting
+  -l, --logscale   log scale the data
+  --proj PROJ      specify the projection on which we draw
+  --cmap CMAP      specify which colormap to use for plotting
   --output OUTPUT  output filename to store resulting image (png format)
   -v, --verbose    switch on verbose mode
   --time TIME      list of times to plot for multiple plots
@@ -218,5 +233,6 @@ psyplot and psy-maps can be found at https://psyplot.readthedocs.io/projects/psy
 
     ]]></help>
     <citations>
+        <citation type="doi">10.21105/joss.00363</citation>
     </citations>
 </tool>
