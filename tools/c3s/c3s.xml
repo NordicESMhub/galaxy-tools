@@ -28,7 +28,7 @@
     <configfiles>
         <configfile name="cds_key_file"><![CDATA[
 #set $c3s_cds_apikey = $__user__.extra_preferences.get('c3s_account|c3s_cds_apikey', "")
-         url: https://cds.climate.copernicus.eu/api/v2
+         url: https://cds.climate.copernicus.eu/api
          key: $c3s_cds_apikey
         ]]></configfile>
         <configfile name="req_from_paste"><![CDATA[
@@ -86,11 +86,32 @@ $is_file.api_req_text
 This tool is a wrapper to retrieve data from the Copernicus Climate Data Store.
 
 - It allows to retrieve data from the Copernicus climate Data Store.
-- Any user willing to use this tool needs to `create a new account <https://cds.climate.copernicus.eu/user/register?destination=%2F%23!%2Fhome>`_.
+- Any user willing to use this tool needs to `create a new account <https://cds.climate.copernicus.eu/>`_.
 - Set your CDS API Key via: User -> Preferences -> Manage Information"
-- Documentation on where to get the CDS API key can be found `here <https://cds.climate.copernicus.eu/api-how-to>`_.
-- Compose your request directly on C3S and copy/paste it in the input field "Request" or save it in a file.
-- Be aware that for being able to download dataset from C3S, users also need to agree to their term of use (Licence to use Copernicus Products) on the C3S website.
+- Documentation on where to get the CDS API key can be found `here <https://cds.climate.copernicus.eu/how-to-api>`_.
+- Compose your request directly on C3S and extract the relevant information, which should be put in the input field "Request" or saved in a file. The format should be, for example:
+
+import cdsapi
+
+c = cdsapi.Client()
+
+c.retrieve(
+    'reanalysis-era5-single-levels-monthly-means',
+    {
+        'data_format': 'netcdf',
+        'product_type': 'monthly_averaged_reanalysis',
+        'variable': '2m_temperature',
+        'year': '2020',
+        'month': '12',
+        'time': '00:00',
+        'area': [
+            60, 10, 59.5,
+            10.5,
+        ],
+    },
+    'download.nc')
+
+- Be aware that for being able to download dataset from C3S, users also need to agree to licensing terms for each dataset of interest on the C3S website.
 
 License:
 ~~~~~~~~
@@ -100,7 +121,7 @@ Neither the European Commission nor ECMWF is responsible for any use
 that may be made of the Copernicus information or data it contains.
     ]]></help>
     <citations>
-
+	<citation type="text">Copernicus Climate Change Service (2024)</citation>
     </citations>
     <edam_topics>
       <edam_topic>topic_3855</edam_topic>
