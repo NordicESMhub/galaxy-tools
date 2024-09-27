@@ -104,10 +104,7 @@ c.retrieve(
         'year': '2020',
         'month': '12',
         'time': '00:00',
-        'area': [
-            60, 10, 59.5,
-            10.5,
-        ],
+        'area': [60, 10, 59.5, 10.5 ],
     },
     'download.nc')
 
@@ -120,9 +117,6 @@ Generated using Copernicus Climate Change Service information [2021]
 Neither the European Commission nor ECMWF is responsible for any use 
 that may be made of the Copernicus information or data it contains.
     ]]></help>
-    <citations>
-	<citation type="text">Copernicus Climate Change Service (2024)</citation>
-    </citations>
     <edam_topics>
       <edam_topic>topic_3855</edam_topic>
       <edam_topic>topic_3318</edam_topic>
@@ -132,4 +126,8 @@ that may be made of the Copernicus information or data it contains.
       <edam_operation>operation_3357</edam_operation>
       <edam_operation>operation_0335</edam_operation>
     </edam_operations>
+    <citations>
+	<citation type="bibtext">
+	@misc{C3S2024,author={Copernicus Climate Change Service},year={2024}}</citation>
+    </citations>
 </tool>
