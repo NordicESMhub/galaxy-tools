@@ -5,7 +5,7 @@ c = cdsapi.Client()
 c.retrieve(
     'reanalysis-era5-single-levels-monthly-means',
     {
-        'format': 'netcdf',
+        'data_format': 'netcdf',
         'product_type': 'monthly_averaged_reanalysis',
         'variable': '2m_temperature',
         'year': '2020',

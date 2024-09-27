@@ -1,9 +1,9 @@
-<tool id="c3s" name="Copernicus Climate Data Store" version="0.2.0">
+<tool id="c3s" name="Copernicus Climate Data Store" version="0.3.0">
     <description>for retrieving climate data</description>
     <requirements>
-        <requirement type="package" version="3">python</requirement>
-        <requirement type="package" version="0.5.1">cdsapi</requirement>
-        <requirement type="package" version="1.9.9">cdo</requirement>
+        <requirement type="package" version="3.8">python</requirement>
+        <requirement type="package" version="0.7.3">cdsapi</requirement>
+        <requirement type="package" version="2.4.4">cdo</requirement>
         <requirement type="package" version="1.34">tar</requirement>
         <requirement type="package" version="6.0">unzip</requirement>
     </requirements>
@@ -61,7 +61,7 @@ $is_file.api_req_text
             <output name="request" ftype="txt">
               <assert_contents>
                   <has_text text="dataset to retrieve: reanalysis-era5-single-levels-monthly-means" />
-                  <has_text text="'format': 'netcdf'" />
+                  <has_text text="'data_format': 'netcdf'" />
                   <has_text text="'product_type': 'monthly_averaged_reanalysis'" />
                   <has_text text="'variable': '2m_temperature'" />
                   <has_text text="'year': '2020'" />
