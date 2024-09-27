@@ -1,5 +1,14 @@
-<tool id="c3s" name="Copernicus Climate Data Store" version="0.3.0">
+<tool id="c3s" name="Copernicus Climate Data Store" version="0.3.0" profile="23.0">
     <description>for retrieving climate data</description>
+    <edam_topics>
+        <edam_topic>topic_3855</edam_topic>
+        <edam_topic>topic_3318</edam_topic>
+      </edam_topics>
+      <edam_operations>
+        <edam_operation>operation_2422</edam_operation>
+        <edam_operation>operation_3357</edam_operation>
+        <edam_operation>operation_0335</edam_operation>
+      </edam_operations>
     <requirements>
         <requirement type="package" version="3.8">python</requirement>
         <requirement type="package" version="0.7.3">cdsapi</requirement>
@@ -11,18 +20,18 @@
        export HOME=`pwd`  &&
        #set $c3s_cds_apikey = $__user__.extra_preferences.get('c3s_account|c3s_cds_apikey', "")
        #if $c3s_cds_apikey == ""
-	    echo "Error. Set your credentials via: User -> Preferences -> Manage Information"  &&
+	    echo "Error. Set your credentials via: User -> Preferences -> Manage Information" &&
        #else
             cp '$cds_key_file' .cdsapirc &&
        #end if
        #if str($is_file.has_req).strip() == 'yes'
             python3 '$__tool_directory__/c3s_retrieve.py' 
-	             --request '$is_file.api_req_file' --output request.txt       &&
+	             --request '$is_file.api_req_file' --output request.txt  &&
        #else
             python3 '$__tool_directory__/c3s_retrieve.py' 
-	             --request $req_from_paste --output request.txt               &&
+	             --request $req_from_paste --output request.txt &&
        #end if
-       bash $__tool_directory__/c3s.sh                                    &&
+       bash $__tool_directory__/c3s.sh &&
        echo "C3S data retrieval is done"
     ]]></command>
     <configfiles>
@@ -52,8 +61,8 @@ $is_file.api_req_text
         </conditional>
     </inputs>
     <outputs>
-        <data name="request" format="txt" from_work_dir="request.txt"/>
-        <data name="ofilename" format="netcdf" from_work_dir="tmp.nc"/>
+        <data name="request" format="txt" from_work_dir="request.txt" label="${tool.name} on ${on_string}: request script"/>
+        <data name="ofilename" format="netcdf" from_work_dir="tmp.nc" label="${tool.name} on ${on_string}: NC"/>
     </outputs>
     <tests>
         <test>
@@ -78,27 +87,22 @@ $is_file.api_req_text
             </output>
         </test>
     </tests>
-    <edam_topics>
-      <edam_topic>topic_3855</edam_topic>
-      <edam_topic>topic_3318</edam_topic>
-    </edam_topics>
-    <edam_operations>
-      <edam_operation>operation_2422</edam_operation>
-      <edam_operation>operation_3357</edam_operation>
-      <edam_operation>operation_0335</edam_operation>
-    </edam_operations>
     <help><![CDATA[
 
 **Copernicus Climate Data Store (C3S)**
-=======================================================================================================
+=======================================
 
 This tool is a wrapper to retrieve data from the Copernicus Climate Data Store.
+
 - It allows to retrieve data from the Copernicus climate Data Store.
 - Any user willing to use this tool needs to `create a new account <https://cds.climate.copernicus.eu/>`_.
 - Set your CDS API Key via: User -> Preferences -> Manage Information"
 - Documentation on where to get the CDS API key can be found `here <https://cds.climate.copernicus.eu/how-to-api>`_.
 - Compose your request directly on C3S and extract the relevant information, which should be put in the input field "Request" or saved in a file. The format should be, for example::
+
+
     import cdsapi
+    
     c = cdsapi.Client()
     c.retrieve(
         'reanalysis-era5-single-levels-monthly-means',
@@ -112,7 +116,10 @@ This tool is a wrapper to retrieve data from the Copernicus Climate Data Store.
             'area': [60, 10, 59.5, 10.5],
         },
         'download.nc')
+
+
 - Be aware that for being able to download dataset from C3S, users also need to agree to licensing terms for each dataset of interest on the C3S website.
+
 License:
 ~~~~~~~~
 
