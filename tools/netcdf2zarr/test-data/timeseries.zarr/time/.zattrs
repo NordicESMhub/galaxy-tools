@@ -1,0 +1,9 @@
+{
+    "_ARRAY_DIMENSIONS": [
+        "time"
+    ],
+    "calendar": "proleptic_gregorian",
+    "comments": "The instant given for each value corresponds to the end of the summarization",
+    "mode": "tu",
+    "units": "seconds since 1970-01-01T00:00:00+00:00"
+}

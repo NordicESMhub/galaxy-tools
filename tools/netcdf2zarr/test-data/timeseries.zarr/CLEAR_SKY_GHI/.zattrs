@@ -1,0 +1,10 @@
+{
+    "_ARRAY_DIMENSIONS": [
+        "time",
+        "altitude",
+        "latitude",
+        "longitude"
+    ],
+    "comments": "Clear Sky Global irradiation on horizontal plane at ground level GHI (Wh/m2)",
+    "units": "Wh/m2"
+}

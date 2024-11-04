@@ -1,0 +1,837 @@
+{
+    "metadata": {
+        ".zattrs": {},
+        ".zgroup": {
+            "zarr_format": 2
+        },
+        "CLEAR_SKY_BHI/.zarray": {
+            "chunks": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "CLEAR_SKY_BHI/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "altitude",
+                "latitude",
+                "longitude"
+            ],
+            "comments": "Clear Sky Beam irradiation on horizontal plane at ground level BHI (Wh/m2)",
+            "units": "Wh/m2"
+        },
+        "CLEAR_SKY_BNI/.zarray": {
+            "chunks": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "CLEAR_SKY_BNI/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "altitude",
+                "latitude",
+                "longitude"
+            ],
+            "comments": "Clear Sky Beam irradiation on mobile surface following the sun at normal incidence BNI (Wh/m2)",
+            "units": "Wh/m2"
+        },
+        "CLEAR_SKY_DHI/.zarray": {
+            "chunks": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "CLEAR_SKY_DHI/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "altitude",
+                "latitude",
+                "longitude"
+            ],
+            "comments": "Clear Sky Diffuse irradiation on horizontal plane at ground level DHI (Wh/m2)",
+            "units": "Wh/m2"
+        },
+        "CLEAR_SKY_GHI/.zarray": {
+            "chunks": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "CLEAR_SKY_GHI/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "altitude",
+                "latitude",
+                "longitude"
+            ],
+            "comments": "Clear Sky Global irradiation on horizontal plane at ground level GHI (Wh/m2)",
+            "units": "Wh/m2"
+        },
+        "G0/.zarray": {
+            "chunks": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "G0/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "altitude",
+                "latitude",
+                "longitude"
+            ],
+            "comments": "Irradiation on horizontal plane at the top of the atmosphere (Wh/m2)",
+            "units": "Wh/m2"
+        },
+        "altitude/.zarray": {
+            "chunks": [
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                1
+            ],
+            "zarr_format": 2
+        },
+        "altitude/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "altitude"
+            ],
+            "comments": "Site altitude in meter",
+            "units": "m"
+        },
+        "latitude/.zarray": {
+            "chunks": [
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                1
+            ],
+            "zarr_format": 2
+        },
+        "latitude/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "latitude"
+            ],
+            "comments": "Site latitude (positive means North)",
+            "units": "degrees_north"
+        },
+        "longitude/.zarray": {
+            "chunks": [
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                1
+            ],
+            "zarr_format": 2
+        },
+        "longitude/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "longitude"
+            ],
+            "comments": "Site longitude (positive means East)",
+            "units": "degrees_east"
+        },
+        "rely/.zarray": {
+            "chunks": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "rely/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "altitude",
+                "latitude",
+                "longitude"
+            ]
+        },
+        "time/.zarray": {
+            "chunks": [
+                96
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<i4",
+            "fill_value": null,
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96
+            ],
+            "zarr_format": 2
+        },
+        "time/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time"
+            ],
+            "calendar": "proleptic_gregorian",
+            "comments": "The instant given for each value corresponds to the end of the summarization",
+            "mode": "tu",
+            "units": "seconds since 1970-01-01T00:00:00+00:00"
+        },
+        "tst_day/.zarray": {
+            "chunks": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "|i1",
+            "fill_value": null,
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "tst_day/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "altitude",
+                "latitude",
+                "longitude"
+            ],
+            "comments": "TST day",
+            "units": "day"
+        },
+        "tst_hour/.zarray": {
+            "chunks": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "|i1",
+            "fill_value": null,
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "tst_hour/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "altitude",
+                "latitude",
+                "longitude"
+            ],
+            "comments": "TST hours",
+            "units": "h"
+        },
+        "tst_jd/.zarray": {
+            "chunks": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "tst_jd/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "altitude",
+                "latitude",
+                "longitude"
+            ],
+            "comments": "Julian Date TST",
+            "units": "Day"
+        },
+        "tst_minute/.zarray": {
+            "chunks": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "|i1",
+            "fill_value": null,
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "tst_minute/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "altitude",
+                "latitude",
+                "longitude"
+            ],
+            "comments": "TST minutes",
+            "units": "minute"
+        },
+        "tst_month/.zarray": {
+            "chunks": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "|i1",
+            "fill_value": null,
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "tst_month/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "altitude",
+                "latitude",
+                "longitude"
+            ],
+            "comments": "TST month",
+            "units": "month"
+        },
+        "tst_second/.zarray": {
+            "chunks": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "tst_second/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "altitude",
+                "latitude",
+                "longitude"
+            ],
+            "comments": "TST seconds",
+            "units": "second"
+        },
+        "tst_year/.zarray": {
+            "chunks": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<i2",
+            "fill_value": null,
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "tst_year/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "altitude",
+                "latitude",
+                "longitude"
+            ],
+            "comments": "TST year",
+            "units": "year"
+        },
+        "ut_day/.zarray": {
+            "chunks": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "|i1",
+            "fill_value": null,
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "ut_day/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "altitude",
+                "latitude",
+                "longitude"
+            ],
+            "comments": "UT day",
+            "units": "day"
+        },
+        "ut_hour/.zarray": {
+            "chunks": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "|i1",
+            "fill_value": null,
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "ut_hour/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "altitude",
+                "latitude",
+                "longitude"
+            ],
+            "comments": "UT hours",
+            "units": "h"
+        },
+        "ut_jd/.zarray": {
+            "chunks": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "ut_jd/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "altitude",
+                "latitude",
+                "longitude"
+            ],
+            "comments": "Julian Date UT",
+            "units": "Day"
+        },
+        "ut_minute/.zarray": {
+            "chunks": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "|i1",
+            "fill_value": null,
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "ut_minute/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "altitude",
+                "latitude",
+                "longitude"
+            ],
+            "comments": "UT minutes",
+            "units": "minute"
+        },
+        "ut_month/.zarray": {
+            "chunks": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "|i1",
+            "fill_value": null,
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "ut_month/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "altitude",
+                "latitude",
+                "longitude"
+            ],
+            "comments": "UT month",
+            "units": "month"
+        },
+        "ut_second/.zarray": {
+            "chunks": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<f8",
+            "fill_value": "NaN",
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "ut_second/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "altitude",
+                "latitude",
+                "longitude"
+            ],
+            "comments": "UT seconds",
+            "units": "second"
+        },
+        "ut_year/.zarray": {
+            "chunks": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "compressor": {
+                "blocksize": 0,
+                "clevel": 5,
+                "cname": "lz4",
+                "id": "blosc",
+                "shuffle": 1
+            },
+            "dtype": "<i2",
+            "fill_value": null,
+            "filters": null,
+            "order": "C",
+            "shape": [
+                96,
+                1,
+                1,
+                1
+            ],
+            "zarr_format": 2
+        },
+        "ut_year/.zattrs": {
+            "_ARRAY_DIMENSIONS": [
+                "time",
+                "altitude",
+                "latitude",
+                "longitude"
+            ],
+            "comments": "UT year",
+            "units": "year"
+        }
+    },
+    "zarr_consolidated_format": 1
+}

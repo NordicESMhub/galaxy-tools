@@ -1,0 +1,12 @@
+{
+    "_ARRAY_DIMENSIONS": [
+        "time",
+        "level",
+        "latitude",
+        "longitude"
+    ],
+    "species": "Nitrogen Dioxide",
+    "standard_name": "mass_concentration_of_nitrogen_dioxide_in_air",
+    "units": "\u00b5g/m3",
+    "value": "hourly values"
+}
