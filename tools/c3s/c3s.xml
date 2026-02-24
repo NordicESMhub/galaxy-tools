@@ -81,7 +81,6 @@ This tool is a wrapper to retrieve data from the Copernicus Climate Data Store.
 - Documentation on where to get the CDS API key can be found `here <https://cds.climate.copernicus.eu/how-to-api>`_.
 - Compose your request directly on C3S and extract the relevant information, which should be put in the input field "Request" or saved in a file. The format should be, for example::
 
-
     import cdsapi
     
     c = cdsapi.Client()
