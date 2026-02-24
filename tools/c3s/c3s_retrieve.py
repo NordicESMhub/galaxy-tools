@@ -1,7 +1,6 @@
 import argparse
 import ast
 from os import environ, path
-import sys
 
 import cdsapi
 
@@ -60,8 +59,6 @@ try:
     )
     print("data retrieval successful")
 except Exception:
-    print(
-        "CDS retrieval failed, make sure you filled in your CDS API Key",
-        file=sys.stderr
+    raise RuntimeError(
+        "CDS retrieval failed, make sure you filled in your CDS API Key"
     )
-    sys.exit(1)
