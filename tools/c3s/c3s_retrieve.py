@@ -1,5 +1,5 @@
-import sys
 import argparse
+import sys
 import ast
 from os import environ, path
 
