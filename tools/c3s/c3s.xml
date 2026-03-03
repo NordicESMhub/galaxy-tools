@@ -1,4 +1,4 @@
-<tool id="c3s" name="Copernicus Climate Data Store" version="0.3.0" profile="23.0">
+<tool id="c3s" name="Copernicus Climate Data Store" version="0.3.1" profile="25.1">
     <description>for retrieving climate data</description>
     <edam_topics>
         <edam_topic>topic_3855</edam_topic>
@@ -15,15 +15,13 @@
         <requirement type="package" version="2.4.4">cdo</requirement>
         <requirement type="package" version="1.34">tar</requirement>
         <requirement type="package" version="6.0">unzip</requirement>
+		<credentials name="c3s_cds_apikey" version="1.0" label="CDS API key" description="Credential for accessing Copernicus climate Data Store API.">
+            <secret name="key" inject_as_env="CDS_API_KEY" optional="false" label="CDS API key" description="Your Copernicus climate Data Store API key."/>
+        </credentials>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
        export HOME=`pwd`  &&
-       #set $c3s_cds_apikey = $__user__.extra_preferences.get('c3s_account|c3s_cds_apikey', "")
-       #if $c3s_cds_apikey == ""
-	    echo "Error. Set your credentials via: User -> Preferences -> Manage Information" &&
-       #else
-            cp '$cds_key_file' .cdsapirc &&
-       #end if
+		
        #if str($is_file.has_req).strip() == 'yes'
             python3 '$__tool_directory__/c3s_retrieve.py' 
 	             --request '$is_file.api_req_file' --output request.txt  &&
@@ -35,11 +33,6 @@
        echo "C3S data retrieval is done"
     ]]></command>
     <configfiles>
-        <configfile name="cds_key_file"><![CDATA[
-#set $c3s_cds_apikey = $__user__.extra_preferences.get('c3s_account|c3s_cds_apikey', "")
-         url: https://cds.climate.copernicus.eu/api
-         key: $c3s_cds_apikey
-        ]]></configfile>
         <configfile name="req_from_paste"><![CDATA[
        #if str($is_file.has_req).strip() == 'no'
 $is_file.api_req_text
@@ -52,11 +45,11 @@ $is_file.api_req_text
                 <option value="yes" selected="true">yes</option>
                 <option value="no">no</option>
             </param>
-	   <when value="yes">
-	        <param name="api_req_file" type="data" label="API Request filename" format="txt"/>
+	       <when value="yes">
+	           <param name="api_req_file" type="data" label="API Request filename" format="txt"/>
            </when>
-            <when value="no">
-	        <param name="api_req_text" type="text" label="Paste API Request" area="true" />
+           <when value="no">
+	           <param name="api_req_text" type="text" label="Paste API Request" area="true" />
            </when>
         </conditional>
     </inputs>
@@ -65,26 +58,14 @@ $is_file.api_req_text
         <data name="ofilename" format="netcdf" from_work_dir="tmp.nc" label="${tool.name} on ${on_string}: NC"/>
     </outputs>
     <tests>
-        <test>
-            <param name="api_req_file" value="input.txt" />
-            <output name="request" ftype="txt">
-              <assert_contents>
-                  <has_text text="dataset to retrieve: reanalysis-era5-single-levels-monthly-means" />
-                  <has_text text="'data_format': 'netcdf'" />
-                  <has_text text="'product_type': 'monthly_averaged_reanalysis'" />
-                  <has_text text="'variable': '2m_temperature'" />
-                  <has_text text="'year': '2020'" />
-                  <has_text text="'month': '12'" />
-                  <has_text text="'time': '00:00'" />
-		  <has_text text="'area': [" />
-	          <has_text text="60," />
-		  <has_text text="10," />
-		  <has_text text="59.5," />            
-		  <has_text text="10.5," />
-		  <has_text text="]" />
-		  <has_text text="output filename: download.nc" />
-              </assert_contents>
-            </output>
+        <test expect_failure="true">
+			<conditional name="is_file">
+                <param name="has_req" value="yes"/>
+                <param name="api_req_file" value="input.txt" />
+            </conditional>
+            <assert_stderr>
+                <has_text text="CDS retrieval failed, make sure you filled in your CDS API Key"/>
+            </assert_stderr>
         </test>
     </tests>
     <help><![CDATA[
@@ -96,10 +77,9 @@ This tool is a wrapper to retrieve data from the Copernicus Climate Data Store.
 
 - It allows to retrieve data from the Copernicus climate Data Store.
 - Any user willing to use this tool needs to `create a new account <https://cds.climate.copernicus.eu/>`_.
-- Set your CDS API Key via: User -> Preferences -> Manage Information"
+- Set your CDS API Key in the Credentials
 - Documentation on where to get the CDS API key can be found `here <https://cds.climate.copernicus.eu/how-to-api>`_.
 - Compose your request directly on C3S and extract the relevant information, which should be put in the input field "Request" or saved in a file. The format should be, for example::
-
 
     import cdsapi
     
