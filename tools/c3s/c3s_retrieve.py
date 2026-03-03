@@ -1,6 +1,6 @@
 import argparse
-import sys
 import ast
+import sys
 from os import environ, path
 
 import cdsapi
