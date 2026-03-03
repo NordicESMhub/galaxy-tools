@@ -1,5 +1,6 @@
 import argparse
 import ast
+import sys
 from os import environ, path
 
 import cdsapi
@@ -43,10 +44,18 @@ with open(args.output, "w") as f:
 
 print("start retrieving data...")
 
+api_key = environ.get("CADS_API_KEY")
+
+if not api_key:
+    sys.stderr.write(
+        "CADS retrieval failed, make sure you filled in your CADS API Key\n"
+    )
+    sys.exit(1)
+
 try:
     c = cdsapi.Client(
         url="https://ads.atmosphere.copernicus.eu/api/v2",
-        key=environ.get("CADS_API_KEY")
+        key=api_key
     )
 
     c.retrieve(
