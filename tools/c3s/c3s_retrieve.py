@@ -55,7 +55,7 @@ if not api_key:
         "CDS retrieval failed, make sure you filled in your CDS API Key\n"
     )
     sys.exit(1)
-    
+
 try:
     c = cdsapi.Client(
         url="https://cds.climate.copernicus.eu/api",
