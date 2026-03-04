@@ -99,6 +99,6 @@ Neither the European Commission nor ECMWF is responsible for any use
 that may be made of the Copernicus information or data it contains.
     ]]></help>
     <citations>
-			<citation>@misc{CADS,author={Copernicus Atmosphere Data Store}}</citation>
+	    <citation type="bibtex">@misc{CADS,author={Copernicus Atmosphere Data Store}}</citation>
     </citations>
 </tool>
