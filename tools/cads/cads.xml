@@ -54,8 +54,8 @@ $is_file.api_req_text
         </conditional>
     </inputs>
     <outputs>
-        <data name="request" format="txt" from_work_dir="request.txt"/>
-        <data name="filename" format="netcdf" from_work_dir="tmp.nc"/>
+        <data name="request" format="txt" from_work_dir="request.txt" label="Request"/>
+        <data name="filename" format="netcdf" from_work_dir="tmp.nc" label="Netcdf file"/>
     </outputs>
     <tests>
         <test expect_failure="true">
