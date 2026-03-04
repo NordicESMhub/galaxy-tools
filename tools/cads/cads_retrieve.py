@@ -1,7 +1,7 @@
 import argparse
 import ast
 import sys
-from os import environ, path
+from os import environ
 
 import cdsapi
 
@@ -66,4 +66,4 @@ try:
 except Exception:
     raise RuntimeError(
         "CADS retrieval failed, make sure you filled in your CADS API Key"
-    )    
+    )
