@@ -54,7 +54,7 @@ if not api_key:
 
 try:
     c = cdsapi.Client(
-        url="https://ads.atmosphere.copernicus.eu/api/v2",
+        url="https://ads.atmosphere.copernicus.eu/api",
         key=api_key
     )
 
