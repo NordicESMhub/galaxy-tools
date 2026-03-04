@@ -55,7 +55,7 @@ $is_file.api_req_text
     </inputs>
     <outputs>
         <data name="request" format="txt" from_work_dir="request.txt"/>
-        <data name="ofilename" format="netcdf" from_work_dir="tmp.nc"/>
+        <data name="filename" format="netcdf" from_work_dir="tmp.nc"/>
     </outputs>
     <tests>
         <test expect_failure="true">
