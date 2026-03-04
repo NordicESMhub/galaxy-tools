@@ -1,5 +1,6 @@
 import argparse
 import ast
+import sys
 from os import environ, path
 
 import cdsapi
@@ -47,14 +48,28 @@ f.close()
 
 print("start retrieving data...")
 
-cdapi_file = path.join(environ.get('HOME'), '.cdsapirc')
+api_key = environ.get("CDS_API_KEY")
 
-if path.isfile(cdapi_file):
-    c = cdsapi.Client()
+if not api_key:
+    sys.stderr.write(
+        "CDS retrieval failed, make sure you filled in your CDS API Key\n"
+    )
+    sys.exit(1)
+
+try:
+    c = cdsapi.Client(
+        url="https://cds.climate.copernicus.eu/api",
+        key=api_key
+    )
 
     c.retrieve(
         c3s_type,
         c3s_req_dict,
-        c3s_output)
-
+        c3s_output
+    )
     print("data retrieval successful")
+except Exception:
+    sys.stderr.write(
+        "CDS retrieval failed, make sure you filled in your CDS API Key\n"
+    )
+    sys.exit(1)
