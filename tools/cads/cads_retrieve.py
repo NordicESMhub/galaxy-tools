@@ -53,8 +53,8 @@ try:
         key=api_key
     )
 
-   result = c.retrieve(c3s_type, c3s_req_dict)
-   c3s_output = result.download()
+    result = c.retrieve(c3s_type, c3s_req_dict)
+    c3s_output = result.download()
 
     print("data retrieval successful")
 except Exception:
