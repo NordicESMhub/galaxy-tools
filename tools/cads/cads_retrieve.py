@@ -32,15 +32,10 @@ with open(args.request) as f:
         req = req.replace(value, key)
 
 print("req = ", req)
-c3s_type = req.split('c.retrieve')[1].split('(')[1].split(',')[0].strip(' "\'\t\r\n')
 
-c3s_req = '{' + req.split('{', 1)[1].rsplit('}', 1)[0].replace('\n', '') + '}'
+c3s_type = req.split('dataset')[1].split('=')[1].split('\n')[0].strip(' "\'\t\r\n')
+c3s_req = '{' + req.split('request',1)[1].split('{',1)[1].rsplit('}',1)[0].replace('\n','') + '}'
 c3s_req_dict = ast.literal_eval(c3s_req)
-
-c3s_output = req.rsplit('}', 1)[1].split(',')[1].split(')')[0].strip(' "\'\t\r\n')
-
-with open(args.output, "w") as f:
-    f.write(f'dataset to retrieve: {c3s_type}\nrequest: {c3s_req}\noutput filename: {c3s_output}')
 
 print("start retrieving data...")
 
@@ -58,12 +53,14 @@ try:
         key=api_key
     )
 
-    c.retrieve(
-        c3s_type,
-        c3s_req_dict,
-        c3s_output)
+   result = c.retrieve(c3s_type, c3s_req_dict)
+   c3s_output = result.download()
+
     print("data retrieval successful")
 except Exception:
     raise RuntimeError(
         "CADS retrieval failed, make sure you filled in your CADS API Key"
     )
+
+with open(args.output, "w") as f:
+    f.write(f'dataset to retrieve: {c3s_type}\nrequest: {c3s_req}\noutput filename: {c3s_output}')
