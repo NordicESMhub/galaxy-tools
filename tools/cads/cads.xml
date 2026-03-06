@@ -9,10 +9,6 @@
       <edam_operation>operation_3357</edam_operation>
       <edam_operation>operation_0335</edam_operation>
     </edam_operations>
-	<required_files>
-        <include path="cads_retrieve.py" />
-        <include path="cads.sh" />
-    </required_files>
     <requirements>
 		<requirement type="package" version="3.8">python</requirement>
 		<requirement type="package" version="0.7.3">cdsapi</requirement>
@@ -23,7 +19,11 @@
             <secret name="key" inject_as_env="CADS_API_KEY" optional="false" label="CADS API key" description="Your Copernicus atmosphere Data Store API key."/>
         </credentials>
     </requirements>
-    <command detect_errors="exit_code"><![CDATA[
+	<required_files>
+        <include path="cads_retrieve.py" />
+        <include path="cads.sh" />
+    </required_files>
+	<command detect_errors="exit_code"><![CDATA[
         export HOME=`pwd`  &&
 
         python3 '$__tool_directory__/cads_retrieve.py' 
