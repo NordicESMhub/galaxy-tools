@@ -34,7 +34,7 @@ with open(args.request) as f:
 print("req = ", req)
 
 c3s_type = req.split('dataset')[1].split('=')[1].split('\n')[0].strip(' "\'\t\r\n')
-c3s_req = '{' + req.split('request',1)[1].split('{',1)[1].rsplit('}',1)[0].replace('\n','') + '}'
+c3s_req = '{' + req.split('request', 1)[1].split('{', 1)[1].rsplit('}', 1)[0].replace('\n', '') + '}'
 c3s_req_dict = ast.literal_eval(c3s_req)
 
 print("start retrieving data...")
