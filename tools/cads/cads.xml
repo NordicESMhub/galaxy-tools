@@ -9,6 +9,10 @@
       <edam_operation>operation_3357</edam_operation>
       <edam_operation>operation_0335</edam_operation>
     </edam_operations>
+	<required_files>
+        <include path="cads_retrieve.py" />
+        <include path="cads.sh" />
+    </required_files>
     <requirements>
 		<requirement type="package" version="3.8">python</requirement>
 		<requirement type="package" version="0.7.3">cdsapi</requirement>
