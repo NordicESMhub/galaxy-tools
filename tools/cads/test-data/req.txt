@@ -1,21 +1,19 @@
 import cdsapi
 
-c = cdsapi.Client()
+dataset = "cams-global-reanalysis-eac4"
+request = {
+    "variable": [
+        "total_column_carbon_monoxide",
+        "total_column_nitric_acid"
+    ],
+    "date": ["2025-08-01/2025-08-31"],
+    "time": [
+        "00:00", "03:00", "06:00",
+        "09:00", "12:00", "15:00",
+        "18:00", "21:00"
+    ],
+    "data_format": "grib"
+}
 
-c.retrieve(
-    'cams-europe-air-quality-forecasts',
-    {
-        'variable': 'nitrogen_dioxide',
-        'model': 'ensemble',
-        'level': '0',
-        'date': '2021-06-16/2021-06-16',
-        'type': 'analysis',
-        'time': '00:00',
-        'leadtime_hour': '0',
-        'format': 'netcdf',
-        'area': [
-            59.96, 10.66, 59.87,
-            10.9,
-        ],
-    },
-    'download.nc')
+client = cdsapi.Client()
+client.retrieve(dataset, request).download()
