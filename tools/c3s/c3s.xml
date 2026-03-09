@@ -19,6 +19,10 @@
             <secret name="key" inject_as_env="CDS_API_KEY" optional="false" label="CDS API key" description="Your Copernicus climate Data Store API key."/>
         </credentials>
     </requirements>
+	<required_files>
+        <include path="c3s_retrieve.py"/>
+		<include path="c3s.sh"/>
+    </required_files>
     <command detect_errors="exit_code"><![CDATA[
        export HOME=`pwd`  &&
 		
